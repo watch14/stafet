@@ -32,7 +32,7 @@ export default function ClientLogos() {
   ];
 
   return (
-    <section className="w-full py-16 bg-white">
+    <section className="w-full pt-12 bg-white">
       <div className="max-w-[1440px] mx-auto px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center justify-items-center">
           {logos.map((client, index) => (
