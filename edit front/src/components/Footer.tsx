@@ -3,15 +3,15 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#FAFAFA] py-12">
+    <footer className="w-full bg-[#FFFFFB] pt-24 pb-8">
       <div className="max-w-[1440px] mx-auto px-8">
         <div className="flex items-start justify-between">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="">
             <Image
               src="/images/logo-2.png"
               alt="STAFF Logo"
-              width={120}
+              width={160}
               height={50}
               className="object-contain"
               priority
@@ -19,38 +19,26 @@ export default function Footer() {
           </div>
 
           {/* Customer Links */}
-          <div className="flex-1 max-w-[200px] ml-auto mr-16">
-            <h3 className="text-black font-semibold mb-4 text-sm">Customer</h3>
-            <ul className="space-y-2 text-sm">
+          <div className="max-w-[200px]  mr-16">
+            <h3 className="text-black font-bold mb-4 text-sm">Customer</h3>
+            <ul className="space-y-1 text-sm">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-600 hover:text-black transition-colors"
-                >
+                <a href="#" className="text-black hover:underline  ">
                   Returns & Refunds
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-600 hover:text-black transition-colors"
-                >
+                <a href="#" className="text-black hover:underline ">
                   Shipping & Delivery
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-600 hover:text-black transition-colors"
-                >
+                <a href="#" className="text-black hover:underline  ">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-600 hover:text-black transition-colors"
-                >
+                <a href="#" className="text-black hover:underline  ">
                   Terms of Service
                 </a>
               </li>
@@ -59,12 +47,12 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="text-right">
-            <h3 className="text-black font-semibold mb-4 text-sm">Contact</h3>
+            <h3 className="text-black font-bold mb-4 text-sm">Contact</h3>
             <div className="text-sm">
-              <div className="text-gray-600 mb-1">Get in touch at</div>
+              <div className="text-black mb-0">Get in touch at</div>
               <a
                 href="mailto:hello@staffet.com"
-                className="text-black hover:underline transition-colors"
+                className="text-black underline "
               >
                 hello@staffet.com
               </a>
