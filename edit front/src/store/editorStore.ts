@@ -39,16 +39,16 @@ const defaultHero: HeroContent = {
   title: "More than a traditional\nsoftware agency",
   subtitle:
     "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-  titleColor: "#ffffff",
-  subtitleColor: "#ffffff",
+  titleColor: "#000000",
+  subtitleColor: "#000000",
   button: {
     text: "Work with us",
     href: "#",
-    textColor: "#000000",
-    bgColor: "#ffffff",
+    textColor: "#ffffff",
+    bgColor: "#000000",
   },
   bgType: "color",
-  bgColor: "#636ede",
+  bgColor: "#6366F1",
   bgImage: "",
 };
 
