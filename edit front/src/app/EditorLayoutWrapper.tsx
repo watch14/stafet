@@ -6,7 +6,9 @@ interface EditorLayoutWrapperProps {
   children: React.ReactNode;
 }
 
-export default function EditorLayoutWrapper({ children }: EditorLayoutWrapperProps) {
+export default function EditorLayoutWrapper({
+  children,
+}: EditorLayoutWrapperProps) {
   const isEditorOpen = useEditorStore((state) => state.isEditorOpen);
 
   return (

@@ -41,7 +41,11 @@ export default function ClientLogosEditor({
   };
 
   return (
-    <SidePanel open={open} onClose={handleClose} title="Edit Client Logos Section">
+    <SidePanel
+      open={open}
+      onClose={handleClose}
+      title="Edit Client Logos Section"
+    >
       <div className="space-y-6">
         <div>
           <label className="block text-xs font-medium mb-1">

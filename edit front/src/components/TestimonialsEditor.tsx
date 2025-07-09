@@ -34,7 +34,11 @@ export default function TestimonialsEditor({
   };
 
   return (
-    <SidePanel open={open} onClose={handleClose} title="Edit Testimonials Section">
+    <SidePanel
+      open={open}
+      onClose={handleClose}
+      title="Edit Testimonials Section"
+    >
       <div className="space-y-6">
         <div>
           <label className="block text-xs font-medium mb-1">
