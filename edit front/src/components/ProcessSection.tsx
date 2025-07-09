@@ -10,7 +10,7 @@ export default function ProcessSection() {
       subtitle: "Calibrating your business targets",
       description:
         "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-      bgColor: "bg-white",
+      bgColor: "bg-[#FFFFFB]",
       textColor: "text-black",
       image: "/images/WHAT.png",
       titleBgColor: "bg-pink-200",
@@ -21,7 +21,7 @@ export default function ProcessSection() {
       subtitle: "Identifying why you haven't reached your potential",
       description:
         "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-      bgColor: "bg-gray-100",
+      bgColor: "bg-[#FFFFFB]",
       textColor: "text-black",
       image: "/images/WHY.png",
       titleBgColor: "bg-pink-200",
@@ -32,7 +32,7 @@ export default function ProcessSection() {
       subtitle: "Defining actions to reach your targets",
       description:
         "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-      bgColor: "bg-white",
+      bgColor: "bg-[#FFFFFB]",
       textColor: "text-black",
       image: "/images/HOW.png",
       titleBgColor: "bg-pink-200",
@@ -43,7 +43,7 @@ export default function ProcessSection() {
       subtitle: "Making your vision a reality",
       description:
         "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-      bgColor: "bg-gray-100",
+      bgColor: "bg-[#FFFFFB]",
       textColor: "text-black",
       image: "/images/ACTION.png",
       titleBgColor: "bg-pink-200",
@@ -55,10 +55,10 @@ export default function ProcessSection() {
       {processes.map((process, index) => (
         <div key={index} className={`w-full ${process.bgColor}`}>
           <div className="w-full max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]  ">
               {/* Text Content */}
               <div
-                className={`flex items-center justify-start px-8 lg:px-16 py-16 lg:py-20 ${
+                className={`flex items-start justify-between px-8 lg:px-16 py-16 lg:py-16 h-[100%] ${
                   index % 2 === 1 ? "order-2 lg:order-2" : "order-2 lg:order-1"
                 }`}
               >
@@ -76,7 +76,7 @@ export default function ProcessSection() {
                     </span>
                   </div>
                   <h3
-                    className={`text-5xl lg:text-[50px] font-light ${process.textColor} leading-tight max-w-md  mb-[100%]`}
+                    className={`text-5xl lg:text-[50px] font-light ${process.textColor} leading-tight max-w-md mb-80`}
                   >
                     {process.subtitle}
                   </h3>
