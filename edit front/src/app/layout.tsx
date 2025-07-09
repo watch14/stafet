@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./navbar";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
+import EditorLayoutWrapper from "./EditorLayoutWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,9 +25,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <EditorLayoutWrapper>
+            <Navbar />
+            {children}
+            <Footer />
+          </EditorLayoutWrapper>
         </AuthProvider>
       </body>
     </html>

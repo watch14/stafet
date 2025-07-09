@@ -2,13 +2,14 @@
 import React, { useRef } from "react";
 import HeroEditor from "./HeroEditor";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function HeroSection() {
   const hero = useEditorStore((s) => s.hero);
   const editMode = useEditorStore((s) => s.editMode);
   const { isAuthenticated } = useAuth();
-  const [editorOpen, setEditorOpen] = React.useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   // Only allow edit interactions if authenticated
   const canEdit = editMode && isAuthenticated;
@@ -37,7 +38,7 @@ export default function HeroSection() {
                 color: hero.titleColor || "#000000",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
-              onClick={() => canEdit && setEditorOpen(true)}
+              onClick={() => canEdit && openEditor("hero")}
               tabIndex={canEdit ? 0 : -1}
             >
               {hero.title}
@@ -53,7 +54,7 @@ export default function HeroSection() {
                 color: hero.subtitleColor || "#000000",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
-              onClick={() => canEdit && setEditorOpen(true)}
+              onClick={() => canEdit && openEditor("hero")}
               tabIndex={canEdit ? 0 : -1}
             >
               {hero.subtitle}
@@ -73,7 +74,7 @@ export default function HeroSection() {
               onClick={(e) => {
                 if (canEdit) {
                   e.preventDefault();
-                  setEditorOpen(true);
+                  openEditor("hero");
                 }
               }}
               tabIndex={canEdit ? 0 : -1}
@@ -88,7 +89,7 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
-      <HeroEditor open={editorOpen} onClose={() => setEditorOpen(false)} />
+      <HeroEditor open={isEditorActive("hero")} onClose={() => {}} />
     </>
   );
 }

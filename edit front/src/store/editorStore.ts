@@ -75,6 +75,10 @@ type ClientLogosContent = {
 type EditorState = {
   editMode: boolean;
   setEditMode: (v: boolean) => void;
+  isEditorOpen: boolean;
+  setIsEditorOpen: (open: boolean) => void;
+  activeEditor: string | null;
+  setActiveEditor: (editor: string | null) => void;
   hero: HeroContent;
   setHero: (h: Partial<HeroContent>) => void;
   navbar: NavbarContent;
@@ -237,6 +241,10 @@ export const useEditorStore = create<EditorState>()(
     (set) => ({
       editMode: false,
       setEditMode: (v) => set({ editMode: v }),
+      isEditorOpen: false,
+      setIsEditorOpen: (open) => set({ isEditorOpen: open }),
+      activeEditor: null,
+      setActiveEditor: (editor) => set({ activeEditor: editor }),
       hero: defaultHero,
       setHero: (h) => set((state) => ({ hero: { ...state.hero, ...h } })),
       navbar: defaultNavbar,

@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
-import AppModal from "./AppModal";
+import SidePanel from "./SidePanel";
 import ImageUploader from "./ImageUploader";
 
 export default function HeroEditor({
@@ -14,6 +15,7 @@ export default function HeroEditor({
 }) {
   const hero = useEditorStore((s) => s.hero);
   const setHero = useEditorStore((s) => s.setHero);
+  const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(hero);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -44,8 +46,20 @@ export default function HeroEditor({
     });
   };
 
+  const handleSave = () => {
+    setHero(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(hero);
+    closeEditor();
+    onClose();
+  };
+
   return (
-    <AppModal open={open} onClose={onClose} title="Edit Hero Section">
+    <SidePanel open={open} onClose={handleClose} title="Edit Hero Section">
       <div className="mb-4">
         <label className="block text-xs sm:text-sm mb-1 font-medium">
           Title
@@ -192,21 +206,17 @@ export default function HeroEditor({
       <div className="flex flex-col sm:flex-row gap-3 mt-6">
         <button
           className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium w-full hover:bg-blue-700 transition-colors text-sm sm:text-base"
-          onClick={() => {
-            setHero(draft);
-            console.log("[SAVE HERO]", draft);
-            onClose();
-          }}
+          onClick={handleSave}
         >
           Save Changes
         </button>
         <button
           className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium w-full hover:bg-gray-300 transition-colors text-sm sm:text-base"
-          onClick={onClose}
+          onClick={handleClose}
         >
           Cancel
         </button>
       </div>
-    </AppModal>
+    </SidePanel>
   );
 }

@@ -1,24 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ValuePropositionEditor from "./ValuePropositionEditor";
 
 export default function ValueProposition() {
   const editMode = useEditorStore((s) => s.editMode);
   const valueProposition = useEditorStore((s) => s.valueProposition);
-  const [showEditor, setShowEditor] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   const handleSectionClick = () => {
     if (editMode) {
-      setShowEditor(true);
+      openEditor("valueProposition");
     }
   };
 
   return (
     <>
       <ValuePropositionEditor
-        open={showEditor}
-        onClose={() => setShowEditor(false)}
+        open={isEditorActive("valueProposition")}
+        onClose={() => {}}
       />
       <section
         className={`w-full py-16 relative ${editMode ? "cursor-pointer" : ""}`}

@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
-import AppModal from "./AppModal";
+import SidePanel from "./SidePanel";
 
 export default function NavBarEditor({
   open,
@@ -13,14 +14,27 @@ export default function NavBarEditor({
 }) {
   const navbar = useEditorStore((s) => s.navbar);
   const setNavbar = useEditorStore((s) => s.setNavbar);
+  const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(navbar);
 
   React.useEffect(() => {
     setDraft(navbar);
   }, [open]);
 
+  const handleSave = () => {
+    setNavbar(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(navbar);
+    closeEditor();
+    onClose();
+  };
+
   return (
-    <AppModal open={open} onClose={onClose} title="Edit Navbar">
+    <SidePanel open={open} onClose={handleClose} title="Edit Navbar">
       <div className="mb-4">
         <label className="block text-xs mb-1">Logo Text</label>
         <div className="flex gap-2 items-center">
@@ -129,21 +143,17 @@ export default function NavBarEditor({
       <div className="flex gap-2 mt-4">
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded font-bold w-full"
-          onClick={() => {
-            setNavbar(draft);
-            console.log("[SAVE NAVBAR]", draft);
-            onClose();
-          }}
+          onClick={handleSave}
         >
           Save
         </button>
         <button
           className="bg-gray-200 text-gray-800 px-4 py-2 rounded font-bold w-full"
-          onClick={onClose}
+          onClick={handleClose}
         >
           Cancel
         </button>
       </div>
-    </AppModal>
+    </SidePanel>
   );
 }

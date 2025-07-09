@@ -1,14 +1,15 @@
 "use client";
 import { useEditorStore } from "../store/editorStore";
-import React, { useState } from "react";
+import React from "react";
 import NavBarEditor from "../components/NavBarEditor";
+import { useEditorManager } from "../hooks/useEditorManager";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Navbar() {
   const navbar = useEditorStore((s) => s.navbar);
   const editMode = useEditorStore((s) => s.editMode);
   const { isAuthenticated } = useAuth();
-  const [editorOpen, setEditorOpen] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   // Only allow edit interactions if authenticated
   const canEdit = editMode && isAuthenticated;
@@ -24,7 +25,7 @@ export default function Navbar() {
                 cursor: canEdit ? "pointer" : "default",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
-              onClick={() => canEdit && setEditorOpen(true)}
+              onClick={() => canEdit && openEditor("navbar")}
               tabIndex={canEdit ? 0 : -1}
             >
               {navbar.logo}
@@ -49,7 +50,7 @@ export default function Navbar() {
                 onClick={(e) => {
                   if (canEdit) {
                     e.preventDefault();
-                    setEditorOpen(true);
+                    openEditor("navbar");
                   }
                 }}
                 tabIndex={canEdit ? 0 : -1}
@@ -76,7 +77,7 @@ export default function Navbar() {
               onClick={(e) => {
                 if (canEdit) {
                   e.preventDefault();
-                  setEditorOpen(true);
+                  openEditor("navbar");
                 }
               }}
               tabIndex={canEdit ? 0 : -1}
@@ -91,7 +92,7 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-      <NavBarEditor open={editorOpen} onClose={() => setEditorOpen(false)} />
+      <NavBarEditor open={isEditorActive("navbar")} onClose={() => {}} />
     </>
   );
 }

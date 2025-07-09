@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
-import AppModal from "./AppModal";
+import SidePanel from "./SidePanel";
+import ImageUploader from "./ImageUploader";
 
 export default function ClientLogosEditor({
   open,
@@ -13,6 +15,7 @@ export default function ClientLogosEditor({
 }) {
   const clientLogos = useEditorStore((s) => s.clientLogos);
   const setClientLogos = useEditorStore((s) => s.setClientLogos);
+  const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(clientLogos);
 
   React.useEffect(() => {
@@ -27,11 +30,18 @@ export default function ClientLogosEditor({
 
   const handleSave = () => {
     setClientLogos(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(clientLogos);
+    closeEditor();
     onClose();
   };
 
   return (
-    <AppModal open={open} onClose={onClose} title="Edit Client Logos Section">
+    <SidePanel open={open} onClose={handleClose} title="Edit Client Logos Section">
       <div className="space-y-6">
         <div>
           <label className="block text-xs font-medium mb-1">
@@ -126,12 +136,12 @@ export default function ClientLogosEditor({
           Save Changes
         </button>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 text-sm"
         >
           Cancel
         </button>
       </div>
-    </AppModal>
+    </SidePanel>
   );
 }

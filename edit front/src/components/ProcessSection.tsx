@@ -2,22 +2,23 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ProcessEditor from "./ProcessEditor";
 
 export default function ProcessSection() {
   const editMode = useEditorStore((s) => s.editMode);
   const processData = useEditorStore((s) => s.process);
-  const [showEditor, setShowEditor] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   const handleSectionClick = () => {
     if (editMode) {
-      setShowEditor(true);
+      openEditor("process");
     }
   };
 
   return (
     <>
-      <ProcessEditor open={showEditor} onClose={() => setShowEditor(false)} />
+      <ProcessEditor open={isEditorActive("process")} onClose={() => {}} />
       <section className="w-full relative">
         {editMode && (
           <div className="absolute top-4 right-4 z-10">

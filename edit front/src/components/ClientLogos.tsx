@@ -1,25 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ClientLogosEditor from "./ClientLogosEditor";
 
 export default function ClientLogos() {
   const editMode = useEditorStore((s) => s.editMode);
   const clientLogos = useEditorStore((s) => s.clientLogos);
-  const [showEditor, setShowEditor] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   const handleSectionClick = () => {
     if (editMode) {
-      setShowEditor(true);
+      openEditor("clientLogos");
     }
   };
 
   return (
     <>
       <ClientLogosEditor
-        open={showEditor}
-        onClose={() => setShowEditor(false)}
+        open={isEditorActive("clientLogos")}
+        onClose={() => {}}
       />
       <section
         className={`w-full pt-12 relative ${editMode ? "cursor-pointer" : ""}`}

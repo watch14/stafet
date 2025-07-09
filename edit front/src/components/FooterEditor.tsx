@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
-import AppModal from "./AppModal";
+import SidePanel from "./SidePanel";
 
 export default function FooterEditor({
   open,
@@ -13,6 +14,7 @@ export default function FooterEditor({
 }) {
   const footer = useEditorStore((s) => s.footer);
   const setFooter = useEditorStore((s) => s.setFooter);
+  const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(footer);
 
   React.useEffect(() => {
@@ -27,11 +29,18 @@ export default function FooterEditor({
 
   const handleSave = () => {
     setFooter(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(footer);
+    closeEditor();
     onClose();
   };
 
   return (
-    <AppModal open={open} onClose={onClose} title="Edit Footer Section">
+    <SidePanel open={open} onClose={handleClose} title="Edit Footer Section">
       <div className="space-y-6">
         {/* Customer Section */}
         <div className="p-4 border rounded-lg">
@@ -168,12 +177,12 @@ export default function FooterEditor({
           Save Changes
         </button>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 text-sm"
         >
           Cancel
         </button>
       </div>
-    </AppModal>
+    </SidePanel>
   );
 }

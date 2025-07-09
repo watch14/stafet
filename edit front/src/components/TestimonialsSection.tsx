@@ -1,24 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import TestimonialsEditor from "./TestimonialsEditor";
 
 export default function TestimonialsSection() {
   const editMode = useEditorStore((s) => s.editMode);
   const testimonials = useEditorStore((s) => s.testimonials);
-  const [showEditor, setShowEditor] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   const handleSectionClick = () => {
     if (editMode) {
-      setShowEditor(true);
+      openEditor("testimonials");
     }
   };
 
   return (
     <>
       <TestimonialsEditor
-        open={showEditor}
-        onClose={() => setShowEditor(false)}
+        open={isEditorActive("testimonials")}
+        onClose={() => {}}
       />
       <section
         className={`w-full py-16 relative ${editMode ? "cursor-pointer" : ""}`}

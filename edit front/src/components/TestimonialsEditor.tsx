@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
-import AppModal from "./AppModal";
+import SidePanel from "./SidePanel";
 
 export default function TestimonialsEditor({
   open,
@@ -13,6 +14,7 @@ export default function TestimonialsEditor({
 }) {
   const testimonials = useEditorStore((s) => s.testimonials);
   const setTestimonials = useEditorStore((s) => s.setTestimonials);
+  const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(testimonials);
 
   React.useEffect(() => {
@@ -21,11 +23,18 @@ export default function TestimonialsEditor({
 
   const handleSave = () => {
     setTestimonials(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(testimonials);
+    closeEditor();
     onClose();
   };
 
   return (
-    <AppModal open={open} onClose={onClose} title="Edit Testimonials Section">
+    <SidePanel open={open} onClose={handleClose} title="Edit Testimonials Section">
       <div className="space-y-6">
         <div>
           <label className="block text-xs font-medium mb-1">
@@ -92,12 +101,12 @@ export default function TestimonialsEditor({
           Save Changes
         </button>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 text-sm"
         >
           Cancel
         </button>
       </div>
-    </AppModal>
+    </SidePanel>
   );
 }

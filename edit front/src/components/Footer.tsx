@@ -1,23 +1,23 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import FooterEditor from "./FooterEditor";
 
 export default function Footer() {
   const editMode = useEditorStore((s) => s.editMode);
   const footerData = useEditorStore((s) => s.footer);
-  const [showEditor, setShowEditor] = useState(false);
+  const { openEditor, isEditorActive } = useEditorManager();
 
   const handleSectionClick = () => {
     if (editMode) {
-      setShowEditor(true);
+      openEditor("footer");
     }
   };
 
   return (
     <>
-      <FooterEditor open={showEditor} onClose={() => setShowEditor(false)} />
+      <FooterEditor open={isEditorActive("footer")} onClose={() => {}} />
       <footer
         className={`w-full pt-24 pb-8 relative ${
           editMode ? "cursor-pointer" : ""
