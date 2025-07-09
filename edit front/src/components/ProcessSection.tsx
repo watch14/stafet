@@ -50,27 +50,27 @@ export default function ProcessSection() {
     <section className="w-full">
       {processes.map((process, index) => (
         <div key={index} className={`w-full ${process.bgColor}`}>
-          <div className="w-full">
+          <div className="w-full max-w-[1440px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
               {/* Text Content */}
               <div
-                className={`flex items-center justify-center px-8 py-16 lg:py-24 ${
+                className={`flex items-start justify-start px-12 py-16 lg:py-20 ${
                   index % 2 === 1 ? "order-2 lg:order-2" : "order-2 lg:order-1"
                 }`}
               >
-                <div className="max-w-lg w-full">
+                <div className="max-w-md w-full pt-8">
                   <div
-                    className={`text-sm font-medium ${process.textColor} mb-3 tracking-wider`}
+                    className={`text-base font-bold ${process.textColor} mb-2 tracking-normal`}
                   >
                     {process.number} {process.title}
                   </div>
                   <h3
-                    className={`text-3xl md:text-4xl lg:text-5xl font-bold ${process.textColor} mb-8 leading-tight`}
+                    className={`text-2xl md:text-3xl lg:text-4xl font-bold ${process.textColor} mb-6 leading-tight`}
                   >
                     {process.subtitle}
                   </h3>
                   <p
-                    className={`text-lg md:text-xl ${process.textColor} leading-relaxed`}
+                    className={`text-sm md:text-base ${process.textColor} leading-relaxed max-w-xs`}
                   >
                     {process.description}
                   </p>
@@ -79,7 +79,7 @@ export default function ProcessSection() {
 
               {/* Image Content */}
               <div
-                className={`relative min-h-[400px] lg:min-h-[600px] ${
+                className={`relative w-full h-full min-h-[400px] lg:min-h-[600px] overflow-hidden ${
                   index % 2 === 1 ? "order-1 lg:order-1" : "order-1 lg:order-2"
                 }`}
               >
@@ -88,7 +88,7 @@ export default function ProcessSection() {
                   alt={`${process.title} - ${process.subtitle}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1440px) 50vw, 720px"
                   priority={index < 2}
                 />
               </div>
