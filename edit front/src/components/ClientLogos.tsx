@@ -1,63 +1,74 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { useEditorStore } from "../store/editorStore";
+import ClientLogosEditor from "./ClientLogosEditor";
 
 export default function ClientLogos() {
-  const logos = [
-    {
-      name: "Express Bank",
-      logo: "/images/Express.png", // Express Bank
-      alt: "Express Bank Logo",
-    },
-    {
-      name: "TwoPoint",
-      logo: "/images/TwoPoint.png", // TwoPoint
-      alt: "TwoPoint Logo",
-    },
-    {
-      name: "Gentofte Kommune",
-      logo: "/images/HeadHunter.png", // HeadHunter
-      alt: "Gentofte Kommune Logo",
-    },
-    {
-      name: "Fundbricks",
-      logo: "/images/Gentofte.png", // Gentofte
-      alt: "Fundbricks Logo",
-    },
-    {
-      name: "STAFF",
-      logo: "/images/Fundbricks.png", // Fundbricks
-      alt: "STAFF Logo",
-    },
-  ];
+  const editMode = useEditorStore((s) => s.editMode);
+  const clientLogos = useEditorStore((s) => s.clientLogos);
+  const [showEditor, setShowEditor] = useState(false);
+
+  const handleSectionClick = () => {
+    if (editMode) {
+      setShowEditor(true);
+    }
+  };
 
   return (
-    <section className="w-full pt-12 bg-white">
-      <div className="max-w-[1440px] mx-auto px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center justify-items-center">
-          {logos.map((client, index) => (
-            <div key={index} className="flex items-center justify-center h-12">
-              <Image
-                src={client.logo}
-                alt={client.alt}
-                width={120}
-                height={48}
-                className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                  if (target.nextSibling) {
-                    (target.nextSibling as HTMLElement).style.display = "block";
-                  }
-                }}
-              />
-              <span className="hidden text-black font-medium text-sm md:text-base">
-                {client.name}
-              </span>
-            </div>
-          ))}
+    <>
+      <ClientLogosEditor
+        open={showEditor}
+        onClose={() => setShowEditor(false)}
+      />
+      <section
+        className={`w-full pt-12 relative ${editMode ? "cursor-pointer" : ""}`}
+        style={{ backgroundColor: clientLogos.bgColor }}
+        onClick={handleSectionClick}
+      >
+        {editMode && (
+          <div className="absolute top-4 right-4 z-10">
+            <button
+              onClick={handleSectionClick}
+              className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+            >
+              Edit Client Logos
+            </button>
+          </div>
+        )}
+        <div className="max-w-[1440px] mx-auto px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center justify-items-center">
+            {clientLogos.logos.map((client, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center h-12"
+              >
+                <Image
+                  src={client.logo}
+                  alt={client.alt}
+                  width={120}
+                  height={48}
+                  className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    if (target.nextSibling) {
+                      (target.nextSibling as HTMLElement).style.display =
+                        "block";
+                    }
+                  }}
+                />
+                <span
+                  className="hidden font-medium text-sm md:text-base"
+                  style={{ color: clientLogos.textColor }}
+                >
+                  {client.name}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
