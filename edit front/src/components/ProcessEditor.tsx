@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
 import ColorPicker from "./ColorPicker";
 import AppModal from "./AppModal";
+import ImageUploader from "./ImageUploader";
 
 export default function ProcessEditor({
   open,
@@ -86,6 +87,30 @@ export default function ProcessEditor({
                 }
                 className="w-full p-2 border rounded text-sm h-20"
               />
+            </div>
+
+            {/* Image Upload Section */}
+            <div className="mt-4">
+              <label className="block text-xs font-medium mb-1">
+                Process Image
+              </label>
+              <div className="border rounded-lg p-4">
+                <ImageUploader
+                  onImageSelect={(imageUrl) =>
+                    updateProcessItem(index, "image", imageUrl)
+                  }
+                  currentImage={item.image}
+                />
+                {item.image && (
+                  <div className="mt-2">
+                    <img
+                      src={item.image}
+                      alt={`${item.title} preview`}
+                      className="w-full h-32 object-cover rounded"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
