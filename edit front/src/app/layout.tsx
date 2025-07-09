@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar";
+import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
 
 const inter = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           {children}
+          <Footer />
         </AuthProvider>
       </body>
     </html>

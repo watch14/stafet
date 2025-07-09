@@ -29,10 +29,10 @@ export default function HeroSection() {
             : { background: "#6366F1" } // Default purple background like in design
         }
       >
-        <div className="max-w-[1440px] mx-auto w-full px-8">
-          <div className="max-w-4xl">
+        <div className="max-w-[1440px] mx-auto w-full px-8 mt-auto">
+          <div className="max-w-2xl">
             <h1
-              className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8 cursor-pointer relative"
+              className="text-black text-4xl md:text-5xl lg:text-5xl font-regular leading-tight mb-8  relative"
               style={{
                 color: hero.titleColor || "#000000",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
@@ -48,7 +48,7 @@ export default function HeroSection() {
               )}
             </h1>
             <p
-              className="text-black text-lg md:text-xl max-w-2xl mb-8 leading-relaxed cursor-pointer relative"
+              className="text-black text-sg md:text-x1 max-w-2xl mb-8 leading-relaxed  relative"
               style={{
                 color: hero.subtitleColor || "#000000",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
@@ -64,10 +64,10 @@ export default function HeroSection() {
               )}
             </p>
             <button
-              className="rounded-full px-8 py-3 text-base font-medium shadow-lg transition w-fit cursor-pointer relative hover:shadow-xl"
+              className="rounded-full px-6 py-2 text-1xl shadow-lg transition w-fit cursor-pointer relative hover:shadow-xl"
               style={{
                 color: hero.button.textColor || "#FFFFFF",
-                background: hero.button.bgColor || "#000000",
+                background: hero.button.bgColor || "#FFCEE5",
                 outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
               onClick={(e) => {

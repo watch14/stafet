@@ -44,8 +44,8 @@ const defaultHero: HeroContent = {
   button: {
     text: "Work with us",
     href: "#",
-    textColor: "#ffffff",
-    bgColor: "#000000",
+    textColor: "#000000",
+    bgColor: "#FFCEE5",
   },
   bgType: "color",
   bgColor: "#6366F1",

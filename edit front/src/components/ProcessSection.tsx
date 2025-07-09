@@ -13,6 +13,7 @@ export default function ProcessSection() {
       bgColor: "bg-white",
       textColor: "text-black",
       image: "/images/WHAT.png",
+      titleBgColor: "bg-pink-200",
     },
     {
       number: "02.",
@@ -20,9 +21,10 @@ export default function ProcessSection() {
       subtitle: "Identifying why you haven't reached your potential",
       description:
         "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
-      bgColor: "bg-gray-200",
+      bgColor: "bg-gray-100",
       textColor: "text-black",
       image: "/images/WHY.png",
+      titleBgColor: "bg-blue-200",
     },
     {
       number: "03.",
@@ -33,6 +35,7 @@ export default function ProcessSection() {
       bgColor: "bg-white",
       textColor: "text-black",
       image: "/images/HOW.png",
+      titleBgColor: "bg-green-200",
     },
     {
       number: "04.",
@@ -43,6 +46,7 @@ export default function ProcessSection() {
       bgColor: "bg-gray-100",
       textColor: "text-black",
       image: "/images/ACTION.png",
+      titleBgColor: "bg-yellow-200",
     },
   ];
 
@@ -54,23 +58,30 @@ export default function ProcessSection() {
             <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
               {/* Text Content */}
               <div
-                className={`flex items-start justify-start px-12 py-16 lg:py-20 ${
+                className={`flex items-center justify-start px-8 lg:px-16 py-16 lg:py-20 ${
                   index % 2 === 1 ? "order-2 lg:order-2" : "order-2 lg:order-1"
                 }`}
               >
-                <div className="max-w-md w-full pt-8">
-                  <div
-                    className={`text-base font-bold ${process.textColor} mb-2 tracking-normal`}
-                  >
-                    {process.number} {process.title}
+                <div className="max-w-lg w-full">
+                  <div className="flex items-baseline gap-2 mb-6">
+                    <span
+                      className={`text-5xl lg:text-6xl font-light ${process.textColor}`}
+                    >
+                      {process.number}
+                    </span>
+                    <span
+                      className={`px-3 py-1 text-sm font-bold ${process.titleBgColor} text-black rounded`}
+                    >
+                      {process.title}
+                    </span>
                   </div>
                   <h3
-                    className={`text-2xl md:text-3xl lg:text-4xl font-bold ${process.textColor} mb-6 leading-tight`}
+                    className={`text-2xl lg:text-3xl xl:text-4xl font-normal ${process.textColor} mb-8 leading-tight max-w-md`}
                   >
                     {process.subtitle}
                   </h3>
                   <p
-                    className={`text-sm md:text-base ${process.textColor} leading-relaxed max-w-xs`}
+                    className={`text-sm lg:text-base ${process.textColor} leading-relaxed max-w-md opacity-80`}
                   >
                     {process.description}
                   </p>
