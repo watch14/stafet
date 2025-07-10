@@ -31,26 +31,25 @@ export default function EditModeToggle() {
   const [showSaveLoad, setShowSaveLoad] = useState(false);
   const { isAuthenticated, logout, requireAuth } = useAuth();
 
-  // Handle admin logout with cleanup
+  // Handle admin logout with enhanced security cleanup
   const handleLogout = () => {
     setEditMode(false); // Exit edit mode first
-    logout(); // Clear authentication status
-    window.location.href = "/"; // Redirect to home page
+    logout(); // Clear authentication with secure cleanup
+    window.location.href = "/"; // Force page reload to clear any cached state
   };
 
-  // Handle login redirect
-  const handleLoginRedirect = () => {
-    const currentPath = window.location.pathname;
-    window.location.href = `/admin/login?redirect=${encodeURIComponent(currentPath)}`;
-  };
+  // Remove the handleLoginRedirect function since login button is no longer shown
+
+  // Only show the admin panel if user is authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <>
-      {/* Floating Admin Control Panel */}
+      {/* Floating Admin Control Panel - Only visible to authenticated admins */}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-        {isAuthenticated ? (
-          // Authenticated Admin Controls
-          <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {/* Save/Load Button - Only shown when in edit mode */}
           {editMode && (
             <button
@@ -77,7 +76,7 @@ export default function EditModeToggle() {
             </span>
             <span className="sm:hidden">{editMode ? "✕" : "✎"}</span>
           </button>
-          
+
           {/* Admin logout button */}
           <button
             onClick={handleLogout}
@@ -88,17 +87,6 @@ export default function EditModeToggle() {
             <span className="sm:hidden">🚪</span>
           </button>
         </div>
-        ) : (
-          // Login Button for Non-Authenticated Users
-          <button
-            onClick={handleLoginRedirect}
-            className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-full shadow-lg font-medium text-xs sm:text-sm transition hover:bg-blue-700"
-            title="Login as Admin"
-          >
-            <span className="hidden sm:inline">Admin Login</span>
-            <span className="sm:hidden">🔐</span>
-          </button>
-        )}
       </div>
 
       <SaveLoadManager
