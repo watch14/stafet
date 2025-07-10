@@ -34,9 +34,10 @@ import {
 
 interface AuthContextType {
   isAuthenticated: boolean; // Whether user is logged in as admin
-  login: () => void; // Function to log in as admin
+  login: (credentials?: { username: string; password: string }) => boolean; // Function to log in as admin with credentials
   logout: () => void; // Function to log out
   checkAuth: () => boolean; // Function to check current auth status
+  requireAuth: () => void; // Function to redirect to login if not authenticated
 }
 
 // Create authentication context
@@ -72,13 +73,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   /**
    * Admin Login Function
-   * Sets authentication flags in browser storage
+   * Validates credentials and sets authentication flags
    */
-  const login = () => {
+  const login = (credentials?: { username: string; password: string }): boolean => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("isAdminAuthenticated", "true"); // Persists across sessions
-      sessionStorage.setItem("adminSession", "active"); // Clears when browser closes
-      setIsAuthenticated(true);
+      // If no credentials provided, use legacy login (for backward compatibility)
+      if (!credentials) {
+        localStorage.setItem("isAdminAuthenticated", "true");
+        sessionStorage.setItem("adminSession", "active");
+        setIsAuthenticated(true);
+        return true;
+      }
+
+      // Validate credentials
+      const validUsername = "admin";
+      const validPassword = "admin123"; // In production, hash this and store securely
+      
+      if (credentials.username === validUsername && credentials.password === validPassword) {
+        // Generate session token (simple example - use JWT in production)
+        const sessionToken = btoa(`${Date.now()}-${Math.random()}`);
+        
+        localStorage.setItem("isAdminAuthenticated", "true");
+        sessionStorage.setItem("adminSession", "active");
+        sessionStorage.setItem("sessionToken", sessionToken);
+        
+        setIsAuthenticated(true);
+        return true;
+      } else {
+        return false; // Invalid credentials
+      }
+    }
+    return false;
+  };
+
+  /**
+   * Require Authentication Function
+   * Redirects to login page if not authenticated
+   */
+  const requireAuth = () => {
+    if (!isAuthenticated && typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      window.location.href = `/admin/login?redirect=${encodeURIComponent(currentPath)}`;
     }
   };
 
@@ -90,12 +125,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isAdminAuthenticated");
       sessionStorage.removeItem("adminSession");
+      sessionStorage.removeItem("sessionToken");
       setIsAuthenticated(false);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, checkAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, checkAuth, requireAuth }}>
       {children}
     </AuthContext.Provider>
   );
