@@ -46,13 +46,24 @@ export default function FooterEditor({
         {/* Info Box */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            <svg
+              className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
             </svg>
             <div>
-              <h4 className="text-sm font-medium text-blue-900 mb-1">Footer Section</h4>
+              <h4 className="text-sm font-medium text-blue-900 mb-1">
+                Footer Section
+              </h4>
               <p className="text-sm text-blue-700">
-                Customize your footer content including logo, links, contact information, and styling.
+                Customize your footer content including logo, links, contact
+                information, and styling.
               </p>
             </div>
           </div>
@@ -122,54 +133,54 @@ export default function FooterEditor({
                   </h3>
                 </div>
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Customer Title
-              </label>
-              <input
-                type="text"
-                value={draft.customerTitle}
-                onChange={(e) =>
-                  setDraft({ ...draft, customerTitle: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter customer section title..."
-              />
-            </div>
-
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <label className="block text-sm font-medium text-gray-900 mb-3">
-                🔗 Customer Links
-              </label>
-              <div className="space-y-3">
-                {draft.customerLinks.map((link, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-                  >
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Customer Title
+                    </label>
                     <input
                       type="text"
-                      value={link.label}
+                      value={draft.customerTitle}
                       onChange={(e) =>
-                        updateCustomerLink(index, "label", e.target.value)
+                        setDraft({ ...draft, customerTitle: e.target.value })
                       }
-                      placeholder="Link text"
-                      className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    />
-                    <input
-                      type="text"
-                      value={link.href}
-                      onChange={(e) =>
-                        updateCustomerLink(index, "href", e.target.value)
-                      }
-                      placeholder="Link URL"
-                      className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="Enter customer section title..."
                     />
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <label className="block text-sm font-medium text-gray-900 mb-3">
+                      🔗 Customer Links
+                    </label>
+                    <div className="space-y-3">
+                      {draft.customerLinks.map((link, index) => (
+                        <div
+                          key={index}
+                          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                        >
+                          <input
+                            type="text"
+                            value={link.label}
+                            onChange={(e) =>
+                              updateCustomerLink(index, "label", e.target.value)
+                            }
+                            placeholder="Link text"
+                            className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          />
+                          <input
+                            type="text"
+                            value={link.href}
+                            onChange={(e) =>
+                              updateCustomerLink(index, "href", e.target.value)
+                            }
+                            placeholder="Link URL"
+                            className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -181,51 +192,51 @@ export default function FooterEditor({
                   </h3>
                 </div>
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Contact Title
-              </label>
-              <input
-                type="text"
-                value={draft.contactTitle}
-                onChange={(e) =>
-                  setDraft({ ...draft, contactTitle: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter contact section title..."
-              />
-            </div>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Contact Title
+                    </label>
+                    <input
+                      type="text"
+                      value={draft.contactTitle}
+                      onChange={(e) =>
+                        setDraft({ ...draft, contactTitle: e.target.value })
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="Enter contact section title..."
+                    />
+                  </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Contact Text
-              </label>
-              <input
-                type="text"
-                value={draft.contactText}
-                onChange={(e) =>
-                  setDraft({ ...draft, contactText: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter contact description..."
-              />
-            </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Contact Text
+                    </label>
+                    <input
+                      type="text"
+                      value={draft.contactText}
+                      onChange={(e) =>
+                        setDraft({ ...draft, contactText: e.target.value })
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="Enter contact description..."
+                    />
+                  </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Contact Email
-              </label>
-              <input
-                type="email"
-                value={draft.contactEmail}
-                onChange={(e) =>
-                  setDraft({ ...draft, contactEmail: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter contact email..."
-              />
-            </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Contact Email
+                    </label>
+                    <input
+                      type="email"
+                      value={draft.contactEmail}
+                      onChange={(e) =>
+                        setDraft({ ...draft, contactEmail: e.target.value })
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="Enter contact email..."
+                    />
+                  </div>
                 </div>
               </div>
             </>
@@ -251,7 +262,9 @@ export default function FooterEditor({
                       </label>
                       <ColorPicker
                         color={draft.bgColor}
-                        onChange={(color) => setDraft({ ...draft, bgColor: color })}
+                        onChange={(color) =>
+                          setDraft({ ...draft, bgColor: color })
+                        }
                         label="Background"
                       />
                     </div>
@@ -262,7 +275,9 @@ export default function FooterEditor({
                       </label>
                       <ColorPicker
                         color={draft.textColor}
-                        onChange={(color) => setDraft({ ...draft, textColor: color })}
+                        onChange={(color) =>
+                          setDraft({ ...draft, textColor: color })
+                        }
                         label="Text"
                       />
                     </div>

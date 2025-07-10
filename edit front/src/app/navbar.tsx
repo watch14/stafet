@@ -60,7 +60,7 @@ export default function Navbar() {
             >
               {navbar.cta.label}
             </Link>
-            
+
             {/* Edit button - small circular pen icon */}
             {canEdit && (
               <button

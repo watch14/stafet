@@ -22,7 +22,7 @@ export default function EditorLayoutWrapper({
       >
         {children}
       </div>
-      
+
       {/* Global admin controls - visible on all pages when admin is logged in */}
       <EditModeToggle />
       <AutoSave />
