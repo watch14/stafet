@@ -112,6 +112,18 @@ type AboutContent = {
   image: string; // About section image URL
 };
 
+// Content structure for the Contact section
+type ContactContent = {
+  title: string; // Contact page title
+  subtitle: string; // Contact page subtitle/description
+  bgColor: string; // Section background color
+  titleColor: string; // Title text color
+  textColor: string; // Main text color
+  buttonBgColor: string; // Submit button background color
+  buttonTextColor: string; // Submit button text color
+  image: string; // Contact page image URL
+};
+
 /**
  * MAIN EDITOR STATE TYPE
  * ======================
@@ -148,6 +160,8 @@ type EditorState = {
   setClientLogos: (c: Partial<ClientLogosContent>) => void; // Function to update client logos
   about: AboutContent; // About section content
   setAbout: (a: Partial<AboutContent>) => void; // Function to update about content
+  contact: ContactContent; // Contact section content
+  setContact: (c: Partial<ContactContent>) => void; // Function to update contact content
   resetToDefaults: () => void; // Function to reset all content to defaults
 };
 
@@ -187,7 +201,7 @@ const defaultNavbar: NavbarContent = {
   linkColor: "#000000",
   cta: {
     label: "Work with us",
-    href: "#",
+    href: "/contact",
     textColor: "#000000",
     bgColor: "#ffffff",
   },
@@ -318,6 +332,19 @@ const defaultAbout: AboutContent = {
   image: "/images/About.png",
 };
 
+// Default Contact section content
+const defaultContact: ContactContent = {
+  title: "Want to work with us?",
+  subtitle:
+    "Every good collaboration starts with a meaningful conversation. Answer these questions to start our dialogue and we will be in touch shortly.",
+  bgColor: "#ffffff",
+  titleColor: "#000000",
+  textColor: "#000000",
+  buttonBgColor: "#FFCEE5",
+  buttonTextColor: "#000000",
+  image: "/images/Work.png",
+};
+
 export const useEditorStore = create<EditorState>()(
   persist(
     (set) => ({
@@ -349,6 +376,9 @@ export const useEditorStore = create<EditorState>()(
         set((state) => ({ clientLogos: { ...state.clientLogos, ...c } })),
       about: defaultAbout,
       setAbout: (a) => set((state) => ({ about: { ...state.about, ...a } })),
+      contact: defaultContact,
+      setContact: (c) =>
+        set((state) => ({ contact: { ...state.contact, ...c } })),
       resetToDefaults: () =>
         set({
           hero: defaultHero,
@@ -359,6 +389,7 @@ export const useEditorStore = create<EditorState>()(
           testimonials: defaultTestimonials,
           clientLogos: defaultClientLogos,
           about: defaultAbout,
+          contact: defaultContact,
         }),
     }),
     {
@@ -372,6 +403,7 @@ export const useEditorStore = create<EditorState>()(
         testimonials: state.testimonials,
         clientLogos: state.clientLogos,
         about: state.about,
+        contact: state.contact,
         // Don't persist editMode - it should always start as false
       }),
     }
