@@ -1,6 +1,7 @@
 "use client";
 import { useEditorStore } from "../store/editorStore";
 import React from "react";
+import Link from "next/link";
 import NavBarEditor from "../components/NavBarEditor";
 import { useEditorManager } from "../hooks/useEditorManager";
 import { useAuth } from "../contexts/AuthContext";
@@ -16,65 +17,56 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide ${
-          canEdit ? "cursor-pointer" : ""
-        }`}
+        className={`w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide`}
         style={{
           outline: canEdit ? "2px dashed #2563eb" : undefined,
         }}
-        onClick={() => canEdit && openEditor("navbar")}
         tabIndex={canEdit ? 0 : -1}
       >
         <div className="w-full max-w-[1440px] flex items-center justify-between px-6">
-          <div className="flex items-center">
-            <span
-              className="font-black text-lg tracking-tight"
+          <div className="flex items-center ">
+            <Link
+              href="/"
+              className="font-black text-lg tracking-tight hover:opacity-80 transition"
               style={{
                 color: navbar.logoColor,
               }}
             >
               {navbar.logo}
-            </span>
+            </Link>
           </div>
           <div className="hidden md:flex gap-8 mx-auto">
             {navbar.links.map((link, i) => (
-              <a
+              <Link
                 key={i}
                 href={link.href}
-                className="hover:underline"
+                className="hover:underline "
                 style={{
                   color: navbar.linkColor,
                 }}
-                onClick={(e) => {
-                  if (canEdit) {
-                    e.preventDefault();
-                  }
-                }}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="flex items-center">
-            <a
+            <Link
               href={navbar.cta.href}
-              className="hover:underline underline-offset-4 text-black px-3 py-1 rounded"
+              className="hover:underline underline-offset-4 text-black px-3 py-1 rounded "
               style={{
                 color: navbar.cta.textColor,
                 background: navbar.cta.bgColor,
               }}
-              onClick={(e) => {
-                if (canEdit) {
-                  e.preventDefault();
-                }
-              }}
             >
               {navbar.cta.label}
-            </a>
+            </Link>
           </div>
         </div>
         {canEdit && (
-          <div className="absolute top-full right-4 mt-1 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
+          <div
+            className="absolute top-full right-4 mt-1 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10 cursor-pointer hover:bg-blue-700 transition"
+            onClick={() => openEditor("navbar")}
+          >
             <svg
               className="w-3 h-3"
               fill="none"

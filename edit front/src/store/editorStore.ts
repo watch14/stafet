@@ -72,6 +72,19 @@ type ClientLogosContent = {
   textColor: string;
 };
 
+type AboutContent = {
+  title: string;
+  subtitle: string;
+  content: string[];
+  ctaText: string;
+  bgColor: string;
+  titleColor: string;
+  textColor: string;
+  ctaBgColor: string;
+  ctaTextColor: string;
+  image: string;
+};
+
 type EditorState = {
   editMode: boolean;
   setEditMode: (v: boolean) => void;
@@ -93,6 +106,8 @@ type EditorState = {
   setTestimonials: (t: Partial<TestimonialsContent>) => void;
   clientLogos: ClientLogosContent;
   setClientLogos: (c: Partial<ClientLogosContent>) => void;
+  about: AboutContent;
+  setAbout: (a: Partial<AboutContent>) => void;
   resetToDefaults: () => void;
 };
 
@@ -118,7 +133,7 @@ const defaultNavbar: NavbarContent = {
   logoColor: "#000000",
   links: [
     { label: "Cases", href: "#" },
-    { label: "About", href: "#" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "#" },
   ],
   linkColor: "#000000",
@@ -236,6 +251,25 @@ const defaultClientLogos: ClientLogosContent = {
   textColor: "#000000",
 };
 
+const defaultAbout: AboutContent = {
+  title: "Solving business problems with solid software",
+  subtitle: "",
+  content: [
+    "STAFET is a team of experienced entrepreneurs and engineers with experience from companies such as Microsoft, bp, consultancies and co-founded startups.",
+    "We have had our hands dirty from working with many different organisations. Each is different in its own way. Meaning most organisations need tailored solutions to improve their business. Together with our passion for building great software with real impact.",
+    "We empower you and your team to focus on your core business while we handle the technical side.",
+    "If you are curious to know more about how we help optimizing our clients' budget, enhancing efficiency, and foster growth by unlocking the untapped potential.",
+    "Feel free to reach out.",
+  ],
+  ctaText: "Get in contact",
+  bgColor: "#ffffff",
+  titleColor: "#000000",
+  textColor: "#4b5563",
+  ctaBgColor: "#fde2e7",
+  ctaTextColor: "#000000",
+  image: "/images/About.png",
+};
+
 export const useEditorStore = create<EditorState>()(
   persist(
     (set) => ({
@@ -265,6 +299,8 @@ export const useEditorStore = create<EditorState>()(
       clientLogos: defaultClientLogos,
       setClientLogos: (c) =>
         set((state) => ({ clientLogos: { ...state.clientLogos, ...c } })),
+      about: defaultAbout,
+      setAbout: (a) => set((state) => ({ about: { ...state.about, ...a } })),
       resetToDefaults: () =>
         set({
           hero: defaultHero,
@@ -274,6 +310,7 @@ export const useEditorStore = create<EditorState>()(
           valueProposition: defaultValueProposition,
           testimonials: defaultTestimonials,
           clientLogos: defaultClientLogos,
+          about: defaultAbout,
         }),
     }),
     {
@@ -286,6 +323,7 @@ export const useEditorStore = create<EditorState>()(
         valueProposition: state.valueProposition,
         testimonials: state.testimonials,
         clientLogos: state.clientLogos,
+        about: state.about,
         // Don't persist editMode - it should always start as false
       }),
     }
