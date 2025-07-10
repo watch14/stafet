@@ -19,15 +19,28 @@ export default function ProcessSection() {
   return (
     <>
       <ProcessEditor open={isEditorActive("process")} onClose={() => {}} />
-      <section className="w-full relative">
+      <section
+        className="w-full relative"
+        style={{
+          outline: editMode ? "2px dashed #2563eb" : undefined,
+        }}
+      >
         {editMode && (
-          <div className="absolute top-4 right-4 z-10">
-            <button
-              onClick={handleSectionClick}
-              className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+          <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              Edit Process
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            Click to edit
           </div>
         )}
         {processData.processes.map((process, index) => (
@@ -36,6 +49,7 @@ export default function ProcessSection() {
             className={`w-full ${editMode ? "cursor-pointer" : ""}`}
             style={{ backgroundColor: process.bgColor }}
             onClick={handleSectionClick}
+            tabIndex={editMode ? 0 : -1}
           >
             <div className="w-full max-w-[1440px] mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">

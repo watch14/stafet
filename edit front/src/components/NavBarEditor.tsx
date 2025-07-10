@@ -35,124 +35,238 @@ export default function NavBarEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Navbar">
-      <div className="mb-4 text-black">
-        <label className="block text-xs mb-1">Logo Text</label>
-        <div className="flex gap-2 items-center">
-          <input
-            className="border px-2 py-1 rounded flex-1 text-black bg-white"
-            value={draft.logo}
-            onChange={(e) => setDraft({ ...draft, logo: e.target.value })}
-          />
-          <ColorPicker
-            color={draft.logoColor}
-            onChange={(c) => setDraft({ ...draft, logoColor: c })}
-            label="Color"
-          />
+      <div className="space-y-8 text-black">
+        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <h3 className="text-sm font-medium text-blue-900 mb-2">
+            🧭 Edit Navigation Bar
+          </h3>
+          <p className="text-xs text-blue-800">
+            Customize your navigation bar including logo, menu links, and CTA
+            button. Changes are saved when you click "Save Changes".
+          </p>
         </div>
-      </div>
-      <div className="mb-4 text-black">
-        <label className="block text-xs mb-1">Nav Links</label>
-        <div className="flex gap-2 items-center mb-2">
-          <span className="text-xs">Link Color:</span>
-          <ColorPicker
-            color={draft.linkColor}
-            onChange={(c) => setDraft({ ...draft, linkColor: c })}
-            label="Color"
-          />
-        </div>
-        {draft.links.map((link, i) => (
-          <div key={i} className="flex gap-2 mb-1 items-center">
-            <input
-              className="border px-2 py-1 rounded text-xs flex-1 text-black bg-white"
-              value={link.label}
-              onChange={(e) => {
-                const links = [...draft.links];
-                links[i] = { ...links[i], label: e.target.value };
-                setDraft({ ...draft, links });
-              }}
-              placeholder="Label"
-            />
-            <input
-              className="border px-2 py-1 rounded text-xs flex-1 text-black bg-white"
-              value={link.href}
-              onChange={(e) => {
-                const links = [...draft.links];
-                links[i] = { ...links[i], href: e.target.value };
-                setDraft({ ...draft, links });
-              }}
-              placeholder="Href"
-            />
-            <button
-              className="text-xs text-red-500"
-              onClick={() => {
-                const links = draft.links.filter((_, idx) => idx !== i);
-                setDraft({ ...draft, links });
-              }}
-            >
-              ✕
-            </button>
+
+        {/* Logo Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            Logo Settings
+          </h3>
+
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Logo Text
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  value={draft.logo}
+                  onChange={(e) => setDraft({ ...draft, logo: e.target.value })}
+                  placeholder="Enter logo text..."
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-800 mb-2">
+                  Logo Color
+                </label>
+                <ColorPicker
+                  color={draft.logoColor}
+                  onChange={(c) => setDraft({ ...draft, logoColor: c })}
+                  label="Logo Color"
+                />
+              </div>
+            </div>
           </div>
-        ))}
-        <button
-          className="text-xs underline mt-1"
-          onClick={() =>
-            setDraft({
-              ...draft,
-              links: [...draft.links, { label: "New", href: "#" }],
-            })
-          }
-        >
-          Add Link
-        </button>
-      </div>
-      <div className="mb-4 text-black">
-        <label className="block text-xs mb-1">CTA Button</label>
-        <input
-          className="border px-2 py-1 rounded text-xs w-full mb-1 text-black bg-white"
-          value={draft.cta.label}
-          onChange={(e) =>
-            setDraft({ ...draft, cta: { ...draft.cta, label: e.target.value } })
-          }
-          placeholder="Label"
-        />
-        <input
-          className="border px-2 py-1 rounded text-xs w-full mb-1 text-black bg-white"
-          value={draft.cta.href}
-          onChange={(e) =>
-            setDraft({ ...draft, cta: { ...draft.cta, href: e.target.value } })
-          }
-          placeholder="Href"
-        />
-        <div className="flex gap-2 items-center">
-          <ColorPicker
-            color={draft.cta.textColor}
-            onChange={(c) =>
-              setDraft({ ...draft, cta: { ...draft.cta, textColor: c } })
-            }
-            label="Text"
-          />
-          <ColorPicker
-            color={draft.cta.bgColor}
-            onChange={(c) =>
-              setDraft({ ...draft, cta: { ...draft.cta, bgColor: c } })
-            }
-            label="BG"
-          />
+        </div>
+
+        {/* Navigation Links Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            🔗 Navigation Links
+          </h3>
+
+          <div className="space-y-4">
+            {draft.links.map((link, index) => (
+              <div
+                key={index}
+                className="bg-white p-4 rounded-lg border border-gray-200"
+              >
+                <h4 className="text-sm font-medium text-gray-900 mb-3">
+                  Link {index + 1}
+                </h4>
+                <div className="grid grid-cols-1 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-800 mb-1">
+                      Label
+                    </label>
+                    <input
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={link.label}
+                      onChange={(e) => {
+                        const updatedLinks = [...draft.links];
+                        updatedLinks[index] = {
+                          ...link,
+                          label: e.target.value,
+                        };
+                        setDraft({ ...draft, links: updatedLinks });
+                      }}
+                      placeholder="Link label"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-800 mb-1">
+                      URL
+                    </label>
+                    <input
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={link.href}
+                      onChange={(e) => {
+                        const updatedLinks = [...draft.links];
+                        updatedLinks[index] = { ...link, href: e.target.value };
+                        setDraft({ ...draft, links: updatedLinks });
+                      }}
+                      placeholder="Link URL"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="bg-white p-3 rounded-lg border border-gray-200">
+              <label className="block text-xs font-medium text-gray-800 mb-2">
+                Links Color
+              </label>
+              <ColorPicker
+                color={draft.linkColor}
+                onChange={(c) => setDraft({ ...draft, linkColor: c })}
+                label="Links Color"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Button Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            🚀 Call-to-Action Button
+          </h3>
+
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Button Text
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  value={draft.cta.label}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      cta: { ...draft.cta, label: e.target.value },
+                    })
+                  }
+                  placeholder="CTA button text"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Button URL
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  value={draft.cta.href}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      cta: { ...draft.cta, href: e.target.value },
+                    })
+                  }
+                  placeholder="CTA button URL"
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Text Color
+                  </label>
+                  <ColorPicker
+                    color={draft.cta.textColor}
+                    onChange={(c) =>
+                      setDraft({
+                        ...draft,
+                        cta: { ...draft.cta, textColor: c },
+                      })
+                    }
+                    label="Text Color"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Background Color
+                  </label>
+                  <ColorPicker
+                    color={draft.cta.bgColor}
+                    onChange={(c) =>
+                      setDraft({
+                        ...draft,
+                        cta: { ...draft.cta, bgColor: c },
+                      })
+                    }
+                    label="Background Color"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex gap-2 mt-4">
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded font-bold w-full"
-          onClick={handleSave}
-        >
-          Save
-        </button>
-        <button
-          className="bg-gray-200 text-gray-800 px-4 py-2 rounded font-bold w-full"
-          onClick={handleClose}
-        >
-          Cancel
-        </button>
+
+      {/* Action Buttons */}
+      <div className="border-t border-gray-200 bg-white p-6 mt-8">
+        <div className="space-y-3">
+          <button
+            onClick={handleSave}
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Save Changes
+          </button>
+          <button
+            onClick={handleClose}
+            className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Cancel
+          </button>
+        </div>
+        <p className="text-xs text-gray-600 mt-3 text-center">
+          Changes will be applied to your live website
+        </p>
       </div>
     </SidePanel>
   );

@@ -15,25 +15,25 @@ export default function Navbar() {
   const canEdit = editMode && isAuthenticated;
   return (
     <>
-      <nav className="w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide">
+      <nav
+        className={`w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide ${
+          canEdit ? "cursor-pointer" : ""
+        }`}
+        style={{
+          outline: canEdit ? "2px dashed #2563eb" : undefined,
+        }}
+        onClick={() => canEdit && openEditor("navbar")}
+        tabIndex={canEdit ? 0 : -1}
+      >
         <div className="w-full max-w-[1440px] flex items-center justify-between px-6">
           <div className="flex items-center">
             <span
-              className="font-black text-lg tracking-tight relative"
+              className="font-black text-lg tracking-tight"
               style={{
                 color: navbar.logoColor,
-                cursor: canEdit ? "pointer" : "default",
-                outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
-              onClick={() => canEdit && openEditor("navbar")}
-              tabIndex={canEdit ? 0 : -1}
             >
               {navbar.logo}
-              {canEdit && (
-                <span className="absolute -right-5 top-1/2 -translate-y-1/2 text-blue-600 text-lg">
-                  ✎
-                </span>
-              )}
             </span>
           </div>
           <div className="hidden md:flex gap-8 mx-auto">
@@ -41,56 +41,56 @@ export default function Navbar() {
               <a
                 key={i}
                 href={link.href}
-                className="hover:underline relative"
+                className="hover:underline"
                 style={{
                   color: navbar.linkColor,
-                  cursor: canEdit ? "pointer" : "default",
-                  outline: canEdit ? "1px dashed #2563eb" : undefined,
                 }}
                 onClick={(e) => {
                   if (canEdit) {
                     e.preventDefault();
-                    openEditor("navbar");
                   }
                 }}
-                tabIndex={canEdit ? 0 : -1}
               >
                 {link.label}
-                {canEdit && (
-                  <span className="absolute -right-4 top-1/2 -translate-y-1/2 text-blue-600 text-lg">
-                    ✎
-                  </span>
-                )}
               </a>
             ))}
           </div>
           <div className="flex items-center">
             <a
               href={navbar.cta.href}
-              className="hover:underline underline-offset-4 text-black relative px-3 py-1 rounded"
+              className="hover:underline underline-offset-4 text-black px-3 py-1 rounded"
               style={{
                 color: navbar.cta.textColor,
                 background: navbar.cta.bgColor,
-                cursor: canEdit ? "pointer" : undefined,
-                outline: canEdit ? "1px dashed #2563eb" : undefined,
               }}
               onClick={(e) => {
                 if (canEdit) {
                   e.preventDefault();
-                  openEditor("navbar");
                 }
               }}
-              tabIndex={canEdit ? 0 : -1}
             >
               {navbar.cta.label}
-              {canEdit && (
-                <span className="absolute -right-5 top-1/2 -translate-y-1/2 text-blue-600 text-lg">
-                  ✎
-                </span>
-              )}
             </a>
           </div>
         </div>
+        {canEdit && (
+          <div className="absolute top-full right-4 mt-1 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            Click to edit
+          </div>
+        )}
       </nav>
       <NavBarEditor open={isEditorActive("navbar")} onClose={() => {}} />
     </>
