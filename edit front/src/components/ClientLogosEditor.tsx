@@ -28,6 +28,18 @@ export default function ClientLogosEditor({
     setDraft({ ...draft, logos: updatedLogos });
   };
 
+  const addLogo = () => {
+    const newLogo = { name: "", logo: "", alt: "" };
+    setDraft({ ...draft, logos: [...draft.logos, newLogo] });
+  };
+
+  const removeLogo = (index: number) => {
+    if (draft.logos.length > 1) {
+      const updatedLogos = draft.logos.filter((_, i) => i !== index);
+      setDraft({ ...draft, logos: updatedLogos });
+    }
+  };
+
   const handleSave = () => {
     setClientLogos(draft);
     closeEditor();
@@ -61,10 +73,22 @@ export default function ClientLogosEditor({
         </div>
 
         <div className="space-y-4">
-          <label className="block text-xs font-medium">Client Logos</label>
+          <div className="flex justify-between items-center">
+            <label className="block text-xs font-medium">Client Logos</label>
+          </div>
           {draft.logos.map((logo, index) => (
             <div key={index} className="p-4 border rounded-lg">
-              <h4 className="font-medium mb-3 text-sm">Logo {index + 1}</h4>
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="font-medium text-sm">Logo {index + 1}</h4>
+                {draft.logos.length > 1 && (
+                  <button
+                    onClick={() => removeLogo(index)}
+                    className="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700 transition-colors"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
               <div className="grid grid-cols-1 gap-3">
                 <div>
                   <label className="block text-xs font-medium mb-1">
@@ -81,15 +105,34 @@ export default function ClientLogosEditor({
 
                 <div>
                   <label className="block text-xs font-medium mb-1">
-                    Logo Image Path
+                    Logo Image
                   </label>
-                  <input
-                    type="text"
-                    value={logo.logo}
-                    onChange={(e) => updateLogo(index, "logo", e.target.value)}
-                    className="w-full p-2 border rounded text-sm"
-                    placeholder="/images/logo.png"
+                  <ImageUploader
+                    currentImage={logo.logo}
+                    onImageSelect={(imageUrl) =>
+                      updateLogo(index, "logo", imageUrl)
+                    }
                   />
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      value={logo.logo}
+                      onChange={(e) =>
+                        updateLogo(index, "logo", e.target.value)
+                      }
+                      className="w-full p-2 border rounded text-sm"
+                      placeholder="Or enter image URL manually"
+                    />
+                  </div>
+                  {logo.logo && (
+                    <div className="mt-2">
+                      <img
+                        src={logo.logo}
+                        alt={logo.alt || logo.name}
+                        className="w-20 h-20 object-contain border rounded bg-gray-50"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -107,6 +150,12 @@ export default function ClientLogosEditor({
               </div>
             </div>
           ))}
+          <button
+            onClick={addLogo}
+            className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700 transition-colors flex items-center gap-1 ml-auto"
+          >
+            <span>+</span> Add Client Logo
+          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
