@@ -128,7 +128,9 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
               <input
                 type="text"
                 value={draft.subtitle}
-                onChange={(e) => setDraft({ ...draft, subtitle: e.target.value })}
+                onChange={(e) =>
+                  setDraft({ ...draft, subtitle: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter subtitle..."
               />
@@ -190,7 +192,9 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
               <input
                 type="text"
                 value={draft.ctaText}
-                onChange={(e) => setDraft({ ...draft, ctaText: e.target.value })}
+                onChange={(e) =>
+                  setDraft({ ...draft, ctaText: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter button text..."
               />
@@ -202,7 +206,9 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 About Image
               </label>
               <ImageUploader
-                onImageSelect={(url: string) => setDraft({ ...draft, image: url })}
+                onImageSelect={(url: string) =>
+                  setDraft({ ...draft, image: url })
+                }
                 currentImage={draft.image}
               />
             </div>
@@ -256,7 +262,9 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                   </label>
                   <ColorPicker
                     color={draft.ctaBgColor}
-                    onChange={(color) => setDraft({ ...draft, ctaBgColor: color })}
+                    onChange={(color) =>
+                      setDraft({ ...draft, ctaBgColor: color })
+                    }
                   />
                 </div>
                 <div>
@@ -265,7 +273,9 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                   </label>
                   <ColorPicker
                     color={draft.ctaTextColor}
-                    onChange={(color) => setDraft({ ...draft, ctaTextColor: color })}
+                    onChange={(color) =>
+                      setDraft({ ...draft, ctaTextColor: color })
+                    }
                   />
                 </div>
               </div>
@@ -274,10 +284,10 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
         )}
 
         {/* Save/Cancel Buttons */}
-        <div className="flex gap-3 pt-6 border-t border-gray-200">
+        <div className="space-y-3">
           <button
             onClick={handleSave}
-            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2"
           >
             <svg
               className="w-4 h-4"

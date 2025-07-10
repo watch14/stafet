@@ -106,252 +106,254 @@ export default function HeroEditor({
                 Content Settings
               </h3>
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Hero Title
-              </label>
-              <div className="space-y-3">
-                <textarea
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                  value={draft.title}
-                  onChange={(e) =>
-                    setDraft({ ...draft, title: e.target.value })
-                  }
-                  rows={3}
-                  placeholder="Enter hero title..."
-                />
-                <div className="bg-white p-3 rounded-lg border border-gray-200">
-                  <label className="block text-xs font-medium text-gray-800 mb-2">
-                    Title Color
-                  </label>
-                  <ColorPicker
-                    color={draft.titleColor}
-                    onChange={(c) => setDraft({ ...draft, titleColor: c })}
-                    label="Title Color"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Subtitle
-              </label>
-              <div className="space-y-3">
-                <textarea
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                  value={draft.subtitle}
-                  onChange={(e) =>
-                    setDraft({ ...draft, subtitle: e.target.value })
-                  }
-                  rows={4}
-                  placeholder="Enter hero subtitle..."
-                />
-                <div className="bg-white p-3 rounded-lg border border-gray-200">
-                  <label className="block text-xs font-medium text-gray-800 mb-2">
-                    Subtitle Color
-                  </label>
-                  <ColorPicker
-                    color={draft.subtitleColor}
-                    onChange={(c) => setDraft({ ...draft, subtitleColor: c })}
-                    label="Subtitle Color"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Button Section */}
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            🔘 Call-to-Action Button
-          </h3>
-
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Button Text
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  value={draft.button.text}
-                  onChange={(e) =>
-                    setDraft({
-                      ...draft,
-                      button: { ...draft.button, text: e.target.value },
-                    })
-                  }
-                  placeholder="Button text"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Button Link
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  value={draft.button.href}
-                  onChange={(e) =>
-                    setDraft({
-                      ...draft,
-                      button: { ...draft.button, href: e.target.value },
-                    })
-                  }
-                  placeholder="Button URL"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-xs font-medium text-gray-800 mb-2">
-                    Button Text Color
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Hero Title
                   </label>
-                  <ColorPicker
-                    color={draft.button.textColor}
-                    onChange={(c) =>
-                      setDraft({
-                        ...draft,
-                        button: { ...draft.button, textColor: c },
-                      })
-                    }
-                    label="Text Color"
-                  />
+                  <div className="space-y-3">
+                    <textarea
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                      value={draft.title}
+                      onChange={(e) =>
+                        setDraft({ ...draft, title: e.target.value })
+                      }
+                      rows={3}
+                      placeholder="Enter hero title..."
+                    />
+                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                      <label className="block text-xs font-medium text-gray-800 mb-2">
+                        Title Color
+                      </label>
+                      <ColorPicker
+                        color={draft.titleColor}
+                        onChange={(c) => setDraft({ ...draft, titleColor: c })}
+                        label="Title Color"
+                      />
+                    </div>
+                  </div>
                 </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-800 mb-2">
-                    Button Background Color
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Subtitle
                   </label>
-                  <ColorPicker
-                    color={draft.button.bgColor}
-                    onChange={(c) =>
-                      setDraft({
-                        ...draft,
-                        button: { ...draft.button, bgColor: c },
-                      })
-                    }
-                    label="Background Color"
-                  />
+                  <div className="space-y-3">
+                    <textarea
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                      value={draft.subtitle}
+                      onChange={(e) =>
+                        setDraft({ ...draft, subtitle: e.target.value })
+                      }
+                      rows={4}
+                      placeholder="Enter hero subtitle..."
+                    />
+                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                      <label className="block text-xs font-medium text-gray-800 mb-2">
+                        Subtitle Color
+                      </label>
+                      <ColorPicker
+                        color={draft.subtitleColor}
+                        onChange={(c) =>
+                          setDraft({ ...draft, subtitleColor: c })
+                        }
+                        label="Subtitle Color"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Background Section */}
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            🎨 Background Settings
-          </h3>
+            {/* Button Section */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">
+                🔘 Call-to-Action Button
+              </h3>
 
-          <div className="space-y-6">
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <label className="block text-sm font-medium text-gray-900 mb-3">
-                Background Type
-              </label>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setDraft({ ...draft, bgType: "color" })}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    draft.bgType === "color"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Color
-                </button>
-                <button
-                  onClick={() => setDraft({ ...draft, bgType: "image" })}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    draft.bgType === "image"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Image
-                </button>
-              </div>
-            </div>
-
-            {draft.bgType === "color" && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <label className="block text-sm font-medium text-gray-900 mb-3">
-                  Background Color
-                </label>
-                <ColorPicker
-                  color={draft.bgColor}
-                  onChange={(c) => setDraft({ ...draft, bgColor: c })}
-                  label="Background"
-                />
-              </div>
-            )}
-
-            {draft.bgType === "image" && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <label className="block text-sm font-medium text-gray-900 mb-3">
-                  📸 Background Image
-                </label>
-                <div className="space-y-3">
-                  <ImageUploader
-                    onImageSelect={handleImageSelect}
-                    currentImage={draft.bgImage}
-                  />
+                <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-800 mb-2">
-                      Or enter image URL manually:
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Button Text
                     </label>
                     <input
                       type="text"
-                      placeholder="Or paste image URL"
-                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      value={draft.bgType === "image" ? draft.bgImage : ""}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={draft.button.text}
                       onChange={(e) =>
                         setDraft({
                           ...draft,
-                          bgImage: e.target.value,
-                          bgType: "image",
+                          button: { ...draft.button, text: e.target.value },
                         })
                       }
+                      placeholder="Button text"
                     />
                   </div>
-                  {draft.bgImage && (
-                    <div className="relative">
-                      <img
-                        src={draft.bgImage}
-                        alt="Background preview"
-                        className="w-full h-32 object-cover rounded-lg border border-gray-200"
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Button Link
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={draft.button.href}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          button: { ...draft.button, href: e.target.value },
+                        })
+                      }
+                      placeholder="Button URL"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-800 mb-2">
+                        Button Text Color
+                      </label>
+                      <ColorPicker
+                        color={draft.button.textColor}
+                        onChange={(c) =>
+                          setDraft({
+                            ...draft,
+                            button: { ...draft.button, textColor: c },
+                          })
+                        }
+                        label="Text Color"
                       />
-                      <button
-                        onClick={() => handleImageSelect("")}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
                     </div>
-                  )}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-800 mb-2">
+                        Button Background Color
+                      </label>
+                      <ColorPicker
+                        color={draft.button.bgColor}
+                        onChange={(c) =>
+                          setDraft({
+                            ...draft,
+                            button: { ...draft.button, bgColor: c },
+                          })
+                        }
+                        label="Background Color"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Background Section */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">
+                🎨 Background Settings
+              </h3>
+
+              <div className="space-y-6">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-medium text-gray-900 mb-3">
+                    Background Type
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setDraft({ ...draft, bgType: "color" })}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        draft.bgType === "color"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Color
+                    </button>
+                    <button
+                      onClick={() => setDraft({ ...draft, bgType: "image" })}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        draft.bgType === "image"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Image
+                    </button>
+                  </div>
+                </div>
+
+                {draft.bgType === "color" && (
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <label className="block text-sm font-medium text-gray-900 mb-3">
+                      Background Color
+                    </label>
+                    <ColorPicker
+                      color={draft.bgColor}
+                      onChange={(c) => setDraft({ ...draft, bgColor: c })}
+                      label="Background"
+                    />
+                  </div>
+                )}
+
+                {draft.bgType === "image" && (
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <label className="block text-sm font-medium text-gray-900 mb-3">
+                      📸 Background Image
+                    </label>
+                    <div className="space-y-3">
+                      <ImageUploader
+                        onImageSelect={handleImageSelect}
+                        currentImage={draft.bgImage}
+                      />
+                      <div>
+                        <label className="block text-xs font-medium text-gray-800 mb-2">
+                          Or enter image URL manually:
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Or paste image URL"
+                          className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          value={draft.bgType === "image" ? draft.bgImage : ""}
+                          onChange={(e) =>
+                            setDraft({
+                              ...draft,
+                              bgImage: e.target.value,
+                              bgType: "image",
+                            })
+                          }
+                        />
+                      </div>
+                      {draft.bgImage && (
+                        <div className="relative">
+                          <img
+                            src={draft.bgImage}
+                            alt="Background preview"
+                            className="w-full h-32 object-cover rounded-lg border border-gray-200"
+                          />
+                          <button
+                            onClick={() => handleImageSelect("")}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         )}
 
         {activeTab === "style" && (
@@ -374,7 +376,9 @@ export default function HeroEditor({
               </label>
               <ColorPicker
                 color={draft.subtitleColor}
-                onChange={(color) => setDraft({ ...draft, subtitleColor: color })}
+                onChange={(color) =>
+                  setDraft({ ...draft, subtitleColor: color })
+                }
               />
             </div>
 
@@ -391,7 +395,9 @@ export default function HeroEditor({
                     </label>
                     <ColorPicker
                       color={draft.bgColor}
-                      onChange={(color) => setDraft({ ...draft, bgColor: color })}
+                      onChange={(color) =>
+                        setDraft({ ...draft, bgColor: color })
+                      }
                     />
                   </div>
                 )}
@@ -410,7 +416,12 @@ export default function HeroEditor({
                   </label>
                   <ColorPicker
                     color={draft.button.bgColor}
-                    onChange={(color) => setDraft({ ...draft, button: { ...draft.button, bgColor: color } })}
+                    onChange={(color) =>
+                      setDraft({
+                        ...draft,
+                        button: { ...draft.button, bgColor: color },
+                      })
+                    }
                   />
                 </div>
                 <div>
@@ -419,7 +430,12 @@ export default function HeroEditor({
                   </label>
                   <ColorPicker
                     color={draft.button.textColor}
-                    onChange={(color) => setDraft({ ...draft, button: { ...draft.button, textColor: color } })}
+                    onChange={(color) =>
+                      setDraft({
+                        ...draft,
+                        button: { ...draft.button, textColor: color },
+                      })
+                    }
                   />
                 </div>
               </div>

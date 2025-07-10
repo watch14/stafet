@@ -65,11 +65,11 @@ export default function AboutSection() {
             <div className="px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-8 sm:py-12 md:py-16 lg:py-20 max-w-full lg:max-w-3xl w-full">
               <h1
                 className="font-normal leading-tight mb-6 lg:mb-8"
-                style={{ 
+                style={{
                   color: about.titleColor,
-                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                  lineHeight: '1.1',
-                  fontWeight: '400'
+                  fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                  lineHeight: "1.1",
+                  fontWeight: "400",
                 }}
               >
                 {about.title}
@@ -80,10 +80,10 @@ export default function AboutSection() {
                   <p
                     key={index}
                     className="leading-relaxed"
-                    style={{ 
+                    style={{
                       color: about.textColor,
-                      fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)',
-                      lineHeight: '1.7',
+                      fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)",
+                      lineHeight: "1.7",
                     }}
                   >
                     {paragraph}
@@ -99,8 +99,18 @@ export default function AboutSection() {
                 }}
               >
                 {about.ctaText}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               </button>
             </div>
