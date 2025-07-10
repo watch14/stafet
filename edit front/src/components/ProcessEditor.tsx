@@ -135,41 +135,12 @@ export default function ProcessEditor({
                 <label className="block text-sm font-medium text-gray-900 mb-3">
                   📸 Step Image
                 </label>
-                <div className="space-y-3">
-                  <ImageUploader
-                    onImageSelect={(imageUrl) =>
-                      updateProcessItem(index, "image", imageUrl)
-                    }
-                    currentImage={item.image}
-                  />
-                  {item.image && (
-                    <div className="relative">
-                      <img
-                        src={item.image}
-                        alt={`${item.title} preview`}
-                        className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                      />
-                      <button
-                        onClick={() => updateProcessItem(index, "image", "")}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <ImageUploader
+                  onImageSelect={(imageUrl) =>
+                    updateProcessItem(index, "image", imageUrl)
+                  }
+                  currentImage={item.image}
+                />
               </div>
 
               {/* Color Customization */}

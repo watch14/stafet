@@ -160,19 +160,21 @@ export default function ImageUploader({
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {uploadedImages.map((image) => (
                   <div key={image.filename} className="relative group">
-                    <img
-                      src={`http://localhost:3001${image.url}`}
-                      alt={image.filename}
-                      className="w-full h-32 object-cover rounded border cursor-pointer hover:opacity-75"
-                      onClick={() => handleImageSelect(image.url)}
-                    />
+                    <div className="aspect-square w-full overflow-hidden rounded border bg-gray-100">
+                      <img
+                        src={`http://localhost:3001${image.url}`}
+                        alt={image.filename}
+                        className="w-full h-full object-contain cursor-pointer hover:opacity-75 transition-opacity"
+                        onClick={() => handleImageSelect(image.url)}
+                      />
+                    </div>
                     <button
                       onClick={() => handleDeleteImage(image.filename)}
-                      className="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                     >
                       ✕
                     </button>
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b truncate">
                       {image.filename}
                     </div>
                   </div>
