@@ -22,12 +22,6 @@ export default function NavBarEditor({
     setDraft(navbar);
   }, [open]);
 
-  const updateLink = (index: number, field: string, value: string) => {
-    const updatedLinks = [...draft.links];
-    updatedLinks[index] = { ...updatedLinks[index], [field]: value };
-    setDraft({ ...draft, links: updatedLinks });
-  };
-
   const handleSave = () => {
     setNavbar(draft);
     closeEditor();
@@ -102,17 +96,16 @@ export default function NavBarEditor({
                       Logo Text
                     </label>
                     <input
-                      type="text"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       value={draft.logo}
                       onChange={(e) => setDraft({ ...draft, logo: e.target.value })}
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="Enter logo text..."
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Navigation Links */}
+              {/* Navigation Links Section */}
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -126,130 +119,139 @@ export default function NavBarEditor({
                       🔗 Menu Links
                     </label>
                     <div className="space-y-3">
-                      {draft.links.map((link, index) => (
-                        <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <input
-                            type="text"
-                            value={link.label}
-                            onChange={(e) => updateLink(index, "label", e.target.value)}
-                            placeholder="Link text"
-                            className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                          />
-                          <input
-                            type="text"
-                            value={link.href}
-                            onChange={(e) => updateLink(index, "href", e.target.value)}
-                            placeholder="Link URL"
-                            className="p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Call-to-Action Button
-                  </h3>
-                </div>
-
-                <div className="space-y-6">
+            {draft.links.map((link, index) => (
+              <div
+                key={index}
+                className="bg-white p-4 rounded-lg border border-gray-200"
+              >
+                <h4 className="text-sm font-medium text-gray-900 mb-3">
+                  Link {index + 1}
+                </h4>
+                <div className="grid grid-cols-1 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Button Text
+                    <label className="block text-xs font-medium text-gray-800 mb-1">
+                      Label
                     </label>
                     <input
-                      type="text"
-                      value={draft.cta.label}
-                      onChange={(e) => setDraft({ ...draft, cta: { ...draft.cta, label: e.target.value } })}
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      placeholder="Enter CTA button text..."
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={link.label}
+                      onChange={(e) => {
+                        const updatedLinks = [...draft.links];
+                        updatedLinks[index] = {
+                          ...link,
+                          label: e.target.value,
+                        };
+                        setDraft({ ...draft, links: updatedLinks });
+                      }}
+                      placeholder="Link label"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Button URL
+                    <label className="block text-xs font-medium text-gray-800 mb-1">
+                      URL
                     </label>
                     <input
-                      type="text"
-                      value={draft.cta.href}
-                      onChange={(e) => setDraft({ ...draft, cta: { ...draft.cta, href: e.target.value } })}
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                      placeholder="Enter CTA button URL..."
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      value={link.href}
+                      onChange={(e) => {
+                        const updatedLinks = [...draft.links];
+                        updatedLinks[index] = { ...link, href: e.target.value };
+                        setDraft({ ...draft, links: updatedLinks });
+                      }}
+                      placeholder="Link URL"
                     />
                   </div>
                 </div>
               </div>
-            </>
-          )}
+            ))}
 
-          {activeTab === "style" && (
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Style Settings
-                </h3>
+            <div className="bg-white p-3 rounded-lg border border-gray-200">
+              <label className="block text-xs font-medium text-gray-800 mb-2">
+                Links Color
+              </label>
+              <ColorPicker
+                color={draft.linkColor}
+                onChange={(c) => setDraft({ ...draft, linkColor: c })}
+                label="Links Color"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Button Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            🚀 Call-to-Action Button
+          </h3>
+
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Button Text
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  value={draft.cta.label}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      cta: { ...draft.cta, label: e.target.value },
+                    })
+                  }
+                  placeholder="CTA button text"
+                />
               </div>
-
-              <div className="space-y-6">
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <h4 className="text-sm font-medium text-gray-900 mb-4">
-                    🎨 Color Customization
-                  </h4>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-800 mb-2">
-                        Logo Color
-                      </label>
-                      <ColorPicker
-                        color={draft.logoColor}
-                        onChange={(color) => setDraft({ ...draft, logoColor: color })}
-                        label="Logo"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-800 mb-2">
-                        Links Color
-                      </label>
-                      <ColorPicker
-                        color={draft.linkColor}
-                        onChange={(color) => setDraft({ ...draft, linkColor: color })}
-                        label="Links"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-800 mb-2">
-                        CTA Text Color
-                      </label>
-                      <ColorPicker
-                        color={draft.cta.textColor}
-                        onChange={(color) => setDraft({ ...draft, cta: { ...draft.cta, textColor: color } })}
-                        label="CTA Text"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-800 mb-2">
-                        CTA Background Color
-                      </label>
-                      <ColorPicker
-                        color={draft.cta.bgColor}
-                        onChange={(color) => setDraft({ ...draft, cta: { ...draft.cta, bgColor: color } })}
-                        label="CTA Background"
-                      />
-                    </div>
-                  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Button URL
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  value={draft.cta.href}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      cta: { ...draft.cta, href: e.target.value },
+                    })
+                  }
+                  placeholder="CTA button URL"
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Text Color
+                  </label>
+                  <ColorPicker
+                    color={draft.cta.textColor}
+                    onChange={(c) =>
+                      setDraft({
+                        ...draft,
+                        cta: { ...draft.cta, textColor: c },
+                      })
+                    }
+                    label="Text Color"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Background Color
+                  </label>
+                  <ColorPicker
+                    color={draft.cta.bgColor}
+                    onChange={(c) =>
+                      setDraft({
+                        ...draft,
+                        cta: { ...draft.cta, bgColor: c },
+                      })
+                    }
+                    label="Background Color"
+                  />
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
