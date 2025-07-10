@@ -42,7 +42,7 @@ export default function ProcessEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Process Section">
-      <div className="space-y-8">
+      <div className="space-y-8 text-black">
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
           <h3 className="text-sm font-medium text-blue-900 mb-2">
             💡 Edit Process Steps

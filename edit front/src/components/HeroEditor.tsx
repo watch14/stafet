@@ -60,11 +60,11 @@ export default function HeroEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Hero Section">
-      <div className="mb-4">
+      <div className="mb-4 text-black">
         <label className="block text-xs sm:text-sm mb-1 font-medium">
           Title
         </label>
-        <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end mb-3">
+        <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end mb-3 text-black">
           <textarea
             className="border border-gray-300 px-3 py-2 rounded-lg flex-1 text-black bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             value={draft.title}
@@ -100,7 +100,7 @@ export default function HeroEditor({
           </div>
         </div>
       </div>
-      <div className="mb-4 sm:mb-6">
+      <div className="mb-4 sm:mb-6 text-black">
         <label className="block text-xs sm:text-sm mb-2 font-medium">
           Button Settings
         </label>
@@ -165,7 +165,7 @@ export default function HeroEditor({
           </div>
         </div>
       </div>
-      <div className="mb-6">
+      <div className="mb-6 text-black">
         <label className="block text-xs sm:text-sm mb-2 font-medium">
           Background
         </label>

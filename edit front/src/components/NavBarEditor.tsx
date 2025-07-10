@@ -35,7 +35,7 @@ export default function NavBarEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Navbar">
-      <div className="mb-4">
+      <div className="mb-4 text-black">
         <label className="block text-xs mb-1">Logo Text</label>
         <div className="flex gap-2 items-center">
           <input
@@ -50,7 +50,7 @@ export default function NavBarEditor({
           />
         </div>
       </div>
-      <div className="mb-4">
+      <div className="mb-4 text-black">
         <label className="block text-xs mb-1">Nav Links</label>
         <div className="flex gap-2 items-center mb-2">
           <span className="text-xs">Link Color:</span>
@@ -105,7 +105,7 @@ export default function NavBarEditor({
           Add Link
         </button>
       </div>
-      <div className="mb-4">
+      <div className="mb-4 text-black">
         <label className="block text-xs mb-1">CTA Button</label>
         <input
           className="border px-2 py-1 rounded text-xs w-full mb-1 text-black bg-white"

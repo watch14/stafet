@@ -41,9 +41,9 @@ export default function FooterEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Footer Section">
-      <div className="space-y-6">
+      <div className="space-y-6 text-black">
         {/* Customer Section */}
-        <div className="p-4 border rounded-lg">
+        <div className="p-4 border rounded-lg text-black">
           <h3 className="font-medium mb-4 text-sm">Customer Section</h3>
 
           <div className="mb-4">

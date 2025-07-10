@@ -39,7 +39,7 @@ export default function TestimonialsEditor({
       onClose={handleClose}
       title="Edit Testimonials Section"
     >
-      <div className="space-y-6">
+      <div className="space-y-6 text-black">
         <div>
           <label className="block text-xs font-medium mb-1">
             Section Title

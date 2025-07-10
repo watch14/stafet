@@ -39,7 +39,7 @@ export default function ValuePropositionEditor({
       onClose={handleClose}
       title="Edit Value Proposition Section"
     >
-      <div className="space-y-6">
+      <div className="space-y-6 text-black">
         <div>
           <label className="block text-xs font-medium mb-1">Title</label>
           <textarea
