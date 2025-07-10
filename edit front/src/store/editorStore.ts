@@ -1,116 +1,164 @@
+/**
+ * EDITOR STORE - Main Data Management System
+ * ==========================================
+ *
+ * This file manages all the content for your website using Zustand state management.
+ * It handles:
+ * - All text, colors, and images for each section
+ * - User authentication (admin login)
+ * - Edit mode state (when editing is enabled)
+ * - Auto-save functionality
+ * - Data persistence (saves to browser storage)
+ *
+ * Think of this as the "brain" that remembers all your website content
+ * and whether someone is logged in as admin to edit it.
+ */
+
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+// Content structure for the Hero (main banner) section
+// Content structure for the Hero (main banner) section
 type HeroContent = {
-  title: string;
-  subtitle: string;
-  titleColor: string;
-  subtitleColor: string;
+  title: string; // Main headline text
+  subtitle: string; // Subheadline text
+  titleColor: string; // Color of the main headline
+  subtitleColor: string; // Color of the subheadline
   button: {
-    text: string;
-    href: string;
-    textColor: string;
-    bgColor: string;
+    // Call-to-action button
+    text: string; // Button text
+    href: string; // Where button links to
+    textColor: string; // Button text color
+    bgColor: string; // Button background color
   };
-  bgType: "color" | "image";
-  bgColor: string;
-  bgImage: string;
+  bgType: "color" | "image"; // Background type (solid color or image)
+  bgColor: string; // Background color
+  bgImage: string; // Background image URL
 };
 
+// Content structure for the Navigation Bar
 type NavbarContent = {
-  logo: string;
-  logoColor: string;
-  links: { label: string; href: string }[];
-  linkColor: string;
-  cta: { label: string; href: string; textColor: string; bgColor: string };
+  logo: string; // Logo text or image URL
+  logoColor: string; // Logo text color
+  links: { label: string; href: string }[]; // Navigation menu items
+  linkColor: string; // Navigation link colors
+  cta: { label: string; href: string; textColor: string; bgColor: string }; // Header CTA button
 };
 
+// Content structure for individual Process steps
 type ProcessItem = {
-  number: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  titleBgColor: string;
-  bgColor: string;
-  textColor: string;
-  image: string;
+  number: string; // Step number (e.g., "01", "02")
+  title: string; // Step title
+  subtitle: string; // Step subtitle
+  description: string; // Step description
+  titleBgColor: string; // Title background color
+  bgColor: string; // Step card background color
+  textColor: string; // Text color
+  image: string; // Step image URL
 };
 
+// Content structure for the Process section
 type ProcessContent = {
-  processes: ProcessItem[];
+  processes: ProcessItem[]; // Array of all process steps
 };
 
+// Content structure for the Footer section
 type FooterContent = {
-  logo: string;
-  customerTitle: string;
-  customerLinks: { label: string; href: string }[];
-  contactTitle: string;
-  contactText: string;
-  contactEmail: string;
-  bgColor: string;
-  textColor: string;
+  logo: string; // Footer logo text
+  customerTitle: string; // Customer links section title
+  customerLinks: { label: string; href: string }[]; // Customer navigation links
+  contactTitle: string; // Contact section title
+  contactText: string; // Contact description text
+  contactEmail: string; // Contact email address
+  bgColor: string; // Footer background color
+  textColor: string; // Footer text color
 };
 
+// Content structure for the Value Proposition section
 type ValuePropositionContent = {
-  title: string;
-  bgColor: string;
-  textColor: string;
+  title: string; // Main value proposition headline
+  bgColor: string; // Section background color
+  textColor: string; // Text color
 };
 
+// Content structure for the Testimonials section
 type TestimonialsContent = {
-  title: string;
-  quote: string;
-  author: string;
-  bgColor: string;
-  textColor: string;
+  title: string; // Testimonials section title
+  quote: string; // Customer testimonial quote
+  author: string; // Quote author name
+  bgColor: string; // Section background color
+  textColor: string; // Text color
 };
 
+// Content structure for the Client Logos section
 type ClientLogosContent = {
-  title: string;
-  logos: { name: string; logo: string; alt: string }[];
-  bgColor: string;
-  textColor: string;
+  title: string; // Client logos section title
+  logos: { name: string; logo: string; alt: string }[]; // Array of client logos
+  bgColor: string; // Section background color
+  textColor: string; // Text color
 };
 
+// Content structure for the About section
 type AboutContent = {
-  title: string;
-  subtitle: string;
-  content: string[];
-  ctaText: string;
-  bgColor: string;
-  titleColor: string;
-  textColor: string;
-  ctaBgColor: string;
-  ctaTextColor: string;
-  image: string;
+  title: string; // About section title
+  subtitle: string; // About section subtitle
+  content: string[]; // Array of about content paragraphs
+  ctaText: string; // Call-to-action button text
+  bgColor: string; // Section background color
+  titleColor: string; // Title text color
+  textColor: string; // Main text color
+  ctaBgColor: string; // CTA button background color
+  ctaTextColor: string; // CTA button text color
+  image: string; // About section image URL
 };
 
+/**
+ * MAIN EDITOR STATE TYPE
+ * ======================
+ * This defines all the functions and data available throughout the app.
+ * It includes:
+ * - Edit mode controls (turn editing on/off)
+ * - Content for all website sections
+ * - Functions to update each section
+ * - Reset functionality
+ */
 type EditorState = {
-  editMode: boolean;
-  setEditMode: (v: boolean) => void;
-  isEditorOpen: boolean;
-  setIsEditorOpen: (open: boolean) => void;
-  activeEditor: string | null;
-  setActiveEditor: (editor: string | null) => void;
-  hero: HeroContent;
-  setHero: (h: Partial<HeroContent>) => void;
-  navbar: NavbarContent;
-  setNavbar: (n: Partial<NavbarContent>) => void;
-  process: ProcessContent;
-  setProcess: (p: Partial<ProcessContent>) => void;
-  footer: FooterContent;
-  setFooter: (f: Partial<FooterContent>) => void;
-  valueProposition: ValuePropositionContent;
-  setValueProposition: (v: Partial<ValuePropositionContent>) => void;
-  testimonials: TestimonialsContent;
-  setTestimonials: (t: Partial<TestimonialsContent>) => void;
-  clientLogos: ClientLogosContent;
-  setClientLogos: (c: Partial<ClientLogosContent>) => void;
-  about: AboutContent;
-  setAbout: (a: Partial<AboutContent>) => void;
-  resetToDefaults: () => void;
+  // Edit mode state management
+  editMode: boolean; // Whether editing is currently enabled
+  setEditMode: (v: boolean) => void; // Function to enable/disable editing
+  isEditorOpen: boolean; // Whether editor panel is open
+  setIsEditorOpen: (open: boolean) => void; // Function to open/close editor panel
+  activeEditor: string | null; // Which editor is currently active
+  setActiveEditor: (editor: string | null) => void; // Function to set active editor
+
+  // Website content sections
+  hero: HeroContent; // Hero section content
+  setHero: (h: Partial<HeroContent>) => void; // Function to update hero content
+  navbar: NavbarContent; // Navigation bar content
+  setNavbar: (n: Partial<NavbarContent>) => void; // Function to update navbar content
+  process: ProcessContent; // Process section content
+  setProcess: (p: Partial<ProcessContent>) => void; // Function to update process content
+  footer: FooterContent; // Footer section content
+  setFooter: (f: Partial<FooterContent>) => void; // Function to update footer content
+  valueProposition: ValuePropositionContent; // Value proposition content
+  setValueProposition: (v: Partial<ValuePropositionContent>) => void; // Function to update value prop
+  testimonials: TestimonialsContent; // Testimonials section content
+  setTestimonials: (t: Partial<TestimonialsContent>) => void; // Function to update testimonials
+  clientLogos: ClientLogosContent; // Client logos section content
+  setClientLogos: (c: Partial<ClientLogosContent>) => void; // Function to update client logos
+  about: AboutContent; // About section content
+  setAbout: (a: Partial<AboutContent>) => void; // Function to update about content
+  resetToDefaults: () => void; // Function to reset all content to defaults
 };
 
+/**
+ * DEFAULT CONTENT VALUES
+ * =======================
+ * These are the initial values for each section when the site is first loaded
+ * or when reset to defaults is triggered.
+ */
+
+// Default Hero section content
 const defaultHero: HeroContent = {
   title: "More than a traditional\nsoftware agency",
   subtitle:

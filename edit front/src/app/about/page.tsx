@@ -1,3 +1,17 @@
+/**
+ * ABOUT PAGE - Company Information Page
+ * =====================================
+ *
+ * This is a dedicated About page that provides detailed information about the company.
+ * Features:
+ * - Split layout with text content on left and image on right
+ * - Editable content when admin is logged in
+ * - Responsive design that stacks on mobile
+ * - Call-to-action button
+ *
+ * The content for this page is managed through the About Editor when edit mode is enabled.
+ */
+
 "use client";
 import React from "react";
 import Image from "next/image";
@@ -7,26 +21,32 @@ import { useEditorManager } from "../../hooks/useEditorManager";
 import { useAuth } from "../../contexts/AuthContext";
 import AboutEditor from "../../components/AboutEditor";
 
+/**
+ * About Page Component
+ * Displays company information in a split layout format
+ */
 export default function AboutPage() {
+  // Get current edit mode and about content from store
   const editMode = useEditorStore((s) => s.editMode);
   const about = useEditorStore((s) => s.about);
   const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive } = useEditorManager();
 
-  // Only allow edit interactions if authenticated
+  // Only allow edit interactions if user is authenticated
   const canEdit = editMode && isAuthenticated;
 
   return (
     <div className="min-h-screen max-w-[1440px] mx-auto">
+      {/* About Editor Panel - opens when admin clicks to edit */}
       <AboutEditor open={isEditorActive("about")} onClose={() => {}} />
 
-      {/* Main Content - Pixel-perfect split layout */}
+      {/* Main Content - Split layout with text left, image right */}
       <div
         className={`flex flex-col lg:flex-row min-h-screen relative ${
           canEdit ? "cursor-pointer" : ""
         }`}
         style={{
-          outline: canEdit ? "2px dashed #2563eb" : undefined,
+          outline: canEdit ? "2px dashed #2563eb" : undefined, // Blue dashed border in edit mode
         }}
         onClick={() => canEdit && openEditor("about")}
         tabIndex={canEdit ? 0 : -1}

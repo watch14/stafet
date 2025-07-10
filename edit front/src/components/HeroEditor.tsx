@@ -1,3 +1,26 @@
+/**
+ * HERO EDITOR - Hero Section Editing Interface
+ * =============================================
+ *
+ * This is the editing interface for the Hero section that appears in the side panel.
+ * It provides controls for:
+ *
+ * CONTENT TAB:
+ * - Headline text editing
+ * - Subtitle text editing
+ * - Call-to-action button text and link
+ *
+ * STYLE TAB:
+ * - Text colors (headline and subtitle)
+ * - Button colors (text and background)
+ * - Background type (color or image)
+ * - Background color picker
+ * - Background image upload
+ *
+ * Features a draft system - changes are saved to a draft first, then applied
+ * when "Save Changes" is clicked, allowing users to preview before committing.
+ */
+
 "use client";
 import React, { useState, useRef } from "react";
 import { useEditorStore } from "../store/editorStore";
@@ -6,24 +29,35 @@ import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
 import ImageUploader from "./ImageUploader";
 
+/**
+ * Hero Editor Component
+ * Provides complete editing interface for the Hero section
+ */
 export default function HeroEditor({
   open,
   onClose,
 }: {
-  open: boolean;
-  onClose: () => void;
+  open: boolean; // Whether the editor panel is open
+  onClose: () => void; // Function to close the editor
 }) {
+  // Get current hero content and update function from store
   const hero = useEditorStore((s) => s.hero);
   const setHero = useEditorStore((s) => s.setHero);
   const { closeEditor } = useEditorManager();
+
+  // Local draft state for preview before saving
   const [draft, setDraft] = useState(hero);
+  // Tab switching between content and style editing
   const [activeTab, setActiveTab] = useState<"content" | "style">("content");
+  // Reference for file input element
   const fileInput = useRef<HTMLInputElement>(null);
 
+  // Update draft when editor opens with fresh data
   React.useEffect(() => {
     setDraft(hero);
   }, [open]);
 
+  // Handle background image file upload
   const handleBgImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -32,21 +66,23 @@ export default function HeroEditor({
         setDraft({
           ...draft,
           bgImage: ev.target?.result as string,
-          bgType: "image",
+          bgType: "image", // Switch to image background type
         });
       };
       reader.readAsDataURL(file);
     }
   };
 
+  // Handle image selection from image library
   const handleImageSelect = (imageUrl: string) => {
     setDraft({
       ...draft,
       bgImage: imageUrl,
-      bgType: imageUrl ? "image" : "color",
+      bgType: imageUrl ? "image" : "color", // Switch background type based on image
     });
   };
 
+  // Save draft changes to the actual hero content
   const handleSave = () => {
     setHero(draft);
     closeEditor();

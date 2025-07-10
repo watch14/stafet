@@ -1,3 +1,19 @@
+/**
+ * HERO SECTION - Main Banner Component
+ * ====================================
+ *
+ * This is the first section visitors see - the main banner/hero area.
+ * Features:
+ * - Full screen height for maximum impact
+ * - Customizable background (color or image)
+ * - Large headline and subtitle text
+ * - Call-to-action button
+ * - Click-to-edit functionality for admins
+ *
+ * Content is managed through the Hero Editor when edit mode is enabled.
+ * All styling (colors, text, background) can be customized through the editor.
+ */
+
 "use client";
 import React, { useRef } from "react";
 import HeroEditor from "./HeroEditor";
@@ -5,23 +21,31 @@ import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import { useAuth } from "../contexts/AuthContext";
 
+/**
+ * Hero Section Component
+ * Displays the main banner with headline, subtitle, and CTA button
+ */
 export default function HeroSection() {
+  // Get hero content and edit state from store
   const hero = useEditorStore((s) => s.hero);
   const editMode = useEditorStore((s) => s.editMode);
   const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive } = useEditorManager();
 
-  // Only allow edit interactions if authenticated
+  // Only allow edit interactions if user is authenticated
   const canEdit = editMode && isAuthenticated;
+
   return (
     <>
+      {/* Main Hero Section */}
       <section
         className="min-h-screen w-full flex flex-col justify-center px-0 py-16 transition-all cursor-pointer"
         style={
+          // Dynamic background based on user settings
           hero.bgType === "color"
             ? {
                 background: hero.bgColor,
-                outline: canEdit ? "2px dashed #2563eb" : undefined,
+                outline: canEdit ? "2px dashed #2563eb" : undefined, // Edit mode indicator
               }
             : hero.bgImage
             ? {
@@ -32,19 +56,21 @@ export default function HeroSection() {
                 outline: canEdit ? "2px dashed #2563eb" : undefined,
               }
             : {
-                background: "#6366F1",
+                background: "#6366F1", // Fallback color
                 outline: canEdit ? "2px dashed #2563eb" : undefined,
               }
         }
-        onClick={() => canEdit && openEditor("hero")}
+        onClick={() => canEdit && openEditor("hero")} // Open editor when clicked in edit mode
         tabIndex={canEdit ? 0 : -1}
       >
+        {/* Content Container */}
         <div className="max-w-[1440px] mx-auto w-full px-8 mt-auto">
           <div className="max-w-2xl">
+            {/* Main Headline */}
             <h1
               className="text-black text-xl md:text-9xl lg:text-6xl font-regular mb-8 leading-14"
               style={{
-                color: hero.titleColor || "#000000",
+                color: hero.titleColor || "#000000", // Use custom color or default
               }}
             >
               {hero.title}
