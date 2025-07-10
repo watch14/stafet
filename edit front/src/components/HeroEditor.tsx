@@ -17,6 +17,7 @@ export default function HeroEditor({
   const setHero = useEditorStore((s) => s.setHero);
   const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(hero);
+  const [activeTab, setActiveTab] = useState<"content" | "style">("content");
   const fileInput = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -71,11 +72,39 @@ export default function HeroEditor({
           </p>
         </div>
 
-        {/* Content Section */}
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Content Settings
-          </h3>
+        {/* Tabs */}
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab("content")}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "content"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Content
+            </button>
+            <button
+              onClick={() => setActiveTab("style")}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "style"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Style
+            </button>
+          </nav>
+        </div>
+
+        {activeTab === "content" && (
+          <div className="space-y-6">
+            {/* Content Section */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">
+                Content Settings
+              </h3>
 
           <div className="space-y-6">
             <div>
@@ -322,6 +351,81 @@ export default function HeroEditor({
             )}
           </div>
         </div>
+      </div>
+        )}
+
+        {activeTab === "style" && (
+          <div className="space-y-6">
+            {/* Title Color */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Title Color
+              </label>
+              <ColorPicker
+                color={draft.titleColor}
+                onChange={(color) => setDraft({ ...draft, titleColor: color })}
+              />
+            </div>
+
+            {/* Subtitle Color */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Subtitle Color
+              </label>
+              <ColorPicker
+                color={draft.subtitleColor}
+                onChange={(color) => setDraft({ ...draft, subtitleColor: color })}
+              />
+            </div>
+
+            {/* Background Settings */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-4">
+                Background Settings
+              </label>
+              <div className="space-y-4">
+                {draft.bgType === "color" && (
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-2">
+                      Background Color
+                    </label>
+                    <ColorPicker
+                      color={draft.bgColor}
+                      onChange={(color) => setDraft({ ...draft, bgColor: color })}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* CTA Button Colors */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-4">
+                Call-to-Action Button
+              </label>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-2">
+                    Background Color
+                  </label>
+                  <ColorPicker
+                    color={draft.button.bgColor}
+                    onChange={(color) => setDraft({ ...draft, button: { ...draft.button, bgColor: color } })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-2">
+                    Text Color
+                  </label>
+                  <ColorPicker
+                    color={draft.button.textColor}
+                    onChange={(color) => setDraft({ ...draft, button: { ...draft.button, textColor: color } })}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Action Buttons */}

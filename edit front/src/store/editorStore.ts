@@ -129,7 +129,7 @@ const defaultHero: HeroContent = {
 };
 
 const defaultNavbar: NavbarContent = {
-  logo: "STAFF.",
+  logo: "STAFET",
   logoColor: "#000000",
   links: [
     { label: "Cases", href: "#" },
@@ -264,9 +264,9 @@ const defaultAbout: AboutContent = {
   ctaText: "Get in contact",
   bgColor: "#ffffff",
   titleColor: "#000000",
-  textColor: "#4b5563",
-  ctaBgColor: "#fde2e7",
-  ctaTextColor: "#000000",
+  textColor: "#6b7280",
+  ctaBgColor: "#fecaca",
+  ctaTextColor: "#dc2626",
   image: "/images/About.png",
 };
 

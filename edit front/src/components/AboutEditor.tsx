@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useEditorManager } from "../hooks/useEditorManager";
 import SidePanel from "./SidePanel";
 import ColorPicker from "./ColorPicker";
 import ImageUploader from "./ImageUploader";
@@ -13,25 +14,43 @@ interface AboutEditorProps {
 export default function AboutEditor({ open, onClose }: AboutEditorProps) {
   const about = useEditorStore((s) => s.about);
   const setAbout = useEditorStore((s) => s.setAbout);
+  const { closeEditor } = useEditorManager();
   const [activeTab, setActiveTab] = useState<"content" | "style">("content");
+  const [draft, setDraft] = useState(about);
+
+  React.useEffect(() => {
+    setDraft(about);
+  }, [open]);
+
+  const handleSave = () => {
+    setAbout(draft);
+    closeEditor();
+    onClose();
+  };
+
+  const handleClose = () => {
+    setDraft(about);
+    closeEditor();
+    onClose();
+  };
 
   const handleContentChange = (index: number, value: string) => {
-    const newContent = [...about.content];
+    const newContent = [...draft.content];
     newContent[index] = value;
-    setAbout({ content: newContent });
+    setDraft({ ...draft, content: newContent });
   };
 
   const addParagraph = () => {
-    setAbout({ content: [...about.content, ""] });
+    setDraft({ ...draft, content: [...draft.content, ""] });
   };
 
   const removeParagraph = (index: number) => {
-    const newContent = about.content.filter((_, i) => i !== index);
-    setAbout({ content: newContent });
+    const newContent = draft.content.filter((_, i) => i !== index);
+    setDraft({ ...draft, content: newContent });
   };
 
   return (
-    <SidePanel open={open} onClose={onClose} title="Edit About Section">
+    <SidePanel open={open} onClose={handleClose} title="Edit About Section">
       <div className="space-y-6 text-black">
         {/* Info Box */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -93,8 +112,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 Title
               </label>
               <textarea
-                value={about.title}
-                onChange={(e) => setAbout({ title: e.target.value })}
+                value={draft.title}
+                onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 rows={2}
                 placeholder="Enter main title..."
@@ -108,8 +127,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
               </label>
               <input
                 type="text"
-                value={about.subtitle}
-                onChange={(e) => setAbout({ subtitle: e.target.value })}
+                value={draft.subtitle}
+                onChange={(e) => setDraft({ ...draft, subtitle: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter subtitle..."
               />
@@ -129,7 +148,7 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 </button>
               </div>
               <div className="space-y-3">
-                {about.content.map((paragraph, index) => (
+                {draft.content.map((paragraph, index) => (
                   <div key={index} className="relative">
                     <textarea
                       value={paragraph}
@@ -140,7 +159,7 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                       rows={3}
                       placeholder={`Paragraph ${index + 1}...`}
                     />
-                    {about.content.length > 1 && (
+                    {draft.content.length > 1 && (
                       <button
                         onClick={() => removeParagraph(index)}
                         className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 transition"
@@ -170,8 +189,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
               </label>
               <input
                 type="text"
-                value={about.ctaText}
-                onChange={(e) => setAbout({ ctaText: e.target.value })}
+                value={draft.ctaText}
+                onChange={(e) => setDraft({ ...draft, ctaText: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter button text..."
               />
@@ -183,8 +202,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 About Image
               </label>
               <ImageUploader
-                onImageSelect={(url: string) => setAbout({ image: url })}
-                currentImage={about.image}
+                onImageSelect={(url: string) => setDraft({ ...draft, image: url })}
+                currentImage={draft.image}
               />
             </div>
           </div>
@@ -198,8 +217,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 Background Color
               </label>
               <ColorPicker
-                color={about.bgColor}
-                onChange={(color) => setAbout({ bgColor: color })}
+                color={draft.bgColor}
+                onChange={(color) => setDraft({ ...draft, bgColor: color })}
               />
             </div>
 
@@ -209,8 +228,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 Title Color
               </label>
               <ColorPicker
-                color={about.titleColor}
-                onChange={(color) => setAbout({ titleColor: color })}
+                color={draft.titleColor}
+                onChange={(color) => setDraft({ ...draft, titleColor: color })}
               />
             </div>
 
@@ -220,8 +239,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                 Text Color
               </label>
               <ColorPicker
-                color={about.textColor}
-                onChange={(color) => setAbout({ textColor: color })}
+                color={draft.textColor}
+                onChange={(color) => setDraft({ ...draft, textColor: color })}
               />
             </div>
 
@@ -236,8 +255,8 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                     Background Color
                   </label>
                   <ColorPicker
-                    color={about.ctaBgColor}
-                    onChange={(color) => setAbout({ ctaBgColor: color })}
+                    color={draft.ctaBgColor}
+                    onChange={(color) => setDraft({ ...draft, ctaBgColor: color })}
                   />
                 </div>
                 <div>
@@ -245,14 +264,59 @@ export default function AboutEditor({ open, onClose }: AboutEditorProps) {
                     Text Color
                   </label>
                   <ColorPicker
-                    color={about.ctaTextColor}
-                    onChange={(color) => setAbout({ ctaTextColor: color })}
+                    color={draft.ctaTextColor}
+                    onChange={(color) => setDraft({ ...draft, ctaTextColor: color })}
                   />
                 </div>
               </div>
             </div>
           </div>
         )}
+
+        {/* Save/Cancel Buttons */}
+        <div className="flex gap-3 pt-6 border-t border-gray-200">
+          <button
+            onClick={handleSave}
+            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Save Changes
+          </button>
+          <button
+            onClick={handleClose}
+            className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Cancel
+          </button>
+        </div>
+        <p className="text-xs text-gray-600 mt-3 text-center">
+          Changes will be applied to your live website
+        </p>
       </div>
     </SidePanel>
   );
