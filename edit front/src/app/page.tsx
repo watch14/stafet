@@ -31,7 +31,7 @@ import PersistenceDebug from "../components/PersistenceDebug";
  */
 export default function Home() {
   return (
-    <ClientOnly fallback={<div className="min-h-screen bg-gray-100" />}>
+    <ClientOnly fallback={<div className="min-h-screen" />}>
       <HeroSection /> {/* Main banner/hero area */}
       <ClientLogos /> {/* Client logos showcase */}
       <TestimonialsSection /> {/* Customer testimonials */}

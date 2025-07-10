@@ -28,7 +28,7 @@ export default function ContactPage() {
   const setContact = useEditorStore((s) => s.setContact);
   const editMode = useEditorStore((s) => s.editMode);
   const { isAuthenticated } = useAuth();
-  const { openEditor, isEditorActive } = useEditorManager();
+  const { openEditor, isEditorActive, closeEditor } = useEditorManager();
 
   // Migration: Fix old placeholder image paths
   React.useEffect(() => {
@@ -75,7 +75,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen max-w-[1440px] mx-auto">
       {/* Contact Editor Panel */}
-      <ContactEditor open={isEditorActive("contact")} onClose={() => {}} />
+      <ContactEditor open={isEditorActive("contact")} onClose={closeEditor} />
 
       {/* Main Content - Split layout */}
       <div
