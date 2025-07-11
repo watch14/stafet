@@ -39,7 +39,7 @@ export default function HeroSection() {
     <>
       {/* Main Hero Section */}
       <section
-        className="min-h-screen w-full flex flex-col justify-center px-0 py-16 transition-all cursor-pointer"
+        className="min-h-screen w-full flex flex-col justify-center px-0 py-16 transition-all "
         style={
           // Dynamic background based on user settings
           hero.bgType === "color"
@@ -84,7 +84,7 @@ export default function HeroSection() {
               {hero.subtitle}
             </p>
             <button
-              className="rounded-full px-6 py-2 text-sm shadow-lg transition w-fit hover:shadow-xl"
+              className="rounded-full px-6 py-2 text-sm shadow-lg transition w-fit hover:shadow-xl cursor-pointer"
               style={{
                 color: hero.button.textColor || "#FFFFFF",
                 background: hero.button.bgColor || "#FFCEE5",

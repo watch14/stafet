@@ -172,6 +172,23 @@ type EditorState = {
  * or when reset to defaults is triggered.
  */
 
+const defaultNavbar: NavbarContent = {
+  logo: "STAFET.",
+  logoColor: "#000000",
+  links: [
+    { label: "Cases", href: "#" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "#" },
+  ],
+  linkColor: "#000000",
+  cta: {
+    label: "Work with us",
+    href: "/contact",
+    textColor: "#000000",
+    bgColor: "#ffffff",
+  },
+};
+
 // Default Hero section content
 const defaultHero: HeroContent = {
   title: "More than a traditional\nsoftware agency",
@@ -188,23 +205,6 @@ const defaultHero: HeroContent = {
   bgType: "color",
   bgColor: "#6366F1",
   bgImage: "",
-};
-
-const defaultNavbar: NavbarContent = {
-  logo: "STAFET",
-  logoColor: "#000000",
-  links: [
-    { label: "Cases", href: "#" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "#" },
-  ],
-  linkColor: "#000000",
-  cta: {
-    label: "Work with us",
-    href: "/contact",
-    textColor: "#000000",
-    bgColor: "#ffffff",
-  },
 };
 
 const defaultProcess: ProcessContent = {
