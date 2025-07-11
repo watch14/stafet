@@ -66,7 +66,7 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Show loading screen with message
     showLoading("Sending your message...");
     setSubmitMessage("");

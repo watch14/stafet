@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState } from 'react';
-import LoadingScreen from '../components/LoadingScreen';
+import React, { createContext, useContext, useState } from "react";
+import LoadingScreen from "../components/LoadingScreen";
 
 interface LoadingContextType {
   isLoading: boolean;
@@ -14,7 +14,7 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('Loading...');
+  const [loadingMessage, setLoadingMessage] = useState("Loading...");
 
   const showLoading = (message?: string) => {
     if (message) {
@@ -41,8 +41,8 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <LoadingScreen 
-        isLoading={isLoading} 
+      <LoadingScreen
+        isLoading={isLoading}
         message={loadingMessage}
         showProgress={true}
       />
@@ -53,7 +53,7 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
 export function useLoadingContext() {
   const context = useContext(LoadingContext);
   if (context === undefined) {
-    throw new Error('useLoadingContext must be used within a LoadingProvider');
+    throw new Error("useLoadingContext must be used within a LoadingProvider");
   }
   return context;
 }

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 interface UseLoadingReturn {
   isLoading: boolean;
@@ -10,7 +10,7 @@ interface UseLoadingReturn {
   loadingMessage: string;
 }
 
-export function useLoading(initialMessage = 'Loading...'): UseLoadingReturn {
+export function useLoading(initialMessage = "Loading..."): UseLoadingReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(initialMessage);
 
@@ -40,20 +40,26 @@ export function useLoading(initialMessage = 'Loading...'): UseLoadingReturn {
 
 // Hook for async operations with loading states
 export function useAsyncLoading() {
-  const { isLoading, startLoading, stopLoading, setLoadingMessage, loadingMessage } = useLoading();
+  const {
+    isLoading,
+    startLoading,
+    stopLoading,
+    setLoadingMessage,
+    loadingMessage,
+  } = useLoading();
 
-  const executeWithLoading = useCallback(async <T>(
-    asyncFn: () => Promise<T>,
-    loadingMsg?: string
-  ): Promise<T> => {
-    try {
-      startLoading(loadingMsg);
-      const result = await asyncFn();
-      return result;
-    } finally {
-      stopLoading();
-    }
-  }, [startLoading, stopLoading]);
+  const executeWithLoading = useCallback(
+    async <T>(asyncFn: () => Promise<T>, loadingMsg?: string): Promise<T> => {
+      try {
+        startLoading(loadingMsg);
+        const result = await asyncFn();
+        return result;
+      } finally {
+        stopLoading();
+      }
+    },
+    [startLoading, stopLoading]
+  );
 
   return {
     isLoading,
