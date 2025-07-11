@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useEditorStore } from "../store/editorStore";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import apiClient from "../lib/api";
 
 interface SavedConfiguration {
@@ -28,8 +29,9 @@ export default function SaveLoadManager({
 }: SaveLoadManagerProps) {
   const [savedConfigs, setSavedConfigs] = useState<SavedConfiguration[]>([]);
   const [saveName, setSaveName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [isUILoading, setIsUILoading] = useState(false);
+  const { showLoading, hideLoading } = useLoadingContext();
 
   const { hero, navbar, setHero, setNavbar, resetToDefaults } =
     useEditorStore();
@@ -43,7 +45,8 @@ export default function SaveLoadManager({
 
   const loadConfigurations = async () => {
     try {
-      setIsLoading(true);
+      setIsUILoading(true);
+      showLoading("Loading configurations...");
       const response = await apiClient.getAllConfigurations();
       // Sort by lastModified date, latest first
       const sortedConfigs = (response.configurations || []).sort(
@@ -56,7 +59,8 @@ export default function SaveLoadManager({
       console.error("Failed to load configurations:", error);
       setMessage("Failed to load configurations");
     } finally {
-      setIsLoading(false);
+      setIsUILoading(false);
+      hideLoading();
     }
   };
 
@@ -67,7 +71,8 @@ export default function SaveLoadManager({
     }
 
     try {
-      setIsLoading(true);
+      setIsUILoading(true);
+      showLoading("Saving configuration...");
       const configData = {
         name: saveName,
         hero,
@@ -84,13 +89,15 @@ export default function SaveLoadManager({
       console.error("Failed to save configuration:", error);
       setMessage("Failed to save configuration");
     } finally {
-      setIsLoading(false);
+      setIsUILoading(false);
+      hideLoading();
     }
   };
 
   const loadConfiguration = async (config: SavedConfiguration) => {
     try {
-      setIsLoading(true);
+      setIsUILoading(true);
+      showLoading(`Loading "${config.name}"...`);
       const response = await apiClient.getConfiguration(config.id);
 
       if (response.configuration) {
@@ -103,7 +110,8 @@ export default function SaveLoadManager({
       console.error("Failed to load configuration:", error);
       setMessage("Failed to load configuration");
     } finally {
-      setIsLoading(false);
+      setIsUILoading(false);
+      hideLoading();
     }
   };
 
@@ -113,7 +121,8 @@ export default function SaveLoadManager({
     }
 
     try {
-      setIsLoading(true);
+      setIsUILoading(true);
+      showLoading(`Deleting "${config.name}"...`);
       await apiClient.deleteConfiguration(config.id);
       setMessage(`Deleted "${config.name}" successfully!`);
       await loadConfigurations();
@@ -121,7 +130,8 @@ export default function SaveLoadManager({
       console.error("Failed to delete configuration:", error);
       setMessage("Failed to delete configuration");
     } finally {
-      setIsLoading(false);
+      setIsUILoading(false);
+      hideLoading();
     }
   };
 
@@ -193,14 +203,14 @@ export default function SaveLoadManager({
               onChange={(e) => setSaveName(e.target.value)}
               placeholder="Enter configuration name..."
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black text-sm sm:text-base"
-              disabled={isLoading}
+              disabled={isUILoading}
             />
             <button
               onClick={saveConfiguration}
-              disabled={isLoading || !saveName.trim()}
+              disabled={isUILoading || !saveName.trim()}
               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base font-medium whitespace-nowrap transition-colors"
             >
-              {isLoading ? "Saving..." : "Save"}
+              {isUILoading ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
@@ -212,7 +222,7 @@ export default function SaveLoadManager({
           </h3>
           <button
             onClick={resetToOriginal}
-            disabled={isLoading}
+            disabled={isUILoading}
             className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base font-medium transition-colors w-full sm:w-auto"
           >
             Reset to Original
@@ -228,7 +238,7 @@ export default function SaveLoadManager({
             Saved Configurations
           </h3>
 
-          {isLoading && savedConfigs.length === 0 ? (
+          {isUILoading && savedConfigs.length === 0 ? (
             <div className="text-center py-6 text-black text-sm">
               Loading...
             </div>
@@ -261,14 +271,14 @@ export default function SaveLoadManager({
                     <div className="flex gap-2 sm:ml-4 sm:flex-col lg:flex-row">
                       <button
                         onClick={() => loadConfiguration(config)}
-                        disabled={isLoading}
+                        disabled={isUILoading}
                         className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium flex-1 sm:flex-initial"
                       >
                         Load
                       </button>
                       <button
                         onClick={() => deleteConfiguration(config)}
-                        disabled={isLoading}
+                        disabled={isUILoading}
                         className="bg-red-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm hover:bg-red-700 disabled:opacity-50 transition-colors font-medium flex-1 sm:flex-initial"
                       >
                         Delete

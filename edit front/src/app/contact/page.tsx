@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useEditorStore } from "../../store/editorStore";
 import { useEditorManager } from "../../hooks/useEditorManager";
 import { useAuth } from "../../contexts/AuthContext";
+import { useLoadingContext } from "../../contexts/LoadingContext";
 import ContactEditor from "../../components/ContactEditor";
 
 /**
@@ -29,6 +30,7 @@ export default function ContactPage() {
   const editMode = useEditorStore((s) => s.editMode);
   const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive, closeEditor } = useEditorManager();
+  const { showLoading, hideLoading } = useLoadingContext();
 
   // Migration: Fix old placeholder image paths
   React.useEffect(() => {
@@ -46,7 +48,6 @@ export default function ContactPage() {
   });
 
   // Submission state
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -65,7 +66,9 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    // Show loading screen with message
+    showLoading("Sending your message...");
     setSubmitMessage("");
     setSubmitSuccess(false);
 
@@ -106,7 +109,8 @@ export default function ContactPage() {
       );
       console.error("Contact form error:", error);
     } finally {
-      setIsSubmitting(false);
+      // Hide loading screen
+      hideLoading();
     }
   };
 
@@ -257,43 +261,13 @@ export default function ContactPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className={`px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isSubmitting
-                    ? "transform-none"
-                    : "hover:transform hover:-translate-y-0.5"
-                }`}
+                className="px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg hover:transform hover:-translate-y-0.5"
                 style={{
                   backgroundColor: contact?.buttonBgColor || "#FFCEE5",
                   color: contact?.buttonTextColor || "#000000",
                 }}
               >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <svg
-                      className="animate-spin h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Sending...
-                  </span>
-                ) : (
-                  "Submit"
-                )}
+                Submit
               </button>
 
               {/* Success/Error Message */}

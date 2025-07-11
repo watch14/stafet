@@ -19,6 +19,7 @@ import "./globals.css";
 import Navbar from "./navbar";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
+import { LoadingProvider } from "../contexts/LoadingContext";
 import EditorLayoutWrapper from "./EditorLayoutWrapper";
 
 // Font configuration for the website
@@ -45,18 +46,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased `}>
-        {/* Authentication Provider - handles login/logout across the site */}
-        <AuthProvider>
-          {/* Editor Layout Wrapper - provides editing controls when admin is logged in */}
-          <EditorLayoutWrapper>
-            {/* Navigation bar - appears on every page */}
-            <Navbar />
-            {/* Page content - this changes based on which page you're on */}
-            {children}
-            {/* Footer - appears on every page */}
-            <Footer />
-          </EditorLayoutWrapper>
-        </AuthProvider>
+        {/* Loading Provider - manages global loading states */}
+        <LoadingProvider>
+          {/* Authentication Provider - handles login/logout across the site */}
+          <AuthProvider>
+            {/* Editor Layout Wrapper - provides editing controls when admin is logged in */}
+            <EditorLayoutWrapper>
+              {/* Navigation bar - appears on every page */}
+              <Navbar />
+              {/* Page content - this changes based on which page you're on */}
+              {children}
+              {/* Footer - appears on every page */}
+              <Footer />
+            </EditorLayoutWrapper>
+          </AuthProvider>
+        </LoadingProvider>
       </body>
     </html>
   );
