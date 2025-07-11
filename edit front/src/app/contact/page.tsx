@@ -45,6 +45,11 @@ export default function ContactPage() {
     message: "",
   });
 
+  // Submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   // Only allow edit interactions if user is authenticated
   const canEdit = editMode && isAuthenticated;
 
@@ -58,18 +63,51 @@ export default function ContactPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, just log the form data (placeholder functionality)
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! We'll be in touch soon.");
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    });
+    setIsSubmitting(true);
+    setSubmitMessage("");
+    setSubmitSuccess(false);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitSuccess(true);
+        setSubmitMessage(
+          "Thank you for your message! We've sent you a confirmation email and will be in touch shortly."
+        );
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      } else {
+        setSubmitSuccess(false);
+        setSubmitMessage(
+          result.error ||
+            "There was an error sending your message. Please try again."
+        );
+      }
+    } catch (error) {
+      setSubmitSuccess(false);
+      setSubmitMessage(
+        "There was an error sending your message. Please check your internet connection and try again."
+      );
+      console.error("Contact form error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -89,8 +127,31 @@ export default function ContactPage() {
         onClick={() => canEdit && openEditor("contact")}
         tabIndex={canEdit ? 0 : -1}
       >
+        {/* Edit Mode Indicator */}
+        {canEdit && (
+          <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            Click to edit
+          </div>
+        )}
+
         {/* Left Side - Contact Form */}
-        <div className="lg:w-1/2 flex flex-col justify-center px-8 lg:px-16 py-16 lg:py-24">
+        <div
+          className="lg:w-1/2 flex flex-col justify-center px-8 lg:px-16 py-16 lg:py-24"
+          onClick={(e) => canEdit && e.stopPropagation()}
+        >
           <div className="max-w-lg mx-auto lg:mx-0 w-full">
             {/* Header */}
             <h1
@@ -196,14 +257,88 @@ export default function ContactPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg"
+                disabled={isSubmitting}
+                className={`px-8 py-3 rounded-full font-medium transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isSubmitting
+                    ? "transform-none"
+                    : "hover:transform hover:-translate-y-0.5"
+                }`}
                 style={{
                   backgroundColor: contact?.buttonBgColor || "#FFCEE5",
                   color: contact?.buttonTextColor || "#000000",
                 }}
               >
-                Submit
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Sending...
+                  </span>
+                ) : (
+                  "Submit"
+                )}
               </button>
+
+              {/* Success/Error Message */}
+              {submitMessage && (
+                <div
+                  className={`mt-4 p-4 rounded-lg ${
+                    submitSuccess
+                      ? "bg-green-50 border border-green-200 text-green-800"
+                      : "bg-red-50 border border-red-200 text-red-800"
+                  }`}
+                >
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      {submitSuccess ? (
+                        <svg
+                          className="h-5 w-5 text-green-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5 text-red-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium">{submitMessage}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         </div>
