@@ -34,6 +34,7 @@ export default function HeroSection() {
 
   // Only allow edit interactions if user is authenticated
   const canEdit = editMode && isAuthenticated;
+  console.log(hero.button.href);
 
   return (
     <>
@@ -83,15 +84,18 @@ export default function HeroSection() {
             >
               {hero.subtitle}
             </p>
-            <button
-              className="rounded-full px-6 py-2 text-sm shadow-lg transition w-fit hover:shadow-xl cursor-pointer"
-              style={{
-                color: hero.button.textColor || "#FFFFFF",
-                background: hero.button.bgColor || "#FFCEE5",
-              }}
-            >
-              {hero.button.text}
-            </button>
+
+            <a href={hero.button.href || "#"}>
+              <button
+                className="rounded-full px-6 py-2 text-sm shadow-lg transition w-fit hover:shadow-xl cursor-pointer"
+                style={{
+                  color: hero.button.textColor || "#FFFFFF",
+                  background: hero.button.bgColor || "#FFCEE5",
+                }}
+              >
+                {hero.button.text}
+              </button>
+            </a>
           </div>
         </div>
         {canEdit && (

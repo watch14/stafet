@@ -198,7 +198,7 @@ const defaultHero: HeroContent = {
   subtitleColor: "#000000",
   button: {
     text: "Work with us",
-    href: "#",
+    href: "/contact",
     textColor: "#000000",
     bgColor: "#FFCEE5",
   },

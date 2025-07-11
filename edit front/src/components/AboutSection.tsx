@@ -74,7 +74,6 @@ export default function AboutSection() {
               >
                 {about.title}
               </h1>
-
               <div className="space-y-4 lg:space-y-6 mb-6 lg:mb-8">
                 {about.content.map((paragraph, index) => (
                   <p
@@ -91,28 +90,31 @@ export default function AboutSection() {
                 ))}
               </div>
 
-              <button
-                className="px-8 py-3 rounded-full font-medium text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center gap-2"
-                style={{
-                  backgroundColor: about.ctaBgColor,
-                  color: about.ctaTextColor,
-                }}
-              >
-                {about.ctaText}
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <a href="aaa">
+                <button
+                  className="px-8 py-3 rounded-full font-medium text-sm transition-all duration-300 
+                  hover:scale-105 hover:shadow-lg inline-flex items-center gap-2 cursor-pointer"
+                  style={{
+                    backgroundColor: about.ctaBgColor,
+                    color: about.ctaTextColor,
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </button>
+                  {about.ctaText}
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </button>
+              </a>
             </div>
           </div>
         </div>
