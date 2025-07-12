@@ -1,273 +1,389 @@
-/**
- * CONTACT EDITOR - Contact Section Editing Interface
- * ==================================================
- *
- * This is the editing interface for the Contact section that appears in the side panel.
- * It provides controls for:
- *
- * CONTENT TAB:
- * - Page title editing
- * - Subtitle/description editing
- * - Form configuration
- *
- * STYLE TAB:
- * - Text colors (title and content)
- * - Background color
- * - Button colors (text and background)
- * - Contact page image upload
- *
- * Features a draft system - changes are saved to a draft first, then applied
- * when "Save Changes" is clicked, allowing users to preview before committing.
- */
-
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
 import ImageUploader from "./ImageUploader";
 
-/**
- * Contact Editor Component
- * Provides complete editing interface for the Contact section
- */
+// Default values for resetting
+const defaultContactValues = {
+  title: "Want to work with us?",
+  subtitle: "Get in touch with our team",
+  bgColor: "#ffffff",
+  titleColor: "#000000",
+  textColor: "#000000",
+  buttonBgColor: "#000000",
+  buttonTextColor: "#ffffff",
+  image: "/images/contact-default.jpg",
+};
+
 export default function ContactEditor({
   open,
   onClose,
 }: {
-  open: boolean; // Whether the editor panel is open
-  onClose: () => void; // Function to close the editor
+  open: boolean;
+  onClose: () => void;
 }) {
-  // Get current contact content and update function from store
   const contact = useEditorStore((s) => s.contact);
   const setContact = useEditorStore((s) => s.setContact);
   const { closeEditor } = useEditorManager();
-
-  // Local draft state for preview before saving
   const [draft, setDraft] = useState(contact);
-  // Tab switching between content and style editing
-  const [activeTab, setActiveTab] = useState<"content" | "style">("content");
+  const [hasChanges, setHasChanges] = useState(false);
 
-  // Update draft when editor opens with fresh data
-  React.useEffect(() => {
+  useEffect(() => {
     setDraft(contact);
+    setHasChanges(false);
   }, [open, contact]);
 
-  // Handle image selection from image library
-  const handleImageSelect = (imageUrl: string) => {
-    setDraft({
-      ...draft,
-      image: imageUrl,
-    });
+  // Check for changes whenever draft updates
+  useEffect(() => {
+    const changes = JSON.stringify(draft) !== JSON.stringify(contact);
+    setHasChanges(changes);
+  }, [draft, contact]);
+
+  // Real-time preview - update store immediately for preview
+  const updateContactField = (field: keyof typeof contact, value: any) => {
+    const newDraft = { ...draft, [field]: value };
+    setDraft(newDraft);
+    // Update store immediately for real-time preview
+    setContact(newDraft);
   };
 
-  // Save draft changes to the actual contact content
+  // Reset individual field to default value
+  const resetField = (field: keyof typeof contact) => {
+    const defaultValue =
+      defaultContactValues[field as keyof typeof defaultContactValues];
+    if (defaultValue !== undefined) {
+      updateContactField(field, defaultValue);
+    }
+  };
+
+  // Reset button component
+  const ResetButton = ({
+    onClick,
+    title,
+  }: {
+    onClick: () => void;
+    title: string;
+  }) => (
+    <button
+      onClick={onClick}
+      title={title}
+      className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1 rounded transition-colors"
+    >
+      <svg
+        className="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+        />
+      </svg>
+    </button>
+  );
+
   const handleSave = () => {
     setContact(draft);
+    setHasChanges(false);
     closeEditor();
+    onClose();
   };
 
-  // Cancel changes and close editor
-  const handleCancel = () => {
-    setDraft(contact); // Reset to original
-    closeEditor();
-  };
-
-  // Reset to default values
-  const handleReset = () => {
-    const defaultContact = {
-      title: "Want to work with us?",
-      subtitle:
-        "Every good collaboration starts with a meaningful conversation. Answer these questions to start our dialogue and we will be in touch shortly.",
-      bgColor: "#ffffff",
-      titleColor: "#000000",
-      textColor: "#000000",
-      buttonBgColor: "#FFCEE5",
-      buttonTextColor: "#000000",
-      image: "/images/Work.png",
-    };
-    setDraft(defaultContact);
+  const handleClose = () => {
+    if (hasChanges) {
+      const shouldSave = confirm(
+        "You have unsaved changes. Would you like to save them before closing?"
+      );
+      if (shouldSave) {
+        handleSave();
+      } else {
+        setDraft(contact);
+        setContact(contact);
+        setHasChanges(false);
+        closeEditor();
+        onClose();
+      }
+    } else {
+      closeEditor();
+      onClose();
+    }
   };
 
   return (
-    <SidePanel open={open} onClose={onClose} title="Edit Contact Page">
-      <div className="flex-1 overflow-y-auto">
-        {/* Info Box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 m-6">
-          <p className="text-sm text-blue-800">
-            📝 <strong>Contact Page Editor</strong>
-            <br />
-            Customize the "Work with us" contact form page including title,
-            description, styling, and contact image.
+    <SidePanel open={open} onClose={handleClose} title="Edit Contact Section">
+      <div className="space-y-8 text-black">
+        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <h3 className="text-sm font-medium text-blue-900 mb-2">
+            💬 Real-time Contact Editor
+          </h3>
+          <p className="text-xs text-blue-800">
+            Changes appear instantly on your website.{" "}
+            {hasChanges && (
+              <span className="font-medium text-orange-800">
+                • Unsaved changes
+              </span>
+            )}
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex border-b border-gray-200 mx-6">
-          <button
-            className={`py-2 px-4 text-sm font-medium ${
-              activeTab === "content"
-                ? "border-b-2 border-blue-500 text-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => setActiveTab("content")}
-          >
-            Content
-          </button>
-          <button
-            className={`py-2 px-4 text-sm font-medium ${
-              activeTab === "style"
-                ? "border-b-2 border-blue-500 text-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => setActiveTab("style")}
-          >
-            Style
-          </button>
-        </div>
+        {/* Content Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Content Settings
+            </h3>
+          </div>
 
-        {/* Tab Content */}
-        <div className="p-6 space-y-6">
-          {activeTab === "content" && (
-            <>
-              {/* Page Title */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Page Title
                 </label>
-                <input
-                  type="text"
-                  value={draft.title}
-                  onChange={(e) =>
-                    setDraft({ ...draft, title: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Want to work with us?"
+                <ResetButton
+                  onClick={() => resetField("title")}
+                  title="Reset title"
                 />
               </div>
+              <input
+                type="text"
+                value={draft.title}
+                onChange={(e) => updateContactField("title", e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter the main title..."
+              />
+            </div>
 
-              {/* Subtitle/Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Subtitle
                 </label>
-                <textarea
-                  value={draft.subtitle}
-                  onChange={(e) =>
-                    setDraft({ ...draft, subtitle: e.target.value })
-                  }
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Every good collaboration starts with a meaningful conversation..."
+                <ResetButton
+                  onClick={() => resetField("subtitle")}
+                  title="Reset subtitle"
                 />
               </div>
-            </>
-          )}
+              <input
+                type="text"
+                value={draft.subtitle}
+                onChange={(e) => updateContactField("subtitle", e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                placeholder="Enter subtitle..."
+              />
+            </div>
 
-          {activeTab === "style" && (
-            <>
-              {/* Colors Section */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-4">
-                  Colors
-                </h3>
-                <div className="space-y-3">
-                  {/* Background Color */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Contact Image
+                </label>
+                <ResetButton
+                  onClick={() => resetField("image")}
+                  title="Reset image"
+                />
+              </div>
+              <ImageUploader
+                currentImage={draft.image}
+                onImageSelect={(imageUrl) =>
+                  updateContactField("image", imageUrl)
+                }
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Style Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Style Settings
+            </h3>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h4 className="text-sm font-medium text-gray-900 mb-4">
+                🎨 Color Customization
+              </h4>
+              <div className="grid grid-cols-1 gap-4">
+                <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Background</span>
-                    <ColorPicker
-                      color={draft.bgColor}
-                      onChange={(color) =>
-                        setDraft({ ...draft, bgColor: color })
-                      }
+                    <label className="block text-xs font-medium text-gray-800 mb-2">
+                      Background Color
+                    </label>
+                    <ResetButton
+                      onClick={() => resetField("bgColor")}
+                      title="Reset background color"
                     />
                   </div>
+                  <ColorPicker
+                    color={draft.bgColor}
+                    onChange={(color) => updateContactField("bgColor", color)}
+                    label="Background"
+                  />
+                </div>
 
-                  {/* Title Color */}
+                <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Title Color</span>
-                    <ColorPicker
-                      color={draft.titleColor}
-                      onChange={(color) =>
-                        setDraft({ ...draft, titleColor: color })
-                      }
+                    <label className="block text-xs font-medium text-gray-800 mb-2">
+                      Title Color
+                    </label>
+                    <ResetButton
+                      onClick={() => resetField("titleColor")}
+                      title="Reset title color"
                     />
                   </div>
+                  <ColorPicker
+                    color={draft.titleColor}
+                    onChange={(color) =>
+                      updateContactField("titleColor", color)
+                    }
+                    label="Title"
+                  />
+                </div>
 
-                  {/* Text Color */}
+                <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Text Color</span>
-                    <ColorPicker
-                      color={draft.textColor}
-                      onChange={(color) =>
-                        setDraft({ ...draft, textColor: color })
-                      }
+                    <label className="block text-xs font-medium text-gray-800 mb-2">
+                      Text Color
+                    </label>
+                    <ResetButton
+                      onClick={() => resetField("textColor")}
+                      title="Reset text color"
                     />
                   </div>
+                  <ColorPicker
+                    color={draft.textColor}
+                    onChange={(color) => updateContactField("textColor", color)}
+                    label="Text"
+                  />
+                </div>
 
-                  {/* Button Background Color */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
-                      Button Background
-                    </span>
-                    <ColorPicker
-                      color={draft.buttonBgColor}
-                      onChange={(color) =>
-                        setDraft({ ...draft, buttonBgColor: color })
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Background Color
+                  </label>
+                  <ColorPicker
+                    color={draft.buttonBgColor}
+                    onChange={(color) =>
+                      updateContactField("buttonBgColor", color)
+                    }
+                    label="Button Background"
+                  />
+                </div>
 
-                  {/* Button Text Color */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Button Text</span>
-                    <ColorPicker
-                      color={draft.buttonTextColor}
-                      onChange={(color) =>
-                        setDraft({ ...draft, buttonTextColor: color })
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-800 mb-2">
+                    Button Text Color
+                  </label>
+                  <ColorPicker
+                    color={draft.buttonTextColor}
+                    onChange={(color) =>
+                      updateContactField("buttonTextColor", color)
+                    }
+                    label="Button Text"
+                  />
                 </div>
               </div>
-
-              {/* Image Section */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-4">
-                  Contact Image
-                </h3>
-                <ImageUploader
-                  currentImage={draft.image}
-                  onImageSelect={handleImageSelect}
-                />
-              </div>
-            </>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="border-t border-gray-200 p-6 space-y-3">
-        <button
-          onClick={handleSave}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          Save Changes
-        </button>
-        <div className="flex space-x-3">
+        {/* Reset All Section */}
+        <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
           <button
-            onClick={handleCancel}
-            className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure you want to reset the entire contact section? This action cannot be undone."
+                )
+              ) {
+                const newDraft = { ...defaultContactValues };
+                setDraft(newDraft);
+                setContact(newDraft);
+              }
+            }}
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium text-sm"
           >
-            Cancel
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Reset All Contact Section to Default
           </button>
-          <button
-            onClick={handleReset}
-            className="flex-1 bg-red-100 text-red-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-red-200 transition-colors"
-          >
-            Reset
-          </button>
+          <p className="text-xs text-orange-700 mt-2 text-center">
+            This will restore the contact section to its original state
+          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="border-t border-gray-200 bg-white p-6 mt-8">
+          <div className="space-y-3">
+            <button
+              onClick={handleSave}
+              className={`w-full py-3 px-6 rounded-lg transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2 ${
+                hasChanges
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-gray-100 text-gray-500 cursor-not-allowed"
+              }`}
+              disabled={!hasChanges}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              {hasChanges ? "Save Changes" : "No Changes to Save"}
+            </button>
+            <button
+              onClick={handleClose}
+              className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Close Editor
+            </button>
+          </div>
+          <p className="text-xs text-gray-600 mt-3 text-center">
+            {hasChanges
+              ? "⚠️ You have unsaved changes"
+              : "Changes are applied in real-time"}
+          </p>
         </div>
       </div>
     </SidePanel>
