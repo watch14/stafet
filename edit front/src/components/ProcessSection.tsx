@@ -3,17 +3,47 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
+import { useAuth } from "../contexts/AuthContext";
 import ProcessEditor from "./ProcessEditor";
 
 export default function ProcessSection() {
   const editMode = useEditorStore((s) => s.editMode);
   const processData = useEditorStore((s) => s.process);
+  const setProcess = useEditorStore((s) => s.setProcess);
+  const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive } = useEditorManager();
 
+  // Only allow edit interactions if user is authenticated
+  const canEdit = editMode && isAuthenticated;
+
   const handleSectionClick = () => {
-    if (editMode) {
+    if (canEdit) {
       openEditor("process");
     }
+  };
+
+  const addNewProcess = () => {
+    if (!canEdit) return;
+
+    const newProcessNumber = (processData.processes.length + 1)
+      .toString()
+      .padStart(2, "0")
+      .concat(".");
+    const newProcess = {
+      number: newProcessNumber,
+      title: "NEW",
+      subtitle: "Enter your process subtitle",
+      description:
+        "Enter your process description here. This should explain what happens in this step of your process.",
+      titleBgColor: "#E5E7EB",
+      bgColor: "#ffffff",
+      textColor: "#000000",
+      image: "/images/WHAT.png", // Default image
+    };
+
+    setProcess({
+      processes: [...processData.processes, newProcess],
+    });
   };
 
   return (
@@ -22,10 +52,10 @@ export default function ProcessSection() {
       <section
         className="w-full relative"
         style={{
-          outline: editMode ? "2px dashed #2563eb" : undefined,
+          outline: canEdit ? "2px dashed #2563eb" : undefined,
         }}
       >
-        {editMode && (
+        {canEdit && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"
@@ -43,13 +73,15 @@ export default function ProcessSection() {
             Click to edit
           </div>
         )}
+
+        {/* Existing processes */}
         {processData.processes.map((process, index) => (
           <div
             key={index}
-            className={`w-full ${editMode ? "cursor-pointer" : ""}`}
+            className={`w-full ${canEdit ? "cursor-pointer" : ""}`}
             style={{ backgroundColor: process.bgColor }}
             onClick={handleSectionClick}
-            tabIndex={editMode ? 0 : -1}
+            tabIndex={canEdit ? 0 : -1}
           >
             <div className="w-full max-w-[1440px] mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">

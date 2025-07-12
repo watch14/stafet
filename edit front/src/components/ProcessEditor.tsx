@@ -28,6 +28,40 @@ export default function ProcessEditor({
     setDraft({ processes: updatedProcesses });
   };
 
+  const removeProcess = (index: number) => {
+    if (draft.processes.length <= 1) {
+      alert("You must have at least one process step.");
+      return;
+    }
+
+    const updatedProcesses = draft.processes.filter((_, i) => i !== index);
+    // Renumber the remaining processes
+    const renumberedProcesses = updatedProcesses.map((process, i) => ({
+      ...process,
+      number: (i + 1).toString().padStart(2, "0") + ".",
+    }));
+
+    setDraft({ processes: renumberedProcesses });
+  };
+
+  const addProcess = () => {
+    const newProcessNumber =
+      (draft.processes.length + 1).toString().padStart(2, "0") + ".";
+    const newProcess = {
+      number: newProcessNumber,
+      title: "NEW",
+      subtitle: "Enter your process subtitle",
+      description:
+        "Enter your process description here. This should explain what happens in this step of your process.",
+      titleBgColor: "#E5E7EB",
+      bgColor: "#ffffff",
+      textColor: "#000000",
+      image: "/images/WHAT.png", // Default image
+    };
+
+    setDraft({ processes: [...draft.processes, newProcess] });
+  };
+
   const handleSave = () => {
     setProcess(draft);
     closeEditor();
@@ -48,8 +82,8 @@ export default function ProcessEditor({
             💡 Edit Process Steps
           </h3>
           <p className="text-xs text-blue-800">
-            Customize each step in your process flow. Changes are saved
-            automatically when you click "Save Changes".
+            Customize each step in your process flow. You can add, remove, and
+            reorder steps. Changes are saved when you click "Save Changes".
           </p>
         </div>
 
@@ -62,8 +96,31 @@ export default function ProcessEditor({
               <h3 className="text-lg font-semibold text-gray-900">
                 Step {index + 1}
               </h3>
-              <div className="bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-xs font-medium">
-                {item.number}
+              <div className="flex items-center gap-2">
+                <div className="bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-xs font-medium">
+                  {item.number}
+                </div>
+                {draft.processes.length > 1 && (
+                  <button
+                    onClick={() => removeProcess(index)}
+                    className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Delete this process step"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -192,6 +249,29 @@ export default function ProcessEditor({
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Add New Process Button */}
+      <div className="bg-green-50 p-4 mt-8 rounded-lg border border-green-200">
+        <button
+          onClick={addProcess}
+          className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm"
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Add New Process Step
+        </button>
       </div>
 
       {/* Action Buttons */}
