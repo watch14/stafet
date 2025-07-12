@@ -8,12 +8,27 @@ import SidePanel from "./SidePanel";
 
 // Default client logos values for reset functionality
 const defaultClientLogosValues = {
-  title: "Trusted by leading companies",
-  bgColor: "#FFFFFF",
+  title: "Client Logos",
+  bgColor: "#ffffff",
   textColor: "#000000",
   logos: [
-    { name: "Company 1", logo: "/images/logo.png", alt: "Company 1" },
-    { name: "Company 2", logo: "/images/logo-2.png", alt: "Company 2" },
+    {
+      name: "Express Bank",
+      logo: "/images/Express.png",
+      alt: "Express Bank Logo",
+    },
+    { name: "TwoPoint", logo: "/images/TwoPoint.png", alt: "TwoPoint Logo" },
+    {
+      name: "Gentofte Kommune",
+      logo: "/images/HeadHunter.png",
+      alt: "Gentofte Kommune Logo",
+    },
+    {
+      name: "Fundbricks",
+      logo: "/images/Gentofte.png",
+      alt: "Fundbricks Logo",
+    },
+    { name: "STAFF", logo: "/images/Fundbricks.png", alt: "STAFF Logo" },
   ],
 };
 
