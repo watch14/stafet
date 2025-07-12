@@ -11,7 +11,7 @@ export default function ProcessSection() {
   const processData = useEditorStore((s) => s.process);
   const setProcess = useEditorStore((s) => s.setProcess);
   const { isAuthenticated } = useAuth();
-  const { openEditor, isEditorActive } = useEditorManager();
+  const { openEditor, isEditorActive, closeEditor } = useEditorManager();
 
   // Only allow edit interactions if user is authenticated
   const canEdit = editMode && isAuthenticated;
@@ -48,7 +48,7 @@ export default function ProcessSection() {
 
   return (
     <>
-      <ProcessEditor open={isEditorActive("process")} onClose={() => {}} />
+      <ProcessEditor open={isEditorActive("process")} onClose={() => closeEditor()} />
       <section
         className="w-full relative"
         style={{

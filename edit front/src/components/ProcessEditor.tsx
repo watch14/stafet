@@ -1,10 +1,60 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
 import ImageUploader from "./ImageUploader";
+
+// Default process values for reset functionality
+const defaultProcessValues = {
+  processes: [
+    {
+      number: "01.",
+      title: "WHAT",
+      subtitle: "Calibrating your business targets",
+      description:
+        "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
+      titleBgColor: "#FFC6E7",
+      bgColor: "#ffffff",
+      textColor: "#000000",
+      image: "/images/WHAT.png",
+    },
+    {
+      number: "02.",
+      title: "WHY",
+      subtitle: "Identifying why you haven't reached your potential",
+      description:
+        "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
+      titleBgColor: "#C6E7FF",
+      bgColor: "#f5f5f5",
+      textColor: "#000000",
+      image: "/images/WHY.png",
+    },
+    {
+      number: "03.",
+      title: "HOW",
+      subtitle: "Defining actions to reach your targets",
+      description:
+        "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
+      titleBgColor: "#C6FFC6",
+      bgColor: "#ffffff",
+      textColor: "#000000",
+      image: "/images/HOW.png",
+    },
+    {
+      number: "04.",
+      title: "ACTION",
+      subtitle: "Making your vision a reality",
+      description:
+        "We are specialists at building solid end-to-end software solutions that help you reach your business targets. If your IP lies in commercial knowledge and processes you need software solutions sustaining these enabling you to scale your business.",
+      titleBgColor: "#FFE5C6",
+      bgColor: "#f5f5f5",
+      textColor: "#000000",
+      image: "/images/ACTION.png",
+    },
+  ],
+};
 
 export default function ProcessEditor({
   open,
@@ -17,15 +67,48 @@ export default function ProcessEditor({
   const setProcess = useEditorStore((s) => s.setProcess);
   const { closeEditor } = useEditorManager();
   const [draft, setDraft] = useState(process);
+  const [hasChanges, setHasChanges] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setDraft(process);
-  }, [open]);
+    setHasChanges(false);
+  }, [open, process]);
 
+  // Check for changes whenever draft updates
+  useEffect(() => {
+    const changes = JSON.stringify(draft) !== JSON.stringify(process);
+    setHasChanges(changes);
+  }, [draft, process]);
+
+  // Real-time preview - update store immediately for preview
   const updateProcessItem = (index: number, field: string, value: string) => {
     const updatedProcesses = [...draft.processes];
     updatedProcesses[index] = { ...updatedProcesses[index], [field]: value };
-    setDraft({ processes: updatedProcesses });
+    const newDraft = { processes: updatedProcesses };
+    setDraft(newDraft);
+    
+    // Update store immediately for real-time preview
+    setProcess(newDraft);
+  };
+
+  // Reset individual field to default
+  const resetField = (index: number, field: string) => {
+    const defaultProcess = defaultProcessValues.processes[index];
+    if (defaultProcess && defaultProcess[field as keyof typeof defaultProcess]) {
+      updateProcessItem(index, field, defaultProcess[field as keyof typeof defaultProcess] as string);
+    }
+  };
+
+  // Reset entire process step to default
+  const resetProcessStep = (index: number) => {
+    const defaultProcess = defaultProcessValues.processes[index];
+    if (defaultProcess) {
+      const updatedProcesses = [...draft.processes];
+      updatedProcesses[index] = { ...defaultProcess };
+      const newDraft = { processes: updatedProcesses };
+      setDraft(newDraft);
+      setProcess(newDraft);
+    }
   };
 
   const removeProcess = (index: number) => {
@@ -41,7 +124,9 @@ export default function ProcessEditor({
       number: (i + 1).toString().padStart(2, "0") + ".",
     }));
 
-    setDraft({ processes: renumberedProcesses });
+    const newDraft = { processes: renumberedProcesses };
+    setDraft(newDraft);
+    setProcess(newDraft);
   };
 
   const addProcess = () => {
@@ -56,34 +141,70 @@ export default function ProcessEditor({
       titleBgColor: "#E5E7EB",
       bgColor: "#ffffff",
       textColor: "#000000",
-      image: "/images/WHAT.png", // Default image
+      image: "/images/WHAT.png",
     };
 
-    setDraft({ processes: [...draft.processes, newProcess] });
+    const newDraft = { processes: [...draft.processes, newProcess] };
+    setDraft(newDraft);
+    setProcess(newDraft);
+  };
+
+  // Reset entire component to defaults
+  const resetComponent = () => {
+    if (confirm("Are you sure you want to reset all processes to default values? This will overwrite all your changes.")) {
+      setDraft(defaultProcessValues);
+      setProcess(defaultProcessValues);
+      setHasChanges(false);
+    }
   };
 
   const handleSave = () => {
-    setProcess(draft);
+    setHasChanges(false);
     closeEditor();
     onClose();
   };
 
   const handleClose = () => {
-    setDraft(process); // Reset to original state
+    if (hasChanges) {
+      const shouldSave = confirm("You have unsaved changes. Would you like to save them before closing?");
+      if (shouldSave) {
+        handleSave();
+        return;
+      } else {
+        // Revert changes
+        setProcess(process);
+        setDraft(process);
+        setHasChanges(false);
+      }
+    }
     closeEditor();
     onClose();
   };
+
+  // Reset button component
+  const ResetButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
+    <button
+      onClick={onClick}
+      className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+      title={title}
+    >
+      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    </button>
+  );
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Process Section">
       <div className="space-y-8 text-black">
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
           <h3 className="text-sm font-medium text-blue-900 mb-2">
-            💡 Edit Process Steps
+            💡 Real-time Process Editor
           </h3>
           <p className="text-xs text-blue-800">
-            Customize each step in your process flow. You can add, remove, and
-            reorder steps. Changes are saved when you click "Save Changes".
+            Changes appear instantly on your website. {hasChanges && (
+              <span className="font-medium text-orange-800">• Unsaved changes</span>
+            )}
           </p>
         </div>
 
@@ -100,6 +221,18 @@ export default function ProcessEditor({
                 <div className="bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-xs font-medium">
                   {item.number}
                 </div>
+                {/* Reset entire step button */}
+                {defaultProcessValues.processes[index] && (
+                  <button
+                    onClick={() => resetProcessStep(index)}
+                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Reset this step to default"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </button>
+                )}
                 {draft.processes.length > 1 && (
                   <button
                     onClick={() => removeProcess(index)}
@@ -127,9 +260,15 @@ export default function ProcessEditor({
             <div className="grid grid-cols-1 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Step Number
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Step Number
+                    </label>
+                    <ResetButton 
+                      onClick={() => resetField(index, "number")} 
+                      title="Reset step number"
+                    />
+                  </div>
                   <input
                     type="text"
                     value={item.number}
@@ -142,9 +281,15 @@ export default function ProcessEditor({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Title
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Title
+                    </label>
+                    <ResetButton 
+                      onClick={() => resetField(index, "title")} 
+                      title="Reset title"
+                    />
+                  </div>
                   <input
                     type="text"
                     value={item.title}
@@ -157,9 +302,15 @@ export default function ProcessEditor({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Subtitle
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Subtitle
+                    </label>
+                    <ResetButton 
+                      onClick={() => resetField(index, "subtitle")} 
+                      title="Reset subtitle"
+                    />
+                  </div>
                   <input
                     type="text"
                     value={item.subtitle}
@@ -172,9 +323,15 @@ export default function ProcessEditor({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Description
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Description
+                    </label>
+                    <ResetButton 
+                      onClick={() => resetField(index, "description")} 
+                      title="Reset description"
+                    />
+                  </div>
                   <textarea
                     value={item.description}
                     onChange={(e) =>
@@ -189,9 +346,15 @@ export default function ProcessEditor({
 
               {/* Image Upload Section */}
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <label className="block text-sm font-medium text-gray-900 mb-3">
-                  📸 Step Image
-                </label>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-sm font-medium text-gray-900">
+                    📸 Step Image
+                  </label>
+                  <ResetButton 
+                    onClick={() => resetField(index, "image")} 
+                    title="Reset image"
+                  />
+                </div>
                 <ImageUploader
                   onImageSelect={(imageUrl) =>
                     updateProcessItem(index, "image", imageUrl)
@@ -207,9 +370,15 @@ export default function ProcessEditor({
                 </h4>
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-800 mb-2">
-                      Background Color
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-xs font-medium text-gray-800">
+                        Background Color
+                      </label>
+                      <ResetButton 
+                        onClick={() => resetField(index, "bgColor")} 
+                        title="Reset background color"
+                      />
+                    </div>
                     <ColorPicker
                       color={item.bgColor}
                       onChange={(color) =>
@@ -220,9 +389,15 @@ export default function ProcessEditor({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-gray-800 mb-2">
-                      Text Color
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-xs font-medium text-gray-800">
+                        Text Color
+                      </label>
+                      <ResetButton 
+                        onClick={() => resetField(index, "textColor")} 
+                        title="Reset text color"
+                      />
+                    </div>
                     <ColorPicker
                       color={item.textColor}
                       onChange={(color) =>
@@ -233,9 +408,15 @@ export default function ProcessEditor({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-gray-800 mb-2">
-                      Number Badge Color
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-xs font-medium text-gray-800">
+                        Number Badge Color
+                      </label>
+                      <ResetButton 
+                        onClick={() => resetField(index, "titleBgColor")} 
+                        title="Reset badge color"
+                      />
+                    </div>
                     <ColorPicker
                       color={item.titleBgColor}
                       onChange={(color) =>
@@ -274,12 +455,43 @@ export default function ProcessEditor({
         </button>
       </div>
 
+      {/* Reset Component Button */}
+      <div className="bg-orange-50 p-4 mt-4 rounded-lg border border-orange-200">
+        <button
+          onClick={resetComponent}
+          className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium text-sm"
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          Reset All Processes to Default
+        </button>
+        <p className="text-xs text-orange-700 mt-2 text-center">
+          This will restore all processes to their original state
+        </p>
+      </div>
+
       {/* Action Buttons */}
       <div className="border-t border-gray-200 bg-white p-6 mt-8">
         <div className="space-y-3">
           <button
             onClick={handleSave}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2"
+            className={`w-full py-3 px-6 rounded-lg transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2 ${
+              hasChanges 
+                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+            }`}
+            disabled={!hasChanges}
           >
             <svg
               className="w-4 h-4"
@@ -294,7 +506,7 @@ export default function ProcessEditor({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            Save Changes
+            {hasChanges ? 'Save Changes' : 'No Changes to Save'}
           </button>
           <button
             onClick={handleClose}
@@ -313,11 +525,14 @@ export default function ProcessEditor({
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            Cancel
+            Close Editor
           </button>
         </div>
         <p className="text-xs text-gray-600 mt-3 text-center">
-          Changes will be applied to your live website
+          {hasChanges 
+            ? "⚠️ You have unsaved changes" 
+            : "Changes are applied in real-time"
+          }
         </p>
       </div>
     </SidePanel>
