@@ -50,7 +50,10 @@ export default function ClientLogosEditor({
   };
 
   // Update a specific logo
-  const updateLogo = (index: number, updates: Partial<typeof draft.logos[0]>) => {
+  const updateLogo = (
+    index: number,
+    updates: Partial<(typeof draft.logos)[0]>
+  ) => {
     const newLogos = [...draft.logos];
     newLogos[index] = { ...newLogos[index], ...updates };
     updateDraft({ logos: newLogos });
@@ -91,7 +94,11 @@ export default function ClientLogosEditor({
 
   // Reset entire component to defaults
   const resetComponent = () => {
-    if (confirm("Are you sure you want to reset the client logos section to default values? This will overwrite all your changes.")) {
+    if (
+      confirm(
+        "Are you sure you want to reset the client logos section to default values? This will overwrite all your changes."
+      )
+    ) {
       setDraft(defaultClientLogosValues);
       setClientLogos(defaultClientLogosValues);
       setHasChanges(false);
@@ -106,7 +113,9 @@ export default function ClientLogosEditor({
 
   const handleClose = () => {
     if (hasChanges) {
-      const shouldSave = confirm("You have unsaved changes. Would you like to save them before closing?");
+      const shouldSave = confirm(
+        "You have unsaved changes. Would you like to save them before closing?"
+      );
       if (shouldSave) {
         handleSave();
         return;
@@ -122,20 +131,40 @@ export default function ClientLogosEditor({
   };
 
   // Reset button component
-  const ResetButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
+  const ResetButton = ({
+    onClick,
+    title,
+  }: {
+    onClick: () => void;
+    title: string;
+  }) => (
     <button
       onClick={onClick}
       className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
       title={title}
     >
-      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <svg
+        className="w-3 h-3"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+        />
       </svg>
     </button>
   );
 
   return (
-    <SidePanel open={open} onClose={handleClose} title="Edit Client Logos Section">
+    <SidePanel
+      open={open}
+      onClose={handleClose}
+      title="Edit Client Logos Section"
+    >
       <div className="space-y-8 text-black">
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -143,8 +172,11 @@ export default function ClientLogosEditor({
             💡 Real-time Client Logos Editor
           </h3>
           <p className="text-xs text-blue-800">
-            Changes appear instantly on your website. {hasChanges && (
-              <span className="font-medium text-orange-800">• Unsaved changes</span>
+            Changes appear instantly on your website.{" "}
+            {hasChanges && (
+              <span className="font-medium text-orange-800">
+                • Unsaved changes
+              </span>
             )}
           </p>
         </div>
@@ -162,8 +194,8 @@ export default function ClientLogosEditor({
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Section Title
                 </label>
-                <ResetButton 
-                  onClick={() => resetField("title")} 
+                <ResetButton
+                  onClick={() => resetField("title")}
                   title="Reset title"
                 />
               </div>
@@ -186,8 +218,18 @@ export default function ClientLogosEditor({
                   onClick={addLogo}
                   className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium flex items-center gap-1"
                 >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   Add Logo
                 </button>
@@ -195,12 +237,17 @@ export default function ClientLogosEditor({
 
               <div className="space-y-4">
                 {draft.logos.map((logo, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg border border-gray-200"
+                  >
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-medium text-gray-900">Logo {index + 1}</h4>
+                      <h4 className="text-sm font-medium text-gray-900">
+                        Logo {index + 1}
+                      </h4>
                       <div className="flex items-center gap-2">
-                        <ResetButton 
-                          onClick={() => resetLogo(index)} 
+                        <ResetButton
+                          onClick={() => resetLogo(index)}
                           title="Reset this logo"
                         />
                         {draft.logos.length > 1 && (
@@ -209,8 +256,18 @@ export default function ClientLogosEditor({
                             className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
                             title="Remove this logo"
                           >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
                             </svg>
                           </button>
                         )}
@@ -225,7 +282,12 @@ export default function ClientLogosEditor({
                         <input
                           type="text"
                           value={logo.name}
-                          onChange={(e) => updateLogo(index, { name: e.target.value, alt: e.target.value })}
+                          onChange={(e) =>
+                            updateLogo(index, {
+                              name: e.target.value,
+                              alt: e.target.value,
+                            })
+                          }
                           className="w-full p-2 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                           placeholder="Enter company name..."
                         />
@@ -237,7 +299,9 @@ export default function ClientLogosEditor({
                         </label>
                         <ImageUploader
                           currentImage={logo.logo}
-                          onImageSelect={(newLogo) => updateLogo(index, { logo: newLogo })}
+                          onImageSelect={(newLogo) =>
+                            updateLogo(index, { logo: newLogo })
+                          }
                         />
                       </div>
                     </div>
@@ -265,8 +329,8 @@ export default function ClientLogosEditor({
                     <label className="block text-xs font-medium text-gray-800">
                       Background Color
                     </label>
-                    <ResetButton 
-                      onClick={() => resetField("bgColor")} 
+                    <ResetButton
+                      onClick={() => resetField("bgColor")}
                       title="Reset background color"
                     />
                   </div>
@@ -282,8 +346,8 @@ export default function ClientLogosEditor({
                     <label className="block text-xs font-medium text-gray-800">
                       Text Color
                     </label>
-                    <ResetButton 
-                      onClick={() => resetField("textColor")} 
+                    <ResetButton
+                      onClick={() => resetField("textColor")}
                       title="Reset text color"
                     />
                   </div>
@@ -330,9 +394,9 @@ export default function ClientLogosEditor({
             <button
               onClick={handleSave}
               className={`w-full py-3 px-6 rounded-lg transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2 ${
-                hasChanges 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                  : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                hasChanges
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-gray-100 text-gray-500 cursor-not-allowed"
               }`}
               disabled={!hasChanges}
             >
@@ -349,7 +413,7 @@ export default function ClientLogosEditor({
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              {hasChanges ? 'Save Changes' : 'No Changes to Save'}
+              {hasChanges ? "Save Changes" : "No Changes to Save"}
             </button>
             <button
               onClick={handleClose}
@@ -372,10 +436,9 @@ export default function ClientLogosEditor({
             </button>
           </div>
           <p className="text-xs text-gray-600 mt-3 text-center">
-            {hasChanges 
-              ? "⚠️ You have unsaved changes" 
-              : "Changes are applied in real-time"
-            }
+            {hasChanges
+              ? "⚠️ You have unsaved changes"
+              : "Changes are applied in real-time"}
           </p>
         </div>
       </div>

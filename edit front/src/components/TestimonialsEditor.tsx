@@ -8,7 +8,8 @@ import SidePanel from "./SidePanel";
 // Default testimonials values for reset functionality
 const defaultTestimonialsValues = {
   title: "What our clients say",
-  quote: "Our process starts by diving into your business, customers, and objectives. From there, we create a strategy rooted in our findings",
+  quote:
+    "Our process starts by diving into your business, customers, and objectives. From there, we create a strategy rooted in our findings",
   author: "- Marcus, 29, HeadHunter",
   bgColor: "#ffffff",
   textColor: "#000000",
@@ -56,7 +57,11 @@ export default function TestimonialsEditor({
 
   // Reset entire component to defaults
   const resetComponent = () => {
-    if (confirm("Are you sure you want to reset the testimonials section to default values? This will overwrite all your changes.")) {
+    if (
+      confirm(
+        "Are you sure you want to reset the testimonials section to default values? This will overwrite all your changes."
+      )
+    ) {
       setDraft(defaultTestimonialsValues);
       setTestimonials(defaultTestimonialsValues);
       setHasChanges(false);
@@ -71,7 +76,9 @@ export default function TestimonialsEditor({
 
   const handleClose = () => {
     if (hasChanges) {
-      const shouldSave = confirm("You have unsaved changes. Would you like to save them before closing?");
+      const shouldSave = confirm(
+        "You have unsaved changes. Would you like to save them before closing?"
+      );
       if (shouldSave) {
         handleSave();
         return;
@@ -87,20 +94,40 @@ export default function TestimonialsEditor({
   };
 
   // Reset button component
-  const ResetButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
+  const ResetButton = ({
+    onClick,
+    title,
+  }: {
+    onClick: () => void;
+    title: string;
+  }) => (
     <button
       onClick={onClick}
       className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
       title={title}
     >
-      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <svg
+        className="w-3 h-3"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+        />
       </svg>
     </button>
   );
 
   return (
-    <SidePanel open={open} onClose={handleClose} title="Edit Testimonials Section">
+    <SidePanel
+      open={open}
+      onClose={handleClose}
+      title="Edit Testimonials Section"
+    >
       <div className="space-y-8 text-black">
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -108,8 +135,11 @@ export default function TestimonialsEditor({
             💬 Real-time Testimonials Editor
           </h3>
           <p className="text-xs text-blue-800">
-            Changes appear instantly on your website. {hasChanges && (
-              <span className="font-medium text-orange-800">• Unsaved changes</span>
+            Changes appear instantly on your website.{" "}
+            {hasChanges && (
+              <span className="font-medium text-orange-800">
+                • Unsaved changes
+              </span>
             )}
           </p>
         </div>
@@ -127,8 +157,8 @@ export default function TestimonialsEditor({
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Section Title
                 </label>
-                <ResetButton 
-                  onClick={() => resetField("title")} 
+                <ResetButton
+                  onClick={() => resetField("title")}
                   title="Reset title"
                 />
               </div>
@@ -147,8 +177,8 @@ export default function TestimonialsEditor({
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Testimonial Quote
                 </label>
-                <ResetButton 
-                  onClick={() => resetField("quote")} 
+                <ResetButton
+                  onClick={() => resetField("quote")}
                   title="Reset quote"
                 />
               </div>
@@ -167,8 +197,8 @@ export default function TestimonialsEditor({
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Author Information
                 </label>
-                <ResetButton 
-                  onClick={() => resetField("author")} 
+                <ResetButton
+                  onClick={() => resetField("author")}
                   title="Reset author"
                 />
               </div>
@@ -200,8 +230,8 @@ export default function TestimonialsEditor({
                     <label className="block text-xs font-medium text-gray-800">
                       Background Color
                     </label>
-                    <ResetButton 
-                      onClick={() => resetField("bgColor")} 
+                    <ResetButton
+                      onClick={() => resetField("bgColor")}
                       title="Reset background color"
                     />
                   </div>
@@ -217,8 +247,8 @@ export default function TestimonialsEditor({
                     <label className="block text-xs font-medium text-gray-800">
                       Text Color
                     </label>
-                    <ResetButton 
-                      onClick={() => resetField("textColor")} 
+                    <ResetButton
+                      onClick={() => resetField("textColor")}
                       title="Reset text color"
                     />
                   </div>
@@ -265,9 +295,9 @@ export default function TestimonialsEditor({
             <button
               onClick={handleSave}
               className={`w-full py-3 px-6 rounded-lg transition-colors font-medium text-sm shadow-sm flex items-center justify-center gap-2 ${
-                hasChanges 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                  : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                hasChanges
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-gray-100 text-gray-500 cursor-not-allowed"
               }`}
               disabled={!hasChanges}
             >
@@ -284,7 +314,7 @@ export default function TestimonialsEditor({
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              {hasChanges ? 'Save Changes' : 'No Changes to Save'}
+              {hasChanges ? "Save Changes" : "No Changes to Save"}
             </button>
             <button
               onClick={handleClose}
@@ -307,10 +337,9 @@ export default function TestimonialsEditor({
             </button>
           </div>
           <p className="text-xs text-gray-600 mt-3 text-center">
-            {hasChanges 
-              ? "⚠️ You have unsaved changes" 
-              : "Changes are applied in real-time"
-            }
+            {hasChanges
+              ? "⚠️ You have unsaved changes"
+              : "Changes are applied in real-time"}
           </p>
         </div>
       </div>
