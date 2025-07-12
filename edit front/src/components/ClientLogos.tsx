@@ -56,21 +56,30 @@ export default function ClientLogos() {
                 key={index}
                 className="flex items-center justify-center h-12"
               >
-                <Image
-                  src={client.logo}
-                  alt={client.alt}
-                  width={120}
-                  height={48}
-                  className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = "none";
-                    if (target.nextSibling) {
-                      (target.nextSibling as HTMLElement).style.display =
-                        "block";
-                    }
-                  }}
-                />
+                {client.logo && client.logo.trim() !== "" ? (
+                  <Image
+                    src={client.logo}
+                    alt={client.alt}
+                    width={120}
+                    height={48}
+                    className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = "none";
+                      if (target.nextSibling) {
+                        (target.nextSibling as HTMLElement).style.display =
+                          "block";
+                      }
+                    }}
+                  />
+                ) : (
+                  <span
+                    className="font-medium text-sm md:text-base px-4 py-2 bg-gray-100 rounded border-2 border-dashed border-gray-300"
+                    style={{ color: clientLogos.textColor }}
+                  >
+                    {client.name}
+                  </span>
+                )}
                 <span
                   className="hidden font-medium text-sm md:text-base"
                   style={{ color: clientLogos.textColor }}

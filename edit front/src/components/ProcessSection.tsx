@@ -48,7 +48,10 @@ export default function ProcessSection() {
 
   return (
     <>
-      <ProcessEditor open={isEditorActive("process")} onClose={() => closeEditor()} />
+      <ProcessEditor
+        open={isEditorActive("process")}
+        onClose={() => closeEditor()}
+      />
       <section
         className="w-full relative"
         style={{
@@ -131,14 +134,38 @@ export default function ProcessSection() {
                       : "order-1 lg:order-2"
                   }`}
                 >
-                  <Image
-                    src={process.image}
-                    alt={`${process.title} - ${process.subtitle}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1440px) 50vw, 720px"
-                    priority={index < 2}
-                  />
+                  {process.image && process.image.trim() !== "" ? (
+                    <Image
+                      src={process.image}
+                      alt={`${process.title} - ${process.subtitle}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1440px) 50vw, 720px"
+                      priority={index < 2}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <svg
+                          className="w-16 h-16 mx-auto mb-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                        <p className="font-medium">Process Image</p>
+                        <p className="text-sm">
+                          Upload an image to display here
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
