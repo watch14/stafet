@@ -15,7 +15,7 @@ const defaultContactValues = {
   textColor: "#000000",
   buttonBgColor: "#000000",
   buttonTextColor: "#ffffff",
-  image: "/images/contact-default.jpg",
+  image: "/images/Work.png",
 };
 
 export default function ContactEditor({

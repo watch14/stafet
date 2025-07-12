@@ -321,7 +321,7 @@ export default function ContactPage() {
         <div className="lg:w-1/2 relative min-h-[400px] lg:min-h-screen">
           <div className="absolute inset-0">
             <Image
-              src={contact?.image || "/images/Work.png"}
+              src={contact?.image}
               alt="Contact us"
               fill
               className="object-cover"
