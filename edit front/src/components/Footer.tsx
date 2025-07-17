@@ -50,7 +50,7 @@ export default function Footer() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
           <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-4">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 max-w-50">
               <Image
                 src="/images/logo-2.png"
                 alt="STAFF Logo"
