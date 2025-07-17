@@ -22,26 +22,26 @@ import { useEditorStore } from "../store/editorStore";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import NavBarEditor from "../components/NavBarEditor";
-import { useEditorManager } from "../hooks/useEditorManager";
-import { useAuth } from "../contexts/AuthContext";
+import { useSection } from "../hooks/useSection";
 
 /**
  * Navbar Component
  * Main navigation bar with logo, links, CTA, and edit controls
  */
 export default function Navbar() {
-  // Get navbar content and edit state from store
+  // Get navbar content from store
   const navbar = useEditorStore((s) => s.navbar);
-  const editMode = useEditorStore((s) => s.editMode);
-  const { isAuthenticated } = useAuth();
-  const { openEditor, isEditorActive } = useEditorManager();
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("navbar", {
+    name: "Navigation Bar",
+    description: "Top navigation with logo, menu links, and CTA button",
+    icon: "🧭"
+  });
 
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
-  // Only allow edit interactions if user is authenticated as admin
-  const canEdit = editMode && isAuthenticated;
 
   // Ensure component only renders mobile menu after hydration
   useEffect(() => {
@@ -76,11 +76,12 @@ export default function Navbar() {
     <>
       {/* Main Navigation Bar */}
       <nav
-        className={`w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide`}
+        ref={sectionRef}
+        {...sectionProps}
+        className={`w-full flex items-center justify-center px-0 py-2 border-b border-black/10 sticky top-0 bg-white z-50 text-xs font-semibold tracking-wide ${sectionProps.className}`}
         style={{
-          outline: canEdit ? "2px dashed #2563eb" : undefined, // Edit mode indicator
+          ...sectionProps.style,
         }}
-        tabIndex={canEdit ? 0 : -1}
       >
         <div className="w-full max-w-[1440px] flex items-center justify-between px-4 sm:px-6 relative">
           {/* Logo Section (Left) */}
@@ -158,10 +159,9 @@ export default function Navbar() {
             </Link>
 
             {/* Edit button - small circular pen icon */}
-            {canEdit && (
+            {sectionProps['data-editable'] && (
               <button
                 className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition cursor-pointer"
-                onClick={() => openEditor("navbar")}
                 title="Edit navbar"
               >
                 <svg
@@ -255,7 +255,6 @@ export default function Navbar() {
           </div>
         )}
       </nav>
-      <NavBarEditor open={isEditorActive("navbar")} onClose={() => {}} />
     </>
   );
 }

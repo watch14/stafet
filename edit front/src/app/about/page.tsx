@@ -17,8 +17,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEditorStore } from "../../store/editorStore";
-import { useEditorManager } from "../../hooks/useEditorManager";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSection } from "../../hooks/useSection";
 import AboutEditor from "../../components/AboutEditor";
 
 /**
@@ -26,32 +25,28 @@ import AboutEditor from "../../components/AboutEditor";
  * Displays company information in a split layout format
  */
 export default function AboutPage() {
-  // Get current edit mode and about content from store
-  const editMode = useEditorStore((s) => s.editMode);
-  const about = useEditorStore((s) => s.about);
-  const { isAuthenticated } = useAuth();
-  const { openEditor, isEditorActive } = useEditorManager();
-
-  // Only allow edit interactions if user is authenticated
-  const canEdit = editMode && isAuthenticated;
+  // Get about content from store
+  const aboutContent = useEditorStore((s) => s.about);
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("about", {
+    name: "About Page",
+    description: "Company information and story",
+    icon: "ℹ️"
+  });
 
   return (
     <div className="min-h-screen max-w-[1440px] mx-auto">
-      {/* About Editor Panel - opens when admin clicks to edit */}
-      <AboutEditor open={isEditorActive("about")} onClose={() => {}} />
-
       {/* Main Content - Split layout with text left, image right */}
       <div
-        className={`flex flex-col lg:flex-row min-h-screen relative ${
-          canEdit ? "cursor-pointer" : ""
-        }`}
+        ref={sectionRef as any}
+        {...sectionProps}
+        className={`flex flex-col lg:flex-row min-h-screen relative ${sectionProps.className}`}
         style={{
-          outline: canEdit ? "2px dashed #2563eb" : undefined, // Blue dashed border in edit mode
+          ...sectionProps.style,
         }}
-        onClick={() => canEdit && openEditor("about")}
-        tabIndex={canEdit ? 0 : -1}
       >
-        {canEdit && (
+        {sectionProps['data-editable'] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
             <svg
               className="w-3 h-3"
@@ -72,9 +67,9 @@ export default function AboutPage() {
 
         {/* Left side - Image (50% width on desktop, full width on mobile) */}
         <div className="w-full lg:w-1/2 relative h-64 sm:h-80 md:h-96 lg:h-auto">
-          {about.image && about.image.trim() !== "" ? (
+          {aboutContent.image && aboutContent.image.trim() !== "" ? (
             <Image
-              src={about.image}
+              src={aboutContent.image}
               alt="Ocean research buoy"
               fill
               className="object-cover"
@@ -109,28 +104,28 @@ export default function AboutPage() {
         {/* Right side - Content (50% width on desktop, full width on mobile) */}
         <div
           className="w-full lg:w-1/2 flex items-center justify-center"
-          style={{ backgroundColor: about.bgColor }}
+          style={{ backgroundColor: aboutContent.bgColor }}
         >
           <div className="px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-8 sm:py-12 md:py-16 lg:py-20 max-w-full lg:max-w-3xl w-full">
             <h1
               className="font-normal mb-6 sm:mb-8"
               style={{
-                color: about.titleColor,
+                color: aboutContent.titleColor,
                 fontSize: "clamp(2rem, 5vw, 3.5rem)",
                 lineHeight: "1.1",
                 fontWeight: "400",
               }}
             >
-              {about.title}
+              {aboutContent.title}
             </h1>
 
             <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
-              {about.content.map((paragraph, index) => (
+              {aboutContent.content.map((paragraph, index) => (
                 <p
                   key={index}
                   className="leading-relaxed"
                   style={{
-                    color: about.textColor,
+                    color: aboutContent.textColor,
                     fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)",
                     lineHeight: "1.7",
                   }}
@@ -144,11 +139,11 @@ export default function AboutPage() {
                 className="px-8 py-3 rounded-full font-medium text-sm transition-all duration-300 
                 hover:scale-105 hover:shadow-lg inline-flex items-center gap-2 cursor-pointer"
                 style={{
-                  backgroundColor: about.ctaBgColor,
-                  color: about.ctaTextColor,
+                  backgroundColor: aboutContent.ctaBgColor,
+                  color: aboutContent.ctaTextColor,
                 }}
               >
-                {about.ctaText}
+                {aboutContent.ctaText}
                 <svg
                   className="w-4 h-4"
                   fill="none"

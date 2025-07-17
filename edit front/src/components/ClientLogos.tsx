@@ -2,38 +2,31 @@
 import React from "react";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
-import { useEditorManager } from "../hooks/useEditorManager";
+import { useSection } from "../hooks/useSection";
 import ClientLogosEditor from "./ClientLogosEditor";
 
 export default function ClientLogos() {
-  const editMode = useEditorStore((s) => s.editMode);
   const clientLogos = useEditorStore((s) => s.clientLogos);
-  const { openEditor, isEditorActive } = useEditorManager();
-
-  const handleSectionClick = () => {
-    if (editMode) {
-      openEditor("clientLogos");
-    }
-  };
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("clientLogos", {
+    name: "Client Logos",
+    description: "Showcase of client and partner logos",
+    icon: "🏢"
+  });
 
   return (
     <>
-      <ClientLogosEditor
-        open={isEditorActive("clientLogos")}
-        onClose={() => {}}
-      />
       <section
-        className={`w-full pt-6 sm:pt-8 md:pt-12 relative ${
-          editMode ? "cursor-pointer" : ""
-        }`}
+        ref={sectionRef}
+        {...sectionProps}
+        className={`w-full pt-6 sm:pt-8 md:pt-12 relative ${sectionProps.className}`}
         style={{
           backgroundColor: clientLogos.bgColor,
-          outline: editMode ? "2px dashed #2563eb" : undefined,
+          ...sectionProps.style,
         }}
-        onClick={handleSectionClick}
-        tabIndex={editMode ? 0 : -1}
       >
-        {editMode && (
+        {sectionProps['data-editable'] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"

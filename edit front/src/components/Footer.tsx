@@ -1,35 +1,31 @@
 "use client";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
-import { useEditorManager } from "../hooks/useEditorManager";
+import { useSection } from "../hooks/useSection";
 import FooterEditor from "./FooterEditor";
 
 export default function Footer() {
-  const editMode = useEditorStore((s) => s.editMode);
   const footerData = useEditorStore((s) => s.footer);
-  const { openEditor, isEditorActive } = useEditorManager();
-
-  const handleSectionClick = () => {
-    if (editMode) {
-      openEditor("footer");
-    }
-  };
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("footer", {
+    name: "Footer",
+    description: "Bottom section with links and contact information",
+    icon: "🦶"
+  });
 
   return (
     <>
-      <FooterEditor open={isEditorActive("footer")} onClose={() => {}} />
       <footer
-        className={`w-full pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-4 sm:pb-6 md:pb-8 relative ${
-          editMode ? "cursor-pointer" : ""
-        }`}
+        ref={sectionRef}
+        {...sectionProps}
+        className={`w-full pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-4 sm:pb-6 md:pb-8 relative ${sectionProps.className}`}
         style={{
           backgroundColor: footerData.bgColor,
-          outline: editMode ? "2px dashed #2563eb" : undefined,
+          ...sectionProps.style,
         }}
-        onClick={handleSectionClick}
-        tabIndex={editMode ? 0 : -1}
       >
-        {editMode && (
+        {sectionProps['data-editable'] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"

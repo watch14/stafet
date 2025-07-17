@@ -20,7 +20,9 @@ import Navbar from "./navbar";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
 import { LoadingProvider } from "../contexts/LoadingContext";
+import { EditProvider } from "../contexts/EditContext";
 import EditorLayoutWrapper from "./EditorLayoutWrapper";
+import LeftEditorSlider from "../components/LeftEditorSlider";
 
 // Font configuration for the website
 const inter = Inter({
@@ -53,15 +55,20 @@ export default function RootLayout({
         <LoadingProvider>
           {/* Authentication Provider - handles login/logout across the site */}
           <AuthProvider>
-            {/* Editor Layout Wrapper - provides editing controls when admin is logged in */}
-            <EditorLayoutWrapper>
-              {/* Navigation bar - appears on every page */}
-              <Navbar />
-              {/* Page content - this changes based on which page you're on */}
-              {children}
-              {/* Footer - appears on every page */}
-              <Footer />
-            </EditorLayoutWrapper>
+            {/* Edit Provider - manages global edit state and section registration */}
+            <EditProvider>
+              {/* Editor Layout Wrapper - provides editing controls when admin is logged in */}
+              <EditorLayoutWrapper>
+                {/* Navigation bar - appears on every page */}
+                <Navbar />
+                {/* Page content - this changes based on which page you're on */}
+                {children}
+                {/* Footer - appears on every page */}
+                <Footer />
+                {/* Left Editor Slider - main editing panel */}
+                <LeftEditorSlider />
+              </EditorLayoutWrapper>
+            </EditProvider>
           </AuthProvider>
         </LoadingProvider>
       </body>

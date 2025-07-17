@@ -2,25 +2,19 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useEditorStore } from "../store/editorStore";
-import { useEditorManager } from "../hooks/useEditorManager";
-import { useAuth } from "../contexts/AuthContext";
+import { useSection } from "../hooks/useSection";
 import ProcessEditor from "./ProcessEditor";
 
 export default function ProcessSection() {
-  const editMode = useEditorStore((s) => s.editMode);
   const processData = useEditorStore((s) => s.process);
   const setProcess = useEditorStore((s) => s.setProcess);
-  const { isAuthenticated } = useAuth();
-  const { openEditor, isEditorActive, closeEditor } = useEditorManager();
-
-  // Only allow edit interactions if user is authenticated
-  const canEdit = editMode && isAuthenticated;
-
-  const handleSectionClick = () => {
-    if (canEdit) {
-      openEditor("process");
-    }
-  };
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps, canEdit } = useSection("process", {
+    name: "Process Section", 
+    description: "Step-by-step process explanation with images",
+    icon: "🔄"
+  });
 
   const addNewProcess = () => {
     if (!canEdit) return;
@@ -48,17 +42,15 @@ export default function ProcessSection() {
 
   return (
     <>
-      <ProcessEditor
-        open={isEditorActive("process")}
-        onClose={() => closeEditor()}
-      />
       <section
-        className="w-full relative"
+        ref={sectionRef}
+        {...sectionProps}
+        className={`w-full relative ${sectionProps.className}`}
         style={{
-          outline: canEdit ? "2px dashed #2563eb" : undefined,
+          ...sectionProps.style,
         }}
       >
-        {canEdit && (
+        {sectionProps['data-editable'] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"
@@ -83,7 +75,6 @@ export default function ProcessSection() {
             key={index}
             className={`w-full ${canEdit ? "cursor-pointer" : ""}`}
             style={{ backgroundColor: process.bgColor }}
-            onClick={handleSectionClick}
             tabIndex={canEdit ? 0 : -1}
           >
             <div className="w-full max-w-[1440px] mx-auto">

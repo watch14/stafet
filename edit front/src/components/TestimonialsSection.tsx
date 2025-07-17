@@ -1,38 +1,31 @@
 "use client";
 import React from "react";
 import { useEditorStore } from "../store/editorStore";
-import { useEditorManager } from "../hooks/useEditorManager";
+import { useSection } from "../hooks/useSection";
 import TestimonialsEditor from "./TestimonialsEditor";
 
 export default function TestimonialsSection() {
-  const editMode = useEditorStore((s) => s.editMode);
   const testimonials = useEditorStore((s) => s.testimonials);
-  const { openEditor, isEditorActive } = useEditorManager();
-
-  const handleSectionClick = () => {
-    if (editMode) {
-      openEditor("testimonials");
-    }
-  };
+  
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("testimonials", {
+    name: "Testimonials",
+    description: "Customer testimonials and reviews",
+    icon: "💬"
+  });
 
   return (
     <>
-      <TestimonialsEditor
-        open={isEditorActive("testimonials")}
-        onClose={() => {}}
-      />
       <section
-        className={`w-full py-8 sm:py-12 md:py-16 relative ${
-          editMode ? "cursor-pointer" : ""
-        }`}
+        ref={sectionRef}
+        {...sectionProps}
+        className={`w-full py-8 sm:py-12 md:py-16 relative ${sectionProps.className}`}
         style={{
           backgroundColor: testimonials.bgColor,
-          outline: editMode ? "2px dashed #2563eb" : undefined,
+          ...sectionProps.style,
         }}
-        onClick={handleSectionClick}
-        tabIndex={editMode ? 0 : -1}
       >
-        {editMode && (
+        {sectionProps['data-editable'] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"

@@ -19,6 +19,7 @@ import { useEditorManager } from "../../hooks/useEditorManager";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLoadingContext } from "../../contexts/LoadingContext";
 import ContactEditor from "../../components/ContactEditor";
+import { useSection } from "@/hooks/useSection";
 
 /**
  * Contact Page Component
@@ -27,7 +28,13 @@ import ContactEditor from "../../components/ContactEditor";
 export default function ContactPage() {
   const contact = useEditorStore((s) => s.contact);
   const setContact = useEditorStore((s) => s.setContact);
-  const editMode = useEditorStore((s) => s.editMode);
+
+  // Register this section for editing
+  const { sectionRef, sectionProps } = useSection("contact", {
+    name: "Contact Page",
+    description: "Contact form and company details",
+    icon: "📞",
+  });
   const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive, closeEditor } = useEditorManager();
   const { showLoading, hideLoading } = useLoadingContext();
@@ -52,6 +59,7 @@ export default function ContactPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Only allow edit interactions if user is authenticated
+  const editMode = useEditorStore((s) => s.editMode);
   const canEdit = editMode && isAuthenticated;
 
   const handleInputChange = (
@@ -125,14 +133,11 @@ export default function ContactPage() {
           canEdit ? "cursor-pointer" : ""
         }`}
         style={{
-          outline: canEdit ? "2px dashed #2563eb" : undefined,
           backgroundColor: contact?.bgColor || "#ffffff",
         }}
-        onClick={() => canEdit && openEditor("contact")}
-        tabIndex={canEdit ? 0 : -1}
       >
         {/* Edit Mode Indicator */}
-        {canEdit && (
+        {sectionProps["data-editable"] && (
           <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 z-10">
             <svg
               className="w-3 h-3"
