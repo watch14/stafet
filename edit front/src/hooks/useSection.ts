@@ -70,7 +70,7 @@ export function useSection(sectionId: EditorType, info: SectionInfo): UseSection
     return () => {
       unregisterSection(sectionId);
     };
-  }, [sectionId, info, registerSection, unregisterSection]);
+  }, [sectionId, info.name, info.description, info.icon, registerSection, unregisterSection]);
   
   // Check if this section is currently selected
   const isSelected = selectedSection === sectionId && isLeftPanelOpen;

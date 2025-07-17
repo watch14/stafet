@@ -20,7 +20,6 @@ import { useEditorStore } from "../store/editorStore";
 import { useAuth } from "../contexts/AuthContext";
 import { useEditContext } from "../contexts/EditContext";
 import SaveLoadManager from "./SaveLoadManager";
-import EditorOverview from "./EditorOverview";
 
 /**
  * Edit Mode Toggle Component
@@ -31,9 +30,8 @@ export default function EditModeToggle() {
   const editMode = useEditorStore((s) => s.editMode);
   const setEditMode = useEditorStore((s) => s.setEditMode);
   const [showSaveLoad, setShowSaveLoad] = useState(false);
-  const [showMainEditor, setShowMainEditor] = useState(false);
   const { isAuthenticated, logout, requireAuth } = useAuth();
-  const { openEditor, closeEditor } = useEditContext();
+  const { openMainEditor, closeEditor } = useEditContext();
 
   // Check if main editor should be open
   useEffect(() => {
@@ -45,11 +43,10 @@ export default function EditModeToggle() {
   const handleEditModeToggle = () => {
     if (!editMode) {
       setEditMode(true);
-      setShowMainEditor(true); // Show overview panel when enabling edit mode
+      openMainEditor(); // Open main editor overview when enabling edit mode
     } else {
       setEditMode(false);
       closeEditor(); // Close any open editors when disabling edit mode
-      setShowMainEditor(false);
     }
   };
 
@@ -114,11 +111,6 @@ export default function EditModeToggle() {
       <SaveLoadManager
         isOpen={showSaveLoad}
         onClose={() => setShowSaveLoad(false)}
-      />
-
-      <EditorOverview
-        open={showMainEditor}
-        onClose={() => setShowMainEditor(false)}
       />
     </>
   );

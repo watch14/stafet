@@ -50,6 +50,9 @@ interface EditContextType {
   isLeftPanelOpen: boolean;
   selectedSection: EditorType | null;
   
+  // Main editor overview state
+  isMainEditorOpen: boolean;
+  
   // Section management
   registerSection: (sectionId: EditorType, ref: React.RefObject<HTMLElement | null>, info: { name: string; description: string; icon: string }) => void;
   unregisterSection: (sectionId: EditorType) => void;
@@ -58,6 +61,8 @@ interface EditContextType {
   // Editor actions
   openEditor: (sectionId: EditorType) => void;
   closeEditor: () => void;
+  openMainEditor: () => void;
+  closeMainEditor: () => void;
   scrollToSection: (sectionId: EditorType) => void;
   
   // Section interaction
@@ -81,8 +86,11 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<EditorType | null>(null);
   
-  // Section registry - stores refs to all registered sections
-  const sectionRefs = useRef<Map<EditorType, SectionInfo>>(new Map());
+  // Main editor overview state
+  const [isMainEditorOpen, setIsMainEditorOpen] = useState(false);
+  
+  // Section registry - use state for reactive updates
+  const [registeredSections, setRegisteredSections] = useState<Map<EditorType, SectionInfo>>(new Map());
   
   // Computed edit capability
   const canEdit = editMode && isAuthenticated;
@@ -96,46 +104,55 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
     info: { name: string; description: string; icon: string }
   ) => {
     console.log(`📝 Registering section: ${sectionId}`, info);
-    sectionRefs.current.set(sectionId, {
-      ref,
-      name: info.name,
-      description: info.description,
-      icon: info.icon
+    setRegisteredSections(prevSections => {
+      const newSections = new Map(prevSections);
+      newSections.set(sectionId, {
+        ref,
+        name: info.name,
+        description: info.description,
+        icon: info.icon
+      });
+      console.log(`📝 Total registered sections: ${newSections.size}`);
+      return newSections;
     });
-    console.log(`📝 Total registered sections: ${sectionRefs.current.size}`);
   }, []);
   
   /**
    * Unregister a section (cleanup)
    */
   const unregisterSection = useCallback((sectionId: EditorType) => {
-    sectionRefs.current.delete(sectionId);
+    setRegisteredSections(prevSections => {
+      const newSections = new Map(prevSections);
+      newSections.delete(sectionId);
+      console.log(`🗑️ Unregistered section: ${sectionId}, remaining: ${newSections.size}`);
+      return newSections;
+    });
   }, []);
   
   /**
    * Get the ref for a specific section
    */
   const getSectionRef = useCallback((sectionId: EditorType) => {
-    const sectionInfo = sectionRefs.current.get(sectionId);
+    const sectionInfo = registeredSections.get(sectionId);
     return sectionInfo?.ref || null;
-  }, []);
+  }, [registeredSections]);
   
   /**
    * Get all registered sections for the main editor overview
    */
   const getRegisteredSections = useCallback(() => {
     const sections: Array<{ id: EditorType; info: SectionInfo }> = [];
-    sectionRefs.current.forEach((info, id) => {
+    registeredSections.forEach((info: SectionInfo, id: EditorType) => {
       sections.push({ id, info });
     });
     return sections;
-  }, []);
+  }, [registeredSections]);
   
   /**
    * Smooth scroll to a section
    */
   const scrollToSection = useCallback((sectionId: EditorType) => {
-    const sectionInfo = sectionRefs.current.get(sectionId);
+    const sectionInfo = registeredSections.get(sectionId);
     if (sectionInfo?.ref.current) {
       sectionInfo.ref.current.scrollIntoView({
         behavior: 'smooth',
@@ -143,7 +160,7 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
         inline: 'nearest'
       });
     }
-  }, []);
+  }, [registeredSections]);
   
   /**
    * Open the left editor panel for a section
@@ -169,6 +186,29 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
   }, []);
   
   /**
+   * Open the main editor overview
+   */
+  const openMainEditor = useCallback(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+    
+    // Close any specific editor first
+    setIsLeftPanelOpen(false);
+    setSelectedSection(null);
+    
+    // Open main editor overview
+    setIsMainEditorOpen(true);
+  }, [isAuthenticated, editMode]);
+  
+  /**
+   * Close the main editor overview
+   */
+  const closeMainEditor = useCallback(() => {
+    setIsMainEditorOpen(false);
+  }, []);
+  
+  /**
    * Handle section click - unified interaction handler
    */
   const handleSectionClick = useCallback((sectionId: EditorType) => {
@@ -183,23 +223,32 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
     }
   }, [canEdit, selectedSection, isLeftPanelOpen, scrollToSection, openEditor]);
   
-  // Close panel when edit mode is disabled
+  // Close panels when edit mode is disabled
   React.useEffect(() => {
     if (!editMode) {
       closeEditor();
+      closeMainEditor();
     }
-  }, [editMode, closeEditor]);
+  }, [editMode, closeEditor, closeMainEditor]);
+  
+  // Debug effect to monitor section registration
+  React.useEffect(() => {
+    console.log(`🔍 EditContext: registeredSections changed, count: ${registeredSections.size}`, Array.from(registeredSections.keys()));
+  }, [registeredSections]);
   
   const value: EditContextType = {
     isEditMode: editMode,
     canEdit,
     isLeftPanelOpen,
     selectedSection,
+    isMainEditorOpen,
     registerSection,
     unregisterSection,
     getSectionRef,
     openEditor,
     closeEditor,
+    openMainEditor,
+    closeMainEditor,
     scrollToSection,
     handleSectionClick,
     getRegisteredSections,

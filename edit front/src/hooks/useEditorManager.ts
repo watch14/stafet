@@ -1,7 +1,9 @@
 import { useEditorStore } from "../store/editorStore";
+import { useEditContext } from "../contexts/EditContext";
 
 export const useEditorManager = () => {
   const { activeEditor, setActiveEditor, setIsEditorOpen } = useEditorStore();
+  const { openMainEditor: openMainEditorContext } = useEditContext();
 
   const openEditor = (editorName: string) => {
     setActiveEditor(editorName);
@@ -14,6 +16,10 @@ export const useEditorManager = () => {
   };
 
   const openMainEditor = () => {
+    // Use the new EditContext main editor functionality
+    openMainEditorContext();
+    
+    // Also update the legacy store for backward compatibility
     setActiveEditor("main");
     setIsEditorOpen(true);
   };

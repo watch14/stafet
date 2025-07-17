@@ -23,6 +23,7 @@ import { LoadingProvider } from "../contexts/LoadingContext";
 import { EditProvider } from "../contexts/EditContext";
 import EditorLayoutWrapper from "./EditorLayoutWrapper";
 import LeftEditorSlider from "../components/LeftEditorSlider";
+import EditorOverviewWrapper from "../components/EditorOverviewWrapper";
 
 // Font configuration for the website
 const inter = Inter({
@@ -67,6 +68,8 @@ export default function RootLayout({
                 <Footer />
                 {/* Left Editor Slider - main editing panel */}
                 <LeftEditorSlider />
+                {/* Editor Overview - main section selection panel */}
+                <EditorOverviewWrapper />
               </EditorLayoutWrapper>
             </EditProvider>
           </AuthProvider>
