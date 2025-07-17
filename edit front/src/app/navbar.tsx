@@ -176,22 +176,51 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Full-Screen Menu */}
         {isMobileMenuOpen && (
-          <>
-            {/* Backdrop overlay */}
-            <div
-              className="md:hidden fixed inset-0 bg-black bg-opacity-20 z-30"
-              onClick={closeMobileMenu}
-            />
-            {/* Dropdown menu */}
-            <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-40">
-              <div className="px-4 py-2 space-y-1">
+          <div className="md:hidden fixed inset-0 bg-white z-50 flex flex-col animate-in slide-in-from-top-full duration-300">
+            {/* Header with Close Button */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <Link
+                href="/"
+                className="font-black text-lg tracking-tight"
+                style={{
+                  color: navbar.logoColor,
+                }}
+                onClick={closeMobileMenu}
+              >
+                {navbar.logo}
+              </Link>
+              <button
+                onClick={closeMobileMenu}
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close menu"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  style={{ color: navbar.linkColor }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex-1 flex flex-col justify-center px-8">
+              <nav className="space-y-8">
                 {navbar.links.map((link, i) => (
                   <Link
                     key={i}
                     href={link.href}
-                    className="block px-3 py-2 text-sm hover:bg-gray-50 rounded transition-colors"
+                    className="block text-2xl font-medium hover:opacity-70 transition-opacity text-center py-2"
                     style={{
                       color: navbar.linkColor,
                     }}
@@ -200,9 +229,24 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-              </div>
+              </nav>
             </div>
-          </>
+
+            {/* CTA Button at Bottom */}
+            <div className="p-8 border-t border-gray-200">
+              <Link
+                href={navbar.cta.href}
+                className="block w-full text-center py-4 px-6 rounded-full text-lg font-medium transition-transform hover:scale-105 underline"
+                style={{
+                  color: navbar.cta.textColor,
+                  background: navbar.cta.bgColor,
+                }}
+                onClick={closeMobileMenu}
+              >
+                {navbar.cta.label}
+              </Link>
+            </div>
+          </div>
         )}
       </nav>
       <NavBarEditor open={isEditorActive("navbar")} onClose={() => {}} />
