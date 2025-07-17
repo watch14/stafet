@@ -129,11 +129,12 @@ export default function ContactPage() {
 
       {/* Main Content - Split layout */}
       <div
-        className={`flex flex-col lg:flex-row min-h-screen relative ${
-          canEdit ? "cursor-pointer" : ""
-        }`}
+        ref={sectionRef as any}
+        {...sectionProps}
+        className={`flex flex-col lg:flex-row min-h-screen relative ${sectionProps.className}`}
         style={{
           backgroundColor: contact?.bgColor || "#ffffff",
+          ...sectionProps.style,
         }}
       >
         {/* Edit Mode Indicator */}
