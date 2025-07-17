@@ -19,7 +19,7 @@
 
 "use client";
 import { useEditorStore } from "../store/editorStore";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import NavBarEditor from "../components/NavBarEditor";
 import { useEditorManager } from "../hooks/useEditorManager";
@@ -38,9 +38,15 @@ export default function Navbar() {
 
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   // Only allow edit interactions if user is authenticated as admin
   const canEdit = editMode && isAuthenticated;
+
+  // Ensure component only renders mobile menu after hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {
@@ -177,7 +183,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Full-Screen Menu */}
-        {isMobileMenuOpen && (
+        {isClient && isMobileMenuOpen && (
           <div className="md:hidden fixed inset-0 bg-white z-50 flex flex-col animate-in slide-in-from-top-full duration-300">
             {/* Header with Close Button */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">

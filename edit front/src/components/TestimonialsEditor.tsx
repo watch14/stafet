@@ -4,6 +4,7 @@ import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
+import ReturnToMainEditor from "./ReturnToMainEditor";
 
 // Default testimonials values for reset functionality
 const defaultTestimonialsValues = {
@@ -128,6 +129,7 @@ export default function TestimonialsEditor({
       onClose={handleClose}
       title="Edit Testimonials Section"
     >
+      <ReturnToMainEditor />
       <div className="space-y-8 text-black">
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">

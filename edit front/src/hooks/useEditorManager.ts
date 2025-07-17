@@ -13,6 +13,11 @@ export const useEditorManager = () => {
     setIsEditorOpen(false);
   };
 
+  const openMainEditor = () => {
+    setActiveEditor("main");
+    setIsEditorOpen(true);
+  };
+
   const isEditorActive = (editorName: string) => {
     return activeEditor === editorName;
   };
@@ -21,6 +26,7 @@ export const useEditorManager = () => {
     activeEditor,
     openEditor,
     closeEditor,
+    openMainEditor,
     isEditorActive,
   };
 };

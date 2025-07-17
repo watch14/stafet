@@ -4,6 +4,7 @@ import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
+import ReturnToMainEditor from "./ReturnToMainEditor";
 import ImageUploader from "./ImageUploader";
 
 // Default values for resetting
@@ -117,6 +118,7 @@ export default function ContactEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Contact Section">
+      <ReturnToMainEditor />
       <div className="space-y-8 text-black">
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
           <h3 className="text-sm font-medium text-blue-900 mb-2">

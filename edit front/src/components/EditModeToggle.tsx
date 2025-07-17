@@ -15,10 +15,12 @@
  */
 
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEditorStore } from "../store/editorStore";
 import { useAuth } from "../contexts/AuthContext";
+import { useEditorManager } from "../hooks/useEditorManager";
 import SaveLoadManager from "./SaveLoadManager";
+import MainEditor from "./MainEditor";
 
 /**
  * Edit Mode Toggle Component
@@ -29,7 +31,25 @@ export default function EditModeToggle() {
   const editMode = useEditorStore((s) => s.editMode);
   const setEditMode = useEditorStore((s) => s.setEditMode);
   const [showSaveLoad, setShowSaveLoad] = useState(false);
+  const [showMainEditor, setShowMainEditor] = useState(false);
   const { isAuthenticated, logout, requireAuth } = useAuth();
+  const { isEditorActive, openMainEditor, closeEditor } = useEditorManager();
+
+  // Check if main editor should be open
+  useEffect(() => {
+    setShowMainEditor(isEditorActive("main"));
+  }, [isEditorActive]);
+
+  // Handle edit mode toggle and open main editor
+  const handleEditModeToggle = () => {
+    if (!editMode) {
+      setEditMode(true);
+      openMainEditor(); // Open main editor when enabling edit mode
+    } else {
+      setEditMode(false);
+      closeEditor(); // Close any open editors when disabling edit mode
+    }
+  };
 
   // Handle admin logout with enhanced security cleanup
   const handleLogout = () => {
@@ -67,7 +87,7 @@ export default function EditModeToggle() {
             className={`px-3 sm:px-4 py-2 rounded-full shadow-lg font-medium text-xs sm:text-sm transition border order-1 sm:order-2 ${
               editMode ? "bg-blue-600 text-white" : "bg-white text-blue-600"
             }`}
-            onClick={() => setEditMode(!editMode)}
+            onClick={handleEditModeToggle}
             aria-pressed={editMode}
             title={editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
           >
@@ -92,6 +112,11 @@ export default function EditModeToggle() {
       <SaveLoadManager
         isOpen={showSaveLoad}
         onClose={() => setShowSaveLoad(false)}
+      />
+
+      <MainEditor
+        open={showMainEditor}
+        onClose={() => setShowMainEditor(false)}
       />
     </>
   );

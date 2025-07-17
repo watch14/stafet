@@ -4,6 +4,7 @@ import { useEditorStore } from "../store/editorStore";
 import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import SidePanel from "./SidePanel";
+import ReturnToMainEditor from "./ReturnToMainEditor";
 
 // Default value proposition values for reset functionality
 const defaultValuePropositionValues = {
@@ -126,6 +127,7 @@ export default function ValuePropositionEditor({
       onClose={handleClose}
       title="Edit Value Proposition Section"
     >
+      <ReturnToMainEditor />
       <div className="space-y-8 text-black">
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">

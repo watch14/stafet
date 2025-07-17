@@ -55,7 +55,7 @@ export default function SidePanel({
   return (
     <>
       {/* Side Panel - Fixed position sliding from left */}
-      <div className="fixed top-0 left-0 h-full w-full sm:w-[90%] md:w-[500px] lg:w-[400px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out border-r border-gray-200">
+      <div className="fixed top-0 left-0 h-full w-[280px] sm:w-[320px] md:w-[500px] lg:w-[400px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out border-r border-gray-200">
         <div className="flex flex-col h-full">
           {/* Header - Title and close button */}
           <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gray-50">

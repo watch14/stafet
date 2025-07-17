@@ -5,6 +5,7 @@ import { useEditorManager } from "../hooks/useEditorManager";
 import ColorPicker from "./ColorPicker";
 import ImageUploader from "./ImageUploader";
 import SidePanel from "./SidePanel";
+import ReturnToMainEditor from "./ReturnToMainEditor";
 
 // Default client logos values for reset functionality
 const defaultClientLogosValues = {
@@ -181,6 +182,9 @@ export default function ClientLogosEditor({
       title="Edit Client Logos Section"
     >
       <div className="space-y-8 text-black">
+        {/* Return to Main Editor Button */}
+        <ReturnToMainEditor />
+
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
           <h3 className="text-sm font-medium text-blue-900 mb-2">
