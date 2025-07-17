@@ -55,11 +55,13 @@ export default function SidePanel({
   return (
     <>
       {/* Side Panel - Fixed position sliding from left */}
-      <div className="fixed top-0 left-0 h-full w-[400px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out border-r border-gray-200">
+      <div className="fixed top-0 left-0 h-full w-full sm:w-[90%] md:w-[500px] lg:w-[400px] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out border-r border-gray-200">
         <div className="flex flex-col h-full">
           {/* Header - Title and close button */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+              {title}
+            </h2>
             <button
               onClick={handleClose}
               className="text-gray-600 hover:text-gray-800 transition-colors p-1 rounded-full hover:bg-gray-200"
@@ -82,7 +84,9 @@ export default function SidePanel({
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6 bg-white">{children}</div>
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-white">
+            {children}
+          </div>
         </div>
       </div>
     </>

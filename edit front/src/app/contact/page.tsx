@@ -153,20 +153,20 @@ export default function ContactPage() {
 
         {/* Left Side - Contact Form */}
         <div
-          className="lg:w-1/2 flex flex-col justify-center px-8 lg:px-16 py-16 lg:py-24"
+          className="lg:w-1/2 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-16 py-8 sm:py-12 md:py-16 lg:py-24"
           onClick={(e) => canEdit && e.stopPropagation()}
         >
           <div className="max-w-lg mx-auto lg:mx-0 w-full">
             {/* Header */}
             <h1
-              className="text-4xl lg:text-5xl font-normal mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal mb-4 sm:mb-6 leading-tight"
               style={{ color: contact?.titleColor || "#000000" }}
             >
               {contact?.title || "Want to work with us?"}
             </h1>
 
             <p
-              className="text-lg mb-12 leading-relaxed"
+              className="text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 leading-relaxed"
               style={{ color: contact?.textColor || "#000000" }}
             >
               {contact?.subtitle ||
@@ -174,7 +174,7 @@ export default function ContactPage() {
             </p>
 
             {/* Contact Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Name Field */}
               <div>
                 <label
@@ -197,7 +197,7 @@ export default function ContactPage() {
               </div>
 
               {/* Email and Phone Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label
                     htmlFor="email"

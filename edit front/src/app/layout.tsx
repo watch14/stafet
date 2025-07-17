@@ -45,7 +45,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased `}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {/* Loading Provider - manages global loading states */}
         <LoadingProvider>
           {/* Authentication Provider - handles login/logout across the site */}

@@ -22,7 +22,9 @@ export default function TestimonialsSection() {
         onClose={() => {}}
       />
       <section
-        className={`w-full py-16 relative ${editMode ? "cursor-pointer" : ""}`}
+        className={`w-full py-8 sm:py-12 md:py-16 relative ${
+          editMode ? "cursor-pointer" : ""
+        }`}
         style={{
           backgroundColor: testimonials.bgColor,
           outline: editMode ? "2px dashed #2563eb" : undefined,
@@ -48,23 +50,23 @@ export default function TestimonialsSection() {
             Click to edit
           </div>
         )}
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="w-[32%]">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
+          <div className="w-full lg:w-[32%]">
             <h2
-              className="text-4xl md:text-4xl font-medium pb-8 leading-none"
+              className="text-2xl sm:text-3xl md:text-4xl font-medium pb-4 sm:pb-6 md:pb-8 leading-none"
               style={{ color: testimonials.textColor }}
             >
               {testimonials.title}
             </h2>
             <div className="max-w-3xl">
               <blockquote
-                className="text-xl md:text-xl mb-6 leading-6"
+                className="text-base sm:text-lg md:text-xl mb-4 sm:mb-6 leading-relaxed"
                 style={{ color: testimonials.textColor }}
               >
                 "{testimonials.quote}"
               </blockquote>
               <cite
-                className="text-sm font-regular not-italic"
+                className="text-xs sm:text-sm font-regular not-italic"
                 style={{ color: testimonials.textColor }}
               >
                 {testimonials.author}

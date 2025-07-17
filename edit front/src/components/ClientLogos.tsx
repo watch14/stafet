@@ -23,7 +23,9 @@ export default function ClientLogos() {
         onClose={() => {}}
       />
       <section
-        className={`w-full pt-12 relative ${editMode ? "cursor-pointer" : ""}`}
+        className={`w-full pt-6 sm:pt-8 md:pt-12 relative ${
+          editMode ? "cursor-pointer" : ""
+        }`}
         style={{
           backgroundColor: clientLogos.bgColor,
           outline: editMode ? "2px dashed #2563eb" : undefined,
@@ -49,12 +51,12 @@ export default function ClientLogos() {
             Click to edit
           </div>
         )}
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center justify-items-center">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-items-center">
             {clientLogos.logos.map((client, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center h-12"
+                className="flex items-center justify-center h-8 sm:h-10 md:h-12"
               >
                 {client.logo && client.logo.trim() !== "" ? (
                   <Image
@@ -62,7 +64,7 @@ export default function ClientLogos() {
                     alt={client.alt}
                     width={120}
                     height={48}
-                    className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                    className="object-contain grayscale hover:grayscale-0 transition-all duration-300 max-h-8 sm:max-h-10 md:max-h-12 w-auto"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = "none";
@@ -74,14 +76,14 @@ export default function ClientLogos() {
                   />
                 ) : (
                   <span
-                    className="font-medium text-sm md:text-base px-4 py-2 bg-gray-100 rounded border-2 border-dashed border-gray-300"
+                    className="font-medium text-xs sm:text-sm md:text-base px-2 sm:px-3 md:px-4 py-1 sm:py-2 bg-gray-100 rounded border-2 border-dashed border-gray-300"
                     style={{ color: clientLogos.textColor }}
                   >
                     {client.name}
                   </span>
                 )}
                 <span
-                  className="hidden font-medium text-sm md:text-base"
+                  className="hidden font-medium text-xs sm:text-sm md:text-base"
                   style={{ color: clientLogos.textColor }}
                 >
                   {client.name}

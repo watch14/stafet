@@ -19,7 +19,7 @@
 
 "use client";
 import { useEditorStore } from "../store/editorStore";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import NavBarEditor from "../components/NavBarEditor";
 import { useEditorManager } from "../hooks/useEditorManager";
@@ -36,8 +36,35 @@ export default function Navbar() {
   const { isAuthenticated } = useAuth();
   const { openEditor, isEditorActive } = useEditorManager();
 
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Only allow edit interactions if user is authenticated as admin
   const canEdit = editMode && isAuthenticated;
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close mobile menu when a link is clicked
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  // Close mobile menu on escape key
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -49,12 +76,12 @@ export default function Navbar() {
         }}
         tabIndex={canEdit ? 0 : -1}
       >
-        <div className="w-full max-w-[1440px] flex items-center justify-between px-6 relative">
+        <div className="w-full max-w-[1440px] flex items-center justify-between px-4 sm:px-6 relative">
           {/* Logo Section (Left) */}
-          <div className="flex items-center ">
+          <div className="flex items-center">
             <Link
               href="/"
-              className="font-black text-lg tracking-tight hover:opacity-80 transition"
+              className="font-black text-base sm:text-lg tracking-tight hover:opacity-80 transition"
               style={{
                 color: navbar.logoColor, // Custom logo color
               }}
@@ -63,13 +90,13 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Navigation Links (Center) */}
-          <div className="hidden md:flex gap-8 mx-auto">
+          {/* Navigation Links (Center on Desktop) */}
+          <div className="hidden md:flex gap-4 lg:gap-8 mx-auto">
             {navbar.links.map((link, i) => (
               <Link
                 key={i}
                 href={link.href}
-                className="hover:underline "
+                className="hover:underline text-xs lg:text-sm"
                 style={{
                   color: navbar.linkColor, // Custom link color
                 }}
@@ -78,10 +105,44 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* Right Side - CTA Button, Mobile Menu Button, Edit Button */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Mobile Menu Button (Hamburger) - Hidden on Desktop */}
+            <button
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 transition-colors"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle mobile menu"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style={{ color: navbar.linkColor }}
+              >
+                {isMobileMenuOpen ? (
+                  // X icon when menu is open
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  // Hamburger icon when menu is closed
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
             <Link
               href={navbar.cta.href}
-              className="hover:underline underline-offset-4 text-black px-3 py-1 rounded "
+              className="hover:underline underline-offset-4 text-black px-2 py-1 sm:px-3 sm:py-1 rounded text-xs sm:text-sm"
               style={{
                 color: navbar.cta.textColor,
                 background: navbar.cta.bgColor,
@@ -93,12 +154,12 @@ export default function Navbar() {
             {/* Edit button - small circular pen icon */}
             {canEdit && (
               <button
-                className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition cursor-pointer"
+                className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition cursor-pointer"
                 onClick={() => openEditor("navbar")}
                 title="Edit navbar"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -114,6 +175,35 @@ export default function Navbar() {
             )}
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <div
+              className="md:hidden fixed inset-0 bg-black bg-opacity-20 z-30"
+              onClick={closeMobileMenu}
+            />
+            {/* Dropdown menu */}
+            <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-40">
+              <div className="px-4 py-2 space-y-1">
+                {navbar.links.map((link, i) => (
+                  <Link
+                    key={i}
+                    href={link.href}
+                    className="block px-3 py-2 text-sm hover:bg-gray-50 rounded transition-colors"
+                    style={{
+                      color: navbar.linkColor,
+                    }}
+                    onClick={closeMobileMenu}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </nav>
       <NavBarEditor open={isEditorActive("navbar")} onClose={() => {}} />
     </>

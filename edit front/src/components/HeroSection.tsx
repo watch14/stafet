@@ -40,7 +40,7 @@ export default function HeroSection() {
     <>
       {/* Main Hero Section */}
       <section
-        className="min-h-screen w-full flex flex-col justify-center px-0 py-16 transition-all "
+        className="min-h-screen w-full flex flex-col justify-center px-0 py-8 sm:py-12 md:py-16 transition-all"
         style={
           // Dynamic background based on user settings
           hero.bgType === "color"
@@ -65,11 +65,11 @@ export default function HeroSection() {
         tabIndex={canEdit ? 0 : -1}
       >
         {/* Content Container */}
-        <div className="max-w-[1440px] mx-auto w-full px-8 mt-auto">
+        <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 md:px-8 mt-auto">
           <div className="max-w-2xl">
             {/* Main Headline */}
             <h1
-              className="text-black text-xl md:text-9xl lg:text-6xl font-regular mb-8 leading-14"
+              className="text-black text-3xl sm:text-4xl md:text-6xl lg:text-6xl xl:text-6xl font-regular mb-4 sm:mb-6 md:mb-8 "
               style={{
                 color: hero.titleColor || "#000000", // Use custom color or default
               }}
@@ -77,7 +77,7 @@ export default function HeroSection() {
               {hero.title}
             </h1>
             <p
-              className="text-black text-sg md:text-x1 max-w-2xl mb-8 leading-5"
+              className="text-black text-sm sm:text-base md:text-lg lg:text-1lg max-w-2xl mb-6 sm:mb-8 leading-tight"
               style={{
                 color: hero.subtitleColor || "#000000",
               }}
@@ -87,7 +87,7 @@ export default function HeroSection() {
 
             <a href={hero.button.href || "#"}>
               <button
-                className="rounded-full px-6 py-2 text-sm shadow-lg transition w-fit hover:shadow-xl cursor-pointer"
+                className="rounded-full px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base shadow-lg transition w-fit hover:shadow-xl cursor-pointer"
                 style={{
                   color: hero.button.textColor || "#FFFFFF",
                   background: hero.button.bgColor || "#FFCEE5",

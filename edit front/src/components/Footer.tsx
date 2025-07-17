@@ -19,7 +19,7 @@ export default function Footer() {
     <>
       <FooterEditor open={isEditorActive("footer")} onClose={() => {}} />
       <footer
-        className={`w-full pt-24 pb-8 relative ${
+        className={`w-full pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-4 sm:pb-6 md:pb-8 relative ${
           editMode ? "cursor-pointer" : ""
         }`}
         style={{
@@ -47,24 +47,24 @@ export default function Footer() {
             Click to edit
           </div>
         )}
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="flex items-start justify-between">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-4">
             {/* Logo */}
-            <div className="">
+            <div className="flex-shrink-0">
               <Image
                 src="/images/logo-2.png"
                 alt="STAFF Logo"
                 width={160}
                 height={50}
-                className="object-contain"
+                className="object-contain w-32 sm:w-40 md:w-160 h-auto"
                 priority
               />
             </div>
 
             {/* Customer Links */}
-            <div className="max-w-[200px] mr-16">
+            <div className="max-w-[200px] md:mr-16">
               <h3
-                className="font-bold mb-4 text-sm"
+                className="font-bold mb-3 sm:mb-4 text-sm"
                 style={{ color: footerData.textColor }}
               >
                 {footerData.customerTitle}
@@ -85,9 +85,9 @@ export default function Footer() {
             </div>
 
             {/* Contact */}
-            <div className="text-right">
+            <div className="md:text-right">
               <h3
-                className="font-bold mb-4 text-sm"
+                className="font-bold mb-3 sm:mb-4 text-sm"
                 style={{ color: footerData.textColor }}
               >
                 {footerData.contactTitle}

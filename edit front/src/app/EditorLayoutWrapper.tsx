@@ -36,7 +36,7 @@ export default function EditorLayoutWrapper({
       {/* Main content area - shifts right when editor panel is open */}
       <div
         className={`transition-all duration-300 ease-in-out ${
-          isEditorOpen ? "ml-[400px]" : "ml-0"
+          isEditorOpen ? "ml-0 md:ml-[500px] lg:ml-[400px]" : "ml-0"
         }`}
       >
         {children}

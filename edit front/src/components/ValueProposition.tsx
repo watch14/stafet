@@ -22,7 +22,9 @@ export default function ValueProposition() {
         onClose={() => {}}
       />
       <section
-        className={`w-full py-16 relative ${editMode ? "cursor-pointer" : ""}`}
+        className={`w-full py-8 sm:py-12 md:py-16 relative ${
+          editMode ? "cursor-pointer" : ""
+        }`}
         style={{
           backgroundColor: valueProposition.bgColor,
           outline: editMode ? "2px dashed #2563eb" : undefined,
@@ -48,9 +50,9 @@ export default function ValueProposition() {
             Click to edit
           </div>
         )}
-        <div className="max-w-[1440px] mx-auto px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
           <h2
-            className="text-3xl md:text-5xl font-medium leading-tight whitespace-pre-line"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium leading-tight whitespace-pre-line"
             style={{ color: valueProposition.textColor }}
           >
             {valueProposition.title}
