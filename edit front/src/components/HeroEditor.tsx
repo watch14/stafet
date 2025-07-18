@@ -220,7 +220,7 @@ export default function HeroEditor({
 
   return (
     <SidePanel open={open} onClose={handleClose} title="Edit Hero Section">
-      <div className="space-y-6">
+      <div className="space-y-6 text-gray-900">
         {/* Return to Main Editor Button */}
         <ReturnToMainEditor />
 
