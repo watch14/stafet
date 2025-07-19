@@ -22,20 +22,20 @@ import { useAuth } from "../../../contexts/AuthContext";
  */
 export default function AdminLoginPage() {
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/");
+      router.push("/admin");
     }
   }, [isAuthenticated, router]);
 
@@ -58,13 +58,13 @@ export default function AdminLoginPage() {
 
     try {
       // Validate credentials
-      if (!credentials.username || !credentials.password) {
-        throw new Error("Please enter both username and password");
+      if (!credentials.email || !credentials.password) {
+        throw new Error("Please enter both email and password");
       }
 
       // Attempt login with new secure method
-      const loginSuccess = login({
-        username: credentials.username,
+      const loginSuccess = await login({
+        email: credentials.email,
         password: credentials.password,
       });
 
@@ -75,28 +75,7 @@ export default function AdminLoginPage() {
 
         router.push(redirectTo);
       } else {
-        // Check if account is locked (simple check)
-        const lockoutData = localStorage.getItem("admin_lockout");
-        if (lockoutData) {
-          try {
-            const { attempts } = JSON.parse(lockoutData);
-            if (attempts >= 3) {
-              throw new Error(
-                "Account temporarily locked due to too many failed attempts. Please try again in 15 minutes."
-              );
-            } else {
-              throw new Error(
-                `Invalid credentials. ${
-                  3 - attempts
-                } attempts remaining before account lockout.`
-              );
-            }
-          } catch (parseError) {
-            throw new Error("Invalid username or password");
-          }
-        } else {
-          throw new Error("Invalid username or password");
-        }
+        throw new Error("Invalid email or password");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
@@ -104,6 +83,20 @@ export default function AdminLoginPage() {
       setIsLoading(false);
     }
   };
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <p className="text-gray-600 mb-4">Checking authentication...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -119,23 +112,23 @@ export default function AdminLoginPage() {
         {/* Login Form */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Username Field */}
+            {/* Email Field */}
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Username
+                Email Address
               </label>
               <input
-                id="username"
-                name="username"
-                type="text"
+                id="email"
+                name="email"
+                type="email"
                 required
-                value={credentials.username}
+                value={credentials.email}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter your username"
+                placeholder="Enter your email"
                 disabled={isLoading}
               />
             </div>
@@ -265,15 +258,15 @@ export default function AdminLoginPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-4">
             <div className="text-center">
               <p className="text-sm text-blue-800 font-medium">
-                Demo Credentials:
+                Admin Credentials:
               </p>
               <p className="text-sm text-blue-700">
-                Username:{" "}
-                <code className="bg-blue-100 px-1 rounded">admin</code>
+                Email:{" "}
+                <code className="bg-blue-100 px-1 rounded">admin@stafet.com</code>
               </p>
               <p className="text-sm text-blue-700">
                 Password:{" "}
-                <code className="bg-blue-100 px-1 rounded">admin123</code>
+                <code className="bg-blue-100 px-1 rounded">Stafet@123</code>
               </p>
             </div>
           </div>

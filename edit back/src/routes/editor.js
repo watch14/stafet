@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { validateEditorData } = require("../middleware/validation");
+const { optionalAuth } = require("../middleware/auth");
 const {
   getConfiguration,
   saveConfiguration,
@@ -9,18 +10,18 @@ const {
 } = require("../controllers/editorController");
 
 // Get all saved configurations
-router.get("/configurations", getConfigurations);
+router.get("/configurations", optionalAuth, getConfigurations);
 
 // Get specific configuration
-router.get("/configuration/:id?", getConfiguration);
+router.get("/configuration/:id?", optionalAuth, getConfiguration);
 
 // Save configuration
-router.post("/configuration", validateEditorData, saveConfiguration);
+router.post("/configuration", optionalAuth, validateEditorData, saveConfiguration);
 
 // Update configuration
-router.put("/configuration/:id", validateEditorData, saveConfiguration);
+router.put("/configuration/:id", optionalAuth, validateEditorData, saveConfiguration);
 
 // Delete configuration
-router.delete("/configuration/:id", deleteConfiguration);
+router.delete("/configuration/:id", optionalAuth, deleteConfiguration);
 
 module.exports = router;

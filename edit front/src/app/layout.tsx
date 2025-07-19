@@ -6,11 +6,12 @@
  * It provides:
  * - Global fonts and styling
  * - Authentication system (login/logout)
- * - Editor functionality wrapper
+ * - Editor functionality wrapper (only when admin is logged in)
  * - Navigation bar and footer on every page
  * - Meta information (title, description)
  *
  * Every page you visit will use this layout as the foundation.
+ * Editor components only load when an admin is authenticated for better performance.
  */
 
 import type { Metadata } from "next";
@@ -20,10 +21,7 @@ import Navbar from "./navbar";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
 import { LoadingProvider } from "../contexts/LoadingContext";
-import { EditProvider } from "../contexts/EditContext";
-import EditorLayoutWrapper from "./EditorLayoutWrapper";
-import LeftEditorSlider from "../components/LeftEditorSlider";
-import EditorOverviewWrapper from "../components/EditorOverviewWrapper";
+import ConditionalEditorWrapper from "./ConditionalEditorWrapper";
 
 // Font configuration for the website
 const inter = Inter({
@@ -56,22 +54,15 @@ export default function RootLayout({
         <LoadingProvider>
           {/* Authentication Provider - handles login/logout across the site */}
           <AuthProvider>
-            {/* Edit Provider - manages global edit state and section registration */}
-            <EditProvider>
-              {/* Editor Layout Wrapper - provides editing controls when admin is logged in */}
-              <EditorLayoutWrapper>
-                {/* Navigation bar - appears on every page */}
-                <Navbar />
-                {/* Page content - this changes based on which page you're on */}
-                {children}
-                {/* Footer - appears on every page */}
-                <Footer />
-                {/* Left Editor Slider - main editing panel */}
-                <LeftEditorSlider />
-                {/* Editor Overview - main section selection panel */}
-                <EditorOverviewWrapper />
-              </EditorLayoutWrapper>
-            </EditProvider>
+            {/* Conditional Editor Wrapper - loads editor only when admin is logged in */}
+            <ConditionalEditorWrapper>
+              {/* Navigation bar - appears on every page */}
+              <Navbar />
+              {/* Page content - this changes based on which page you're on */}
+              {children}
+              {/* Footer - appears on every page */}
+              <Footer />
+            </ConditionalEditorWrapper>
           </AuthProvider>
         </LoadingProvider>
       </body>

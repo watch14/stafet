@@ -12,11 +12,19 @@ class ApiClient {
     this.baseURL = baseURL;
   }
 
+  private getAuthToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('auth_token');
+  }
+
   async request(endpoint: string, options: RequestOptions = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    const token = this.getAuthToken();
+    
     const config = {
       headers: {
         "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers,
       },
       ...options,
@@ -35,6 +43,25 @@ class ApiClient {
       console.error("API request failed:", error);
       throw error;
     }
+  }
+
+  // Authentication endpoints
+  async login(credentials: { email: string; password: string }) {
+    return this.request("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+    });
+  }
+
+  async verifyToken() {
+    return this.request("/auth/verify");
+  }
+
+  async changePassword(data: { currentPassword: string; newPassword: string }) {
+    return this.request("/auth/change-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   }
 
   // Editor Configuration endpoints
@@ -74,10 +101,13 @@ class ApiClient {
   async uploadImage(file: File) {
     const formData = new FormData();
     formData.append("image", file);
+    const token = this.getAuthToken();
 
     return this.request("/upload/image", {
       method: "POST",
-      headers: {}, // Let browser set Content-Type for FormData
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+      }, // Let browser set Content-Type for FormData
       body: formData,
     });
   }

@@ -6,10 +6,11 @@ require("dotenv").config();
 
 const editorRoutes = require("./routes/editor");
 const uploadRoutes = require("./routes/upload");
+const authRoutes = require("./routes/auth");
 const { errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Security middleware with relaxed settings for development
 app.use(
@@ -25,7 +26,9 @@ app.use(
     origin: [
       process.env.FRONTEND_URL || "http://localhost:3000",
       "http://localhost:3000",
+      "http://localhost:3002",
       "http://127.0.0.1:3000",
+      "http://127.0.0.1:3002",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -58,6 +61,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 // API routes
 app.use("/api/editor", editorRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/auth", authRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

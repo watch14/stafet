@@ -17,18 +17,30 @@ import { useEditorStore } from "../../store/editorStore";
  * Main control panel for website administration
  */
 export default function AdminDashboard() {
-  const { isAuthenticated, requireAuth, logout } = useAuth();
+  const { isAuthenticated, isLoading, requireAuth, logout } = useAuth();
   const editMode = useEditorStore((s) => s.editMode);
   const setEditMode = useEditorStore((s) => s.setEditMode);
 
   // Require authentication to access this page
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       requireAuth();
     }
-  }, [isAuthenticated, requireAuth]);
+  }, [isAuthenticated, isLoading, requireAuth]);
 
-  // Don't render anything if not authenticated
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Checking authentication...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render anything if not authenticated (will redirect)
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">

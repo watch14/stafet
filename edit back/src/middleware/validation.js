@@ -59,6 +59,12 @@ const editorSchema = Joi.object({
   id: Joi.string().optional(),
 });
 
+// Validation schema for authentication data
+const authSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
+
 const validateEditorData = (req, res, next) => {
   const { error } = editorSchema.validate(req.body);
 
@@ -75,6 +81,23 @@ const validateEditorData = (req, res, next) => {
   next();
 };
 
+const validateAuthData = (req, res, next) => {
+  const { error } = authSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: error.details.map((detail) => ({
+        field: detail.path.join("."),
+        message: detail.message,
+      })),
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   validateEditorData,
+  validateAuthData,
 };
